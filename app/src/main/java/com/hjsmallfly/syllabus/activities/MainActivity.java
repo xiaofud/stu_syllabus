@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
     public static String cur_year_string;
     public static int cur_semester;
     public static String cur_username;
+    public static String cur_password;
 
     // 控件及常量
     public static final String TAG = "POSTTEST";
@@ -116,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         if (user != null){
             username_edit.setText(user[0]);
             passwd_edit.setText(user[1]);
+            cur_password = user[1];
         }
 
         // 选项卡
@@ -227,7 +229,8 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         }
 
         Toast.makeText(MainActivity.this, "正在获取课表信息", Toast.LENGTH_SHORT).show();
-        String passwd = passwd_edit.getText().toString();
+        String password = passwd_edit.getText().toString();
+        cur_password = password;
 //            {"SPRING", "SUMMER", "AUTUMN"}
         String semester_code = "";
         if (semester.equals("SPRING"))
@@ -239,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 
         HashMap<String, String> postData = new HashMap<>();
         postData.put("username", username);
-        postData.put("password", passwd);
+        postData.put("password", password);
         postData.put("submit", "query");
         postData.put("years", years);
         postData.put("semester", semester_code);

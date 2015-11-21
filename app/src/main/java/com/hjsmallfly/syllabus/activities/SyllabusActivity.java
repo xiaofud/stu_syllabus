@@ -124,11 +124,17 @@ public class SyllabusActivity extends AppCompatActivity {
                 set_random_color();
                 break;
 
-            case R.id.blue_text:
+//            case R.id.blue_text:
             case R.id.black_text:
-            case R.id.gray_text:
+//            case R.id.gray_text:
             case R.id.white_text:
                 set_text_color(ColorHelper.get_color_from_id(item.getItemId()));
+                break;
+
+            case R.id.query_grade_action:
+                // 查看成绩
+                Intent grade_intent = new Intent(this, GradeActivity.class);
+                startActivity(grade_intent);
                 break;
 
             default:

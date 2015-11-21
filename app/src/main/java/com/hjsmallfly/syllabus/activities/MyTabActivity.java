@@ -374,9 +374,9 @@ public class MyTabActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-//    self.parser.add_argument("publisher", required=True)
-//            self.parser.add_argument("pub_time", required=True, type=float)
-//            self.parser.add_argument("content", required=True)
+//    self.parse.add_argument("publisher", required=True)
+//            self.parse.add_argument("pub_time", required=True, type=float)
+//            self.parse.add_argument("content", required=True)
 
     public void add_discussion_to_database(){
 

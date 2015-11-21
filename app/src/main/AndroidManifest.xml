@@ -15,8 +15,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.hjsmallfly.syllabus.activities.MainActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,8 +25,8 @@
         </activity>
         <activity
             android:name="com.hjsmallfly.syllabus.activities.SyllabusActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_syllabus" >
+            android:label="@string/title_activity_syllabus"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.hjsmallfly.syllabus.activities.MyTabActivity"
@@ -35,8 +35,8 @@
         </activity>
         <activity
             android:name="com.hjsmallfly.syllabus.activities.HistoryActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_history" >
+            android:label="@string/title_activity_history"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.hjsmallfly.syllabus.activities.AboutActivity"
@@ -44,8 +44,12 @@
         </activity>
         <activity
             android:name="com.hjsmallfly.syllabus.activities.UpdateActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_update" >
+            android:label="@string/title_activity_update"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.hjsmallfly.syllabus.activities.GradeActivity"
+            android:label="@string/title_activity_grade" >
         </activity>
     </application>
 
