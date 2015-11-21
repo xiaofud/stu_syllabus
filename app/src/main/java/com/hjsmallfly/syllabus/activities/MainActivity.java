@@ -196,8 +196,14 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         this.position = year_index;
         String username = username_edit.getText().toString();
         cur_username = username;
+
         String years = YEARS[year_index];  // 点击到列表的哪一项
         cur_year_string = years;    // 用于共享目的
+
+        String password = passwd_edit.getText().toString();
+        cur_password = password;
+
+
         semester = null;
         switch (semester_index){
             case 0:
@@ -229,8 +235,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         }
 
         Toast.makeText(MainActivity.this, "正在获取课表信息", Toast.LENGTH_SHORT).show();
-        String password = passwd_edit.getText().toString();
-        cur_password = password;
+
 //            {"SPRING", "SUMMER", "AUTUMN"}
         String semester_code = "";
         if (semester.equals("SPRING"))

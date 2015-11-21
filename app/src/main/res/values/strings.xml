@@ -49,7 +49,7 @@
         By 晓拂, 2015/10/14 21:14
     </string>
     <string name="title_activity_update">更新界面</string>
-    <string name="title_activity_main2">Main2Activity</string>
-    <string name="title_activity_grade">GradeActivity</string>
+    <!--<string name="title_activity_main2">Main2Activity</string>-->
+    <string name="title_activity_grade">查看成绩</string>
 
 </resources>

@@ -20,6 +20,7 @@ import java.util.List;
 
 public class GradeActivity extends AppCompatActivity implements View.OnClickListener, GradeHandler{
 
+    private EditText gpa_debug_view;
     private EditText grade_debug_display;
     private Button grade_query_button;
 
@@ -33,6 +34,7 @@ public class GradeActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void find_views(){
+        gpa_debug_view = (EditText) findViewById(R.id.gpa_debug);
         grade_debug_display = (EditText) findViewById(R.id.grade_debug);
         grade_query_button = (Button) findViewById(R.id.query_grade_button);
     }
@@ -49,9 +51,27 @@ public class GradeActivity extends AppCompatActivity implements View.OnClickList
             return;
 //        Toast.makeText(GradeActivity.this, "handle_grade_list", Toast.LENGTH_SHORT).show();
         StringBuilder sb = new StringBuilder();
-        for(int i = 0 ; i < grade_list.size() ; ++i)
+        double grade_point_sum = 0.0;
+        double credit_sum = 0.0;
+        for(int i = 0 ; i < grade_list.size() ; ++i) {
             sb.append(grade_list.get(i).toString() + "\n");
-        grade_debug_display.setText("");
+
+            // 计算gpa
+            double grade_point = Double.parseDouble(grade_list.get(i).class_grade) - 50;
+            double credit = Double.parseDouble(grade_list.get(i).class_credit);
+            if (grade_point < 60 - 50)
+                // 不及格的话
+                grade_point = 0;
+            grade_point_sum += grade_point / 10 * credit;
+            credit_sum += credit;
+        }
+
+        double gpa = grade_point_sum / credit_sum;
+
+        gpa_debug_view.setText(gpa + "");
+
+//        grade_debug_display.setText("");
+
         grade_debug_display.setText(sb.toString());
 
     }
