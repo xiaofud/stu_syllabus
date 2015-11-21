@@ -16,7 +16,7 @@
     <string name="insert_discussion_api">/api/discuss</string>
     <string name="version_control_address">/api/version</string>
     <string name="delete_api">/api/v1.0/delete/</string>
-    <string name="title_activity_history">历史记录</string>
+    <string name="title_activity_history">历 史 记 录</string>
     <string name="title_activity_about">Small Fly\'s Words</string>
     <string name="action_settings">Settings</string>
 
@@ -29,7 +29,7 @@
 
     <string name="version_code">1</string>
     <string name="version_name">Ver1.4</string>
-    <string name="releaser">smallfly</string>
+    <string name="publisher">smallfly</string>
 
     <string name="username">账号</string>
     <string name="password">密码</string>

@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "com.example.stu_nwad.userecyclerview"
+        applicationId "com.hjsmallfly.syllabus"
         minSdkVersion 16
         targetSdkVersion 23
     }

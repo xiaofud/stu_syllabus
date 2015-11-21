@@ -38,10 +38,10 @@ public class InfoPullTask extends AsyncTask<HashMap<String, String>, Void, Strin
     private void get_address(){
         switch (task_type){
             case PULL_HOMEWORK:
-                host_address = context.getString(R.string.server_ip) +  context.getString(R.string.get_home_work_api);
+                host_address = WebApi.get_server_address() +  context.getString(R.string.get_home_work_api);
                 break;
             case PULL_DISCUSSION:
-                host_address = context.getString(R.string.server_ip) + context.getString(R.string.get_discussion_api);
+                host_address = WebApi.get_server_address() + context.getString(R.string.get_discussion_api);
                 break;
             default:
                 host_address = "";  // 意味着是错的

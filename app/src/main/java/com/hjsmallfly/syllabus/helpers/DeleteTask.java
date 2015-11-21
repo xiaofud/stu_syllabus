@@ -34,7 +34,7 @@ public class DeleteTask extends AsyncTask<HashMap<String, String>, Void, String>
     @Override
     protected String doInBackground(HashMap<String, String>... params) {
         // 末尾加了 /
-        String request_url = context.getString(R.string.server_ip) + context.getString(R.string.delete_api);
+        String request_url = WebApi.get_server_address() + context.getString(R.string.delete_api);
         if (type_ == DELETE_HOMEWORK)
             request_url += DELETE_HOMEWORK;
         else if (type_ == DELETE_DISCUSSION)

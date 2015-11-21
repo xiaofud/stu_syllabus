@@ -21,6 +21,7 @@ import com.hjsmallfly.syllabus.adapters.DiscussionAdapter;
 import com.hjsmallfly.syllabus.helpers.DeleteTask;
 import com.hjsmallfly.syllabus.helpers.JSONHelper;
 import com.hjsmallfly.syllabus.helpers.StringDataHelper;
+import com.hjsmallfly.syllabus.helpers.WebApi;
 import com.hjsmallfly.syllabus.interfaces.AfterDeleteHandler;
 import com.hjsmallfly.syllabus.syllabus.Discussion;
 import com.hjsmallfly.syllabus.interfaces.DiscussionHandler;
@@ -321,7 +322,7 @@ public class MyTabActivity extends AppCompatActivity implements View.OnClickList
         data.put("semester", lesson.semester + "");
 
         // 添加课程
-        InsertTask insert_class_task = new InsertTask(this.getString(R.string.insert_class_api));
+        InsertTask insert_class_task = new InsertTask(WebApi.get_server_address() + getString(R.string.insert_class_api));
         insert_class_task.execute(data);
 
     }
@@ -330,7 +331,7 @@ public class MyTabActivity extends AppCompatActivity implements View.OnClickList
         HashMap<String, String> data = new HashMap<>();
         // 用户名
         data.put("username", MainActivity.cur_username);
-        InsertTask insert_user_task = new InsertTask(this.getString(R.string.insert_user_api));
+        InsertTask insert_user_task = new InsertTask(WebApi.get_server_address() +  getString(R.string.insert_user_api));
         insert_user_task.execute(data);
     }
 
@@ -363,7 +364,7 @@ public class MyTabActivity extends AppCompatActivity implements View.OnClickList
         // 添加hash_code
         add_hash_code(data, MainActivity.cur_username + timestamp);
 
-        InsertTask insert_homework_task = new InsertTask(this.getString(R.string.insert_home_work_api));
+        InsertTask insert_homework_task = new InsertTask(WebApi.get_server_address() + getString(R.string.insert_home_work_api));
         insert_homework_task.execute(data);
 
     }
@@ -395,7 +396,7 @@ public class MyTabActivity extends AppCompatActivity implements View.OnClickList
         // 增加hash_code
         add_hash_code(data, MainActivity.cur_username + timestamp);
 
-        InsertDiscussionTask task = new InsertDiscussionTask(this.getString(R.string.insert_discussion_api));
+        InsertDiscussionTask task = new InsertDiscussionTask(WebApi.get_server_address() + getString(R.string.insert_discussion_api));
         task.execute(data);
     }
 
@@ -489,7 +490,7 @@ public class MyTabActivity extends AppCompatActivity implements View.OnClickList
         Discussion discussion = (Discussion) discussion_list_view.getItemAtPosition(position);
         discussionAdapter.remove(discussion);
         discussionAdapter.notifyDataSetChanged();
-        Toast.makeText(MyTabActivity.this, "成功删除消息 " + discussion.content, Toast.LENGTH_SHORT).show();
+        Toast.makeText(MyTabActivity.this, "成功删除消息" /*+ discussion.content*/, Toast.LENGTH_SHORT).show();
     }
 
 

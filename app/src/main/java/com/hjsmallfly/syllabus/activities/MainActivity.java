@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.hjsmallfly.syllabus.helpers.LessonPullTask;
 import com.hjsmallfly.syllabus.helpers.StringDataHelper;
 import com.hjsmallfly.syllabus.helpers.UpdateHelper;
+import com.hjsmallfly.syllabus.helpers.WebApi;
 import com.hjsmallfly.syllabus.interfaces.LessonHandler;
 import com.hjsmallfly.syllabus.interfaces.TokenGetter;
 import com.hjsmallfly.syllabus.interfaces.UpdateHandler;
@@ -79,6 +80,9 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         YEARS = StringDataHelper.generate_years(4);  // 生成5年的选项
         getAllViews();
         setupViews();
+
+        // 设置web service 的默认地址
+        WebApi.set_server_address(getString(R.string.server_ip));
 
         // 检查更新
         if (!has_checked_update)
@@ -235,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         postData.put("semester", semester_code);
 //        Log.d(TAG, "onClick");
 
-        LessonPullTask task = new LessonPullTask(getString(R.string.server_ip) + getString(R.string.syllabus_get_api), this);
+        LessonPullTask task = new LessonPullTask(WebApi.get_server_address() + getString(R.string.syllabus_get_api), this);
         task.execute(postData);
 
 //        syllabusGetter.execute(postData);
@@ -313,10 +317,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             FileOperation.save_user(MainActivity.this, USERNAME_FILE, PASSWORD_FILE, username, passwd_edit.getText().toString());
         }
     }
-//    // 获取内部类的实例
-//    public ShowSyllabus getOnClickListener(int position){
-//        return new ShowSyllabus(position);
-//    }
+
 
     @Override
     public void onClick(View v) {
@@ -335,18 +336,6 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         submit_query_request(year_index, semester_index);
     }
 
-//    public class ShowSyllabus implements View.OnClickListener{
-//        private int position; // 保存了点击的项是在列表中的哪一行
-//
-//        public ShowSyllabus(int position){
-//            this.position = position;
-//        }
-//
-//        @Override
-//        public void onClick(View v) {
-//            submit(position, v.getId());
-//        }
-//    }
 
     public LongTimeClickListener getOnLongClickListener(int position){
         return new LongTimeClickListener(position);

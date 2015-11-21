@@ -84,7 +84,7 @@ public class UpdateActivity extends AppCompatActivity implements UpdateHandler, 
         SyllabusVersion cur_version =  UpdateHelper.get_current_version(this);
         String version_str;
         if (cur_version != null){
-             version_str = "[当前版本]:\n版本名称: " + cur_version.version_name + "\n发布者: " + getString(R.string.releaser);
+             version_str = "[当前版本]:\n版本名称: " + cur_version.version_name + "\n发布者: " + getString(R.string.publisher);
             String description = "没有描述信息!";
             if (cur_version.description != null)
                 description = cur_version.description;

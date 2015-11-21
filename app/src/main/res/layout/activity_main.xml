@@ -107,7 +107,11 @@
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content" />-->
 
-
+        <EditText
+            android:id="@+id/debug_ip_edit"
+            android:text="@string/server_ip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/query_syllabus_button"
