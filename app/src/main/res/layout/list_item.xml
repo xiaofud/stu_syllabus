@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:background="@drawable/list_item"
+    android:layout_marginTop="5dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_weight="1"
+            android:id="@+id/year_text_view"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textSize="19sp"
+            android:textColor="#64f0dd"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+
+        <TextView
+            android:id="@+id/spring_text_view"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="19sp"
+            android:text="@string/spring"
+            android:textColor="#ffff"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+
+        <TextView
+            android:id="@+id/summer_text_view"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:textSize="19sp"
+            android:text="@string/summer"
+            android:textColor="#ffff"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+
+        <TextView
+            android:id="@+id/autumn_text_view"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:textSize="19sp"
+            android:text="@string/autumn"
+            android:textColor="#ffff"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+
+
+
+</LinearLayout>

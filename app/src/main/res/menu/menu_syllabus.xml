@@ -1,0 +1,40 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.hjsmallfly.syllabus.activities.SyllabusActivity">
+
+    <item
+        android:id="@+id/set_default_syllabus"
+        android:title="设置为默认课表"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/blue_text"
+        android:title="蓝色字"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/black_text"
+        android:title="黑色字"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/gray_text"
+        android:title="灰色字"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/white_text"
+        android:title="白色字"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/random_color_text"
+        android:title="随机色"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/pick_wallpaper"
+        android:title="从相册中选择壁纸"
+        app:showAsAction="never"/>
+</menu>

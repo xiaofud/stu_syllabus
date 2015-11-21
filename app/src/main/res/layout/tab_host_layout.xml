@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/tabhost"
+    android:background="#2b2b2b"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TabWidget
+            android:id="@android:id/tabs"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <LinearLayout
+                android:id="@+id/personal_layout"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_marginLeft="2dp"
+                    android:id="@+id/dialog_content"
+                    android:textColor="#ffffff"
+                    android:layout_margin="5dp"
+                    android:hint="具体的课程信息"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <ScrollView
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp">
+
+                    <EditText
+                        android:id="@+id/personal_note"
+                        android:gravity="start"
+                        android:inputType="textMultiLine"
+                        android:minLines="20"
+                        android:background="@drawable/input_box"
+                        android:hint="个人备忘录"
+                        android:textColor="#ffffff"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </ScrollView>
+
+
+
+                <Button
+                    android:id="@+id/personal_submit"
+                    android:text="保存"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/homework_layout"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                    <TextView
+                        android:text="最新的作业信息"
+                        android:textColor="#ffffff"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <EditText
+                        android:id="@+id/last_homework"
+                        android:background="@drawable/input_box"
+                        android:editable="false"
+                        android:hint="这里显示最新的作业信息"
+                        android:textSize="12sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+
+
+                    <TextView
+                        android:text="作业发布区"
+                        android:textColor="#ffffff"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                <EditText
+                    android:id="@+id/homework_time_edit"
+                    android:singleLine="true"
+                    android:background="@drawable/text_box"
+                    android:hint="作业提交时间"
+                    android:textColor="#ffffff"
+                    android:maxLength="20"
+                    android:layout_marginBottom="4dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+                    <EditText
+                        android:layout_weight="1"
+                        android:id="@+id/homework_content_edit"
+                        android:background="@drawable/text_box"
+                        android:gravity="start"
+                        android:hint="作业内容"
+                        android:textColor="#ffffff"
+                        android:minLines="10"
+                        android:maxLength="200"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+
+
+
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <Button
+                        android:text="提交"
+                        android:layout_weight="1"
+                        android:id="@+id/homework_submit_button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+
+                    <Button
+                        android:text="历史"
+                        android:id="@+id/homework_history_button"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/talk_layout"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+
+                <ListView
+                    android:layout_weight="6"
+                    android:id="@+id/discuss_list_view"
+                    android:divider="@android:color/transparent"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp">
+                </ListView>
+
+                <ScrollView
+                    android:layout_weight="4"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp">
+
+                    <EditText
+                        android:layout_marginTop="2dp"
+                        android:inputType="textMultiLine"
+                        android:gravity="left"
+                        android:id="@+id/talk_field"
+                        android:background="@drawable/right_msg"
+                        android:maxLength="140"
+                        android:minLines="6"
+                        android:layout_marginBottom="2dp"
+                        android:hint="140个字想怎么吹怎么吹~"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </ScrollView>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:layout_weight="1"
+                        android:id="@+id/submit_discussion_button"
+                        android:text="提交"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent" />
+
+                    <Button
+                        android:layout_weight="1"
+                        android:id="@+id/discuss_history_button"
+                        android:layout_width="0dp"
+                        android:text="历史"
+                        android:layout_height="match_parent" />
+
+                </LinearLayout>
+
+
+
+
+
+            </LinearLayout>
+
+
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</TabHost>

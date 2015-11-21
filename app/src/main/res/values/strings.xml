@@ -1,0 +1,51 @@
+<resources>
+    <string name="app_name">汕大课程表</string>
+    <string name="title_activity_syllabus">课程表</string>
+    <string name="help_message">长按可以删除缓存文件</string>
+    <string name="about_message">Email: 14xfdeng@stu.edu.cn(Android)\n
+                                 Email: 14jhwang@stu.edu.cn(IOS)</string>
+    <string name="syllabus_get_api">/syllabus</string>
+    <string name="server_ip">http://192.168.1.100:5000</string>
+    <string name="server_ip_debug">192.168.1.100</string>
+    <string name="debug_port">5000</string>
+    <string name="get_home_work_api">/api/course_info/0</string>
+    <string name="get_discussion_api">/api/course_info/1</string>
+    <string name="insert_class_api">/api/course</string>
+    <string name="insert_user_api">/api/user</string>
+    <string name="insert_home_work_api">/api/homework</string>
+    <string name="insert_discussion_api">/api/discuss</string>
+    <string name="version_control_address">/api/version</string>
+    <string name="delete_api">/api/v1.0/delete/</string>
+    <string name="title_activity_history">历史记录</string>
+    <string name="title_activity_about">Small Fly\'s Words</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="updated_text">正在检查更新</string>
+    <string name="outdated_text">已经有新版本发布啦，还在等什么，快点我!!!</string>
+
+    <string name="autumn">秋季\n学期</string>
+    <string name="spring">春季\n学期</string>
+    <string name="summer">夏季\n学期</string>
+
+    <string name="version_code">1</string>
+    <string name="version_name">Ver1.4</string>
+    <string name="releaser">smallfly</string>
+
+    <string name="username">账号</string>
+    <string name="password">密码</string>
+    <string name="username_hint">username</string>
+    <string name="password_hint">password</string>
+
+    <string name="query_syllabus_button">查询课表</string>
+
+
+    <string name="about_information">
+        哈哈，你竟然点进这里来了!
+        本来打算写点什么的，但是真到了要写的时候却不知道写什么了。
+        诶诶，希望你喜欢这个应用: ) 那是最大的鼓励.
+        By 晓拂, 2015/10/14 21:14
+    </string>
+    <string name="title_activity_update">更新界面</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+</resources>

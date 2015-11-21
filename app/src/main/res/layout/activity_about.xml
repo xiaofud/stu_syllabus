@@ -1,0 +1,14 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.hjsmallfly.syllabus.activities.AboutActivity">
+
+    <TextView
+        android:id="@+id/about_text"
+        android:background="@drawable/input_box"
+        android:text="@string/about_information"
+        android:inputType="textMultiLine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

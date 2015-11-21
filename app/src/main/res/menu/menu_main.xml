@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+
+    <item
+        android:title="清除默认课表"
+        android:id="@+id/delete_default_syllabus"
+        app:showAsAction="never"/>
+
+    <!--<item-->
+        <!--android:title="清除缓存文件"-->
+        <!--android:id="@+id/delete_action"-->
+        <!--app:showAsAction="never"/>-->
+
+
+    <item
+        android:id="@+id/check_update_action"
+        android:title="检查更新"
+        app:showAsAction="never"/>
+
+</menu>
