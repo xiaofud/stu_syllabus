@@ -19,6 +19,9 @@ public class DeleteTask extends AsyncTask<HashMap<String, String>, Void, String>
     public static final int DELETE_HOMEWORK = 0;
     public static final int DELETE_DISCUSSION = 1;
 
+    public static final String ERROR_WRONG_TOKEN = "not authorized: wrong token";
+    public static final String ERROR_NO_AUTHORIZED = "not authorized: no such user or user not match";
+
     private Context context;
     private AfterDeleteHandler afterDeleteHandler;
     private int type_;

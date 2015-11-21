@@ -151,6 +151,12 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             return true;
         }
 
+        // 清除之前的缓存文件
+        if (id == R.id.delete_action){
+            delete_cached_file();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -337,57 +343,6 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
     }
 
 
-    public LongTimeClickListener getOnLongClickListener(int position){
-        return new LongTimeClickListener(position);
-    }
-
-    public class LongTimeClickListener implements View.OnLongClickListener{
-
-        private int position;
-
-        public LongTimeClickListener(int pos){
-            this.position = pos;
-        }
-
-        private void delete_cache_file(Context context, String file_name){
-            if (FileOperation.hasFile(context, file_name)){
-                if (FileOperation.delete_file(context, file_name))
-                    Toast.makeText(context, "成功删除缓存文件", Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(context, "删除缓存文件失败", Toast.LENGTH_SHORT).show();
-            }else
-                Toast.makeText(context, "不存在该缓存文件", Toast.LENGTH_SHORT).show();
-
-        }
-
-        @Override
-        public boolean onLongClick(View v) {
-            final int id = v.getId();
-            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-            builder.setTitle("清除缓存文件");
-            TextView text = (TextView) v;
-            builder.setMessage("清除 " + YEARS[position] + " " + text.getText().toString().replace("\n", "") + " 课表?");
-            builder.setPositiveButton("清除", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-//                    Toast.makeText(MainActivity.this, "清除缓存文件", Toast.LENGTH_SHORT).show();
-                    String username = username_edit.getText().toString();
-                    String semester = StringDataHelper.semester_from_view_id(id);
-                    String file_name = StringDataHelper.generate_syllabus_file_name(username, YEARS[position], semester, "_");
-                    delete_cache_file(MainActivity.this, file_name);
-                    dialog.dismiss();
-                }
-            });
-            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            builder.create().show();
-            return true;
-        }
-    }
 
     @Override
     public void get_token(String token) {
@@ -410,5 +365,24 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         }else
             MainActivity.token = "";
 
+    }
+
+    private void delete_cached_file(){
+        String username = username_edit.getText().toString();
+        int year_index = year_spinner.getSelectedItemPosition();
+        String semester_name = semester_spinner.getSelectedItem().toString();
+        String filename = StringDataHelper.generate_syllabus_file_name(username, YEARS[year_index], semester_name, "_");
+        //        Toast.makeText(MainActivity.this, "filename: " + filename, Toast.LENGTH_SHORT).show();
+        delete_cache_file(this, filename);
+    }
+
+    private void delete_cache_file(Context context, String file_name) {
+        if (FileOperation.hasFile(context, file_name)) {
+            if (FileOperation.delete_file(context, file_name))
+                Toast.makeText(context, "成功删除缓存文件", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(context, "删除缓存文件失败", Toast.LENGTH_SHORT).show();
+        } else
+            Toast.makeText(context, "不存在该缓存文件", Toast.LENGTH_SHORT).show();
     }
 }

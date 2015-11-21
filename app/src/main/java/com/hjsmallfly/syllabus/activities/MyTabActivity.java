@@ -1,5 +1,6 @@
 package com.hjsmallfly.syllabus.activities;
 
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hjsmallfly.syllabus.adapters.DiscussionAdapter;
+import com.hjsmallfly.syllabus.helpers.ClipBoardHelper;
 import com.hjsmallfly.syllabus.helpers.DeleteTask;
 import com.hjsmallfly.syllabus.helpers.JSONHelper;
 import com.hjsmallfly.syllabus.helpers.StringDataHelper;
@@ -194,6 +196,9 @@ public class MyTabActivity extends AppCompatActivity implements View.OnClickList
 
         //  info.position will give the index of selected item
         if (item.getTitle().equals("复制")){
+            int index = info.position; // 被点击的项的所在位置
+            Discussion discussion = (Discussion) discussion_list_view.getItemAtPosition(index);
+            ClipBoardHelper.setContent(this, discussion.content);
             Toast.makeText(MyTabActivity.this, "成功复制到剪贴板", Toast.LENGTH_SHORT).show();
             return true;
         }else if (item.getTitle().equals("删除")){
@@ -483,8 +488,14 @@ public class MyTabActivity extends AppCompatActivity implements View.OnClickList
     public void deal_with_delete(String response, int position) {
         String error = JSONHelper.check_and_get_error(response);
         if (error != null){
-            Toast.makeText(MyTabActivity.this, "删除错误: " + error, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MyTabActivity.this, "删除错误: " + error, Toast.LENGTH_SHORT).show();
+            if (error.equals(DeleteTask.ERROR_WRONG_TOKEN))
+                Toast.makeText(MyTabActivity.this, "该账号在其他地方登陆过，请返回主界面清除课程缓存文件。", Toast.LENGTH_SHORT).show();
+            else if (error.equals(DeleteTask.ERROR_NO_AUTHORIZED)){
+                Toast.makeText(MyTabActivity.this, "只能删除自己的信息哟", Toast.LENGTH_SHORT).show();
+            }
             return;
+
         }
         // 代表删除成功
         Discussion discussion = (Discussion) discussion_list_view.getItemAtPosition(position);
