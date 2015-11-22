@@ -13,7 +13,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.hjsmallfly.syllabus.helpers.LessonPullTask;
 import com.hjsmallfly.syllabus.helpers.StringDataHelper;
@@ -59,12 +58,14 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 
 //    private EditText address_edit;  // 服务器地址
     private EditText username_edit;
-    private EditText passwd_edit;
+    private EditText password_edit;
 //    private ListView syllabus_list_view;    // 用于显示所有课表的list_view
 
     private Spinner year_spinner;
     private Spinner semester_spinner;
     private Button query_button;
+
+    private EditText debug_ip_edite;
 
     // 如果已经显示过默认课表就没必要再显示了
     private boolean has_showed_default = false;
@@ -97,12 +98,14 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
     private void getAllViews(){
 //        address_edit = (EditText) findViewById(R.id.address_edit);
         username_edit = (EditText) findViewById(R.id.username_edit);
-        passwd_edit = (EditText) findViewById(R.id.passwd_edit);
+        password_edit = (EditText) findViewById(R.id.passwd_edit);
 //        syllabus_list_view = (ListView) findViewById(R.id.syllabus_list_view);
 
         year_spinner = (Spinner) findViewById(R.id.year_spinner);
         semester_spinner = (Spinner) findViewById(R.id.semester_spinner);
         query_button = (Button) findViewById(R.id.query_syllabus_button);
+
+        debug_ip_edite = (EditText) findViewById(R.id.debug_ip_edit);
     }
 
     private void setupViews(){
@@ -116,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         String[] user = FileOperation.load_user(this, USERNAME_FILE, PASSWORD_FILE);
         if (user != null){
             username_edit.setText(user[0]);
-            passwd_edit.setText(user[1]);
+            password_edit.setText(user[1]);
             cur_password = user[1];
         }
 
@@ -200,9 +203,11 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         String years = YEARS[year_index];  // 点击到列表的哪一项
         cur_year_string = years;    // 用于共享目的
 
-        String password = passwd_edit.getText().toString();
+        String password = password_edit.getText().toString();
         cur_password = password;
 
+        // 更新一下 服务器的地址
+        WebApi.set_server_address(debug_ip_edite.getText().toString());
 
         semester = null;
         switch (semester_index){
@@ -328,7 +333,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 //                        Log.d(TAG, "saved file " + filename);
             }
             // 保存用户文件
-            FileOperation.save_user(MainActivity.this, USERNAME_FILE, PASSWORD_FILE, username, passwd_edit.getText().toString());
+            FileOperation.save_user(MainActivity.this, USERNAME_FILE, PASSWORD_FILE, username, password_edit.getText().toString());
         }
     }
 
