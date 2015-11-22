@@ -3,9 +3,12 @@ package com.hjsmallfly.syllabus.parsers;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.hjsmallfly.syllabus.activities.MainActivity;
+import com.hjsmallfly.syllabus.helpers.FileOperation;
 import com.hjsmallfly.syllabus.helpers.JSONHelper;
 import com.hjsmallfly.syllabus.interfaces.GradeHandler;
 import com.hjsmallfly.syllabus.syllabus.Grade;
+import com.hjsmallfly.syllabus.syllabus.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -87,6 +90,11 @@ public class GradeParser {
             }
             // 顺序
             Collections.reverse(grade_list);
+
+            // 保存原始数据
+            FileOperation.save_to_file(context, MainActivity.cur_username + context.getString(R.string.grade_file), raw_data);
+
+            Toast.makeText(context, "更新成绩成功: )", Toast.LENGTH_SHORT).show();
             return grade_list;
 
         } catch (JSONException e) {

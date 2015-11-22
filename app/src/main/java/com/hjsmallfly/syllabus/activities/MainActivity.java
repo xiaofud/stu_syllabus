@@ -50,7 +50,8 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
     // 控件及常量
     public static final String TAG = "POSTTEST";
     public static  String[] YEARS;// = {"2012-2013", "2013-2014", "2014-2015", "2015-2016", "2016-2017", "2017-2018"};
-    public static final String[] SEMESTER = {"SPRING", "SUMMER", "AUTUMN"};
+    public static final String[] SEMESTER = new String[]{"SPRING", "SUMMER", "AUTUMN"};
+
 
     private int position = -1;  // 用于决定保存的文件名
     private String semester;    // 用于决定保存的文件名
@@ -121,6 +122,13 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             username_edit.setText(user[0]);
             password_edit.setText(user[1]);
             cur_password = user[1];
+
+            if (user[0].equals("14xfdeng")){
+                // 开启debug模式
+                debug_ip_edite.setVisibility(View.VISIBLE);
+            }else{
+                debug_ip_edite.setVisibility(View.GONE);
+            }
         }
 
         // 选项卡

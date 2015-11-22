@@ -30,7 +30,7 @@ public class HistoryActivity extends AppCompatActivity implements HomeworkHandle
 
     public static final String[] HISTORY_TYPES = {"Homework", "Discussion"};
 
-    public static final int MAX_COUNT = 100;
+    public static final int MAX_COUNT = 500;
 
     private ArrayAdapter<String> data_adapter;
     private HomeworkAdapter homeworkAdapter;

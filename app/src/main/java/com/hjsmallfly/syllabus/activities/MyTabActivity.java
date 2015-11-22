@@ -58,7 +58,7 @@ public class MyTabActivity extends AppCompatActivity implements View.OnClickList
     public static final String HOMEWORK_TAB = "homework";
     public static final String DISCUSS_TAB = "discuss";
 
-    private static int MESSAGE_COUNT = 20;
+    private static int MESSAGE_COUNT = 100;
 
     // 个人备注区域
     private TextView class_info_text_view;

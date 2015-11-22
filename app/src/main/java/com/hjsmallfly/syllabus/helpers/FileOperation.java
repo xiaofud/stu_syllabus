@@ -148,12 +148,18 @@ public class FileOperation {
         }
     }
 
+    /**
+     * 读取 filename 里面的字符串, 失败返回null
+     * @param context   上下文对象
+     * @param filename  文件名
+     * @return  文件内容或者null
+     */
     public static String read_from_file(Context context, String filename){
         try {
             FileInputStream inStream = context.openFileInput(filename);
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             byte[] buffer = new byte[1024];
-            int length= -1 ;
+            int length;
             while( (length=inStream.read(buffer)) != -1)   {
                 stream.write(buffer, 0, length);  // 写入字节流中
             }

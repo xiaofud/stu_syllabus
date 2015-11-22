@@ -11,9 +11,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.hjsmallfly.syllabus.adapters.GradeAdapter;
+import com.hjsmallfly.syllabus.helpers.FileOperation;
 import com.hjsmallfly.syllabus.helpers.GradeGetter;
 import com.hjsmallfly.syllabus.helpers.StringDataHelper;
 import com.hjsmallfly.syllabus.interfaces.GradeHandler;
+import com.hjsmallfly.syllabus.parsers.GradeParser;
 import com.hjsmallfly.syllabus.syllabus.Grade;
 import com.hjsmallfly.syllabus.syllabus.R;
 
@@ -24,16 +26,8 @@ import java.util.List;
 public class GradeActivity extends AppCompatActivity implements View.OnClickListener, GradeHandler{
 
     private TextView gpa_display_view;
-//    private EditText grade_debug_display;
     private Button grade_query_button;
-
-//    private Spinner year_spinner;
-//    private Spinner semester_spinner;
-
     private ListView grade_list_view;
-
-//    public static final String[] SEMESTERS = {"SPRING", "SUMMER", "AUTUMN"};
-
     private List<Grade> grade_list; // 存放成绩信息
 
     @Override
@@ -44,31 +38,23 @@ public class GradeActivity extends AppCompatActivity implements View.OnClickList
         find_views();
         setup_views();
 
-        // 打开便查一下成绩
-        get_grades();
+        // 先看看有没有本地缓存好的成绩信息
+        if (FileOperation.hasFile(this, MainActivity.cur_username + getString(R.string.grade_file))){
+            parse_local_grade_data();
+        }else
+        // 从服务器获取信息
+            get_grades();
     }
 
     private void find_views(){
         gpa_display_view = (TextView) findViewById(R.id.gpa_display_text_view);
-//        grade_debug_display = (EditText) findViewById(R.id.grade_debug);
         grade_query_button = (Button) findViewById(R.id.query_grade_button);
-
-//        year_spinner = (Spinner) findViewById(R.id.grade_year_spinner);
-//        semester_spinner = (Spinner) findViewById(R.id.grade_semester_spinner);
-
         grade_list_view = (ListView) findViewById(R.id.grade_list_view);
     }
 
     private void setup_views(){
         // listeners
         grade_query_button.setOnClickListener(this);
-
-        // year_spinner
-//        String[] years = StringDataHelper.generate_years(4);
-//        year_spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, years));
-
-        // semester_spinner
-//        semester_spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, SEMESTERS));
 
     }
 
@@ -77,8 +63,7 @@ public class GradeActivity extends AppCompatActivity implements View.OnClickList
 
         if (grade_list == null)
             return;
-//        Toast.makeText(GradeActivity.this, "handle_grade_list", Toast.LENGTH_SHORT).show();
-//        StringBuilder sb = new StringBuilder();
+
         double grade_point_sum = 0.0;
         double credit_sum = 0.0;
         for(int i = 0 ; i < grade_list.size() ; ++i) {
@@ -123,6 +108,18 @@ public class GradeActivity extends AppCompatActivity implements View.OnClickList
         post_data.put("password", MainActivity.cur_password);
         GradeGetter getter = new GradeGetter(this, this);
         getter.execute(post_data);
+    }
+
+
+    // 读取本地缓存文件
+    private String read_grade_data(){
+        return FileOperation.read_from_file(this, MainActivity.cur_username + getString(R.string.grade_file));
+    }
+
+    // 解析本地文件
+    private void parse_local_grade_data(){
+        GradeParser parser = new GradeParser(this);
+        handle_grade_list(parser.parse(read_grade_data()));
     }
 
     @Override
