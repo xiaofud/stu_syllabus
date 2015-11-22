@@ -66,14 +66,13 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
     private Spinner semester_spinner;
     private Button query_button;
 
-    private EditText debug_ip_edite;
+    private EditText debug_ip_edit;
 
     // 如果已经显示过默认课表就没必要再显示了
     private boolean has_showed_default = false;
     private boolean has_checked_update = false;
 
     private UpdateHelper updateHelper;
-    private ClassParser classParser;
 
     // 创建主界面
     @Override
@@ -106,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         semester_spinner = (Spinner) findViewById(R.id.semester_spinner);
         query_button = (Button) findViewById(R.id.query_syllabus_button);
 
-        debug_ip_edite = (EditText) findViewById(R.id.debug_ip_edit);
+        debug_ip_edit = (EditText) findViewById(R.id.debug_ip_edit);
     }
 
     private void setupViews(){
@@ -125,11 +124,15 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 
             if (user[0].equals("14xfdeng")){
                 // 开启debug模式
-                debug_ip_edite.setVisibility(View.VISIBLE);
+                debug_ip_edit.setVisibility(View.VISIBLE);
             }else{
-                debug_ip_edite.setVisibility(View.GONE);
+                debug_ip_edit.setVisibility(View.GONE);
             }
-        }
+        }else
+            debug_ip_edit.setVisibility(View.GONE);
+
+
+
 
         // 选项卡
 
@@ -215,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         cur_password = password;
 
         // 更新一下 服务器的地址
-        WebApi.set_server_address(debug_ip_edite.getText().toString());
+        WebApi.set_server_address(debug_ip_edit.getText().toString());
 
         semester = null;
         switch (semester_index){
@@ -321,7 +324,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
     private void parse_and_display(String json_data){
 //        if (classParser == null)
         // 每次用新的classParser [暂时这样修复这个BUG]
-        classParser = new ClassParser(this, this);
+        ClassParser classParser = new ClassParser(this, this);
         if (classParser.parseJSON(json_data)) {
             classParser.inflateTable();     // 用数据填充课表
             MainActivity.weekdays_syllabus_data = classParser.weekdays_syllabus_data;

@@ -10,6 +10,11 @@ import android.content.Context;
  */
 public class ClipBoardHelper {
 
+    /**
+     * 复制文字信息到剪贴板上
+     * @param context
+     * @param content
+     */
     public static void setContent(Context context, String content){
         ClipboardManager cbm = (ClipboardManager)context.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clipData = ClipData.newPlainText("", content);
