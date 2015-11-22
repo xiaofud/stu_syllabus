@@ -4,21 +4,53 @@
     android:layout_height="match_parent"
     tools:context="com.hjsmallfly.syllabus.activities.AboutActivity">
 
-    <EditText
-        android:id="@+id/gpa_debug"
+    <!--<LinearLayout-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+
+        <!--<Spinner-->
+            <!--android:layout_weight="1"-->
+            <!--android:id="@+id/grade_year_spinner"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content">-->
+        <!--</Spinner>-->
+
+        <!--<Spinner-->
+            <!--android:id="@+id/grade_semester_spinner"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content">-->
+        <!--</Spinner>-->
+
+    <!--</LinearLayout>-->
+
+
+
+    <TextView
+        android:id="@+id/gpa_display_text_view"
+        android:hint="@string/gpa_display_hint"
+        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <EditText
-        android:id="@+id/grade_debug"
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp" />
+    <!--<EditText-->
+        <!--android:id="@+id/grade_debug"-->
+        <!--android:layout_weight="1"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp" />-->
 
+    <ListView
+        android:id="@+id/grade_list_view"
+        android:layout_weight="1"
+        android:divider="@android:color/transparent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+    </ListView>
 
     <Button
         android:id="@+id/query_grade_button"
-        android:text="查询成绩"
+        android:text="@string/query_grade_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

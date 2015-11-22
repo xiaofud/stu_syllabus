@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -28,8 +29,10 @@ public class GradeParser {
     }
 
     public List<Grade> parse(String raw_data){
-        if (raw_data.isEmpty())
+        if (raw_data.isEmpty()) {
+            Toast.makeText(context, "无法连接到服务器", Toast.LENGTH_SHORT).show();
             return null;
+        }
 //        Toast.makeText(context, "parsing grade raw data", Toast.LENGTH_SHORT).show();
         JSONTokener json_parser = new JSONTokener(raw_data);
         try {
@@ -82,6 +85,8 @@ public class GradeParser {
 
                 }
             }
+            // 顺序
+            Collections.reverse(grade_list);
             return grade_list;
 
         } catch (JSONException e) {
