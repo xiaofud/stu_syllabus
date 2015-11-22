@@ -1,7 +1,5 @@
 package com.hjsmallfly.syllabus.helpers;
 
-import com.hjsmallfly.syllabus.syllabus.R;
-
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -89,22 +87,22 @@ public class StringDataHelper {
     }
 
 
-    public static String semester_from_view_id(int id){
-        String semester;
-        switch (id){
-            case R.id.spring_text_view:
-                semester = "SPRING";
-                break;
-            case R.id.summer_text_view:
-                semester = "SUMMER";
-                break;
-            case R.id.autumn_text_view:
-                semester = "AUTUMN";
-                break;
-            default:
-                semester = "";
-                break;
-        }
-        return semester;
-    }
+//    public static String semester_from_view_id(int id){
+//        String semester;
+//        switch (id){
+//            case R.id.spring_text_view:
+//                semester = "SPRING";
+//                break;
+//            case R.id.summer_text_view:
+//                semester = "SUMMER";
+//                break;
+//            case R.id.autumn_text_view:
+//                semester = "AUTUMN";
+//                break;
+//            default:
+//                semester = "";
+//                break;
+//        }
+//        return semester;
+//    }
 }

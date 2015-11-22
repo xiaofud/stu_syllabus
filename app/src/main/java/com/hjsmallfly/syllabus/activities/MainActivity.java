@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 
 
     private int position = -1;  // 用于决定保存的文件名
-    private String semester;    // 用于决定保存的文件名
+//    private int semester;    // 用于决定保存的文件名
 
 
 //    private EditText address_edit;  // 服务器地址
@@ -220,28 +220,28 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         // 更新一下 服务器的地址
         WebApi.set_server_address(debug_ip_edit.getText().toString());
 
-        semester = null;
+//        semester = -1;
         switch (semester_index){
             case 0:
-                semester = "SPRING";
+//                semester = 2;
                 cur_semester = 2;
                 break;
             case 1:
-                semester = "SUMMER";
+//                semester = 3;
                 cur_semester = 3;
                 break;
             case 2:
-                semester = "AUTUMN";
+//                semester = 1;
                 cur_semester = 1;
                 break;
             default:
                 Log.d(TAG, "maybe there is a typo in submit(int, int)");
                 break;
         }
-        info_about_syllabus = username + " " + years + " " + semester;
+        info_about_syllabus = username + " " + years + " " + StringDataHelper.semester_to_string(cur_semester);
         // 先判断有无之前保存的文件
 //        String filename = username + "_" + years + "_" + semester;
-        String filename = StringDataHelper.generate_syllabus_file_name(username, years, semester, "_");
+        String filename = StringDataHelper.generate_syllabus_file_name(username, years, cur_semester, "_");
         String json_data = FileOperation.read_from_file(MainActivity.this, filename);
         if (json_data != null) {
             // 读取之前存的token
@@ -253,20 +253,13 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         Toast.makeText(MainActivity.this, "正在获取课表信息", Toast.LENGTH_SHORT).show();
 
 //            {"SPRING", "SUMMER", "AUTUMN"}
-        String semester_code = "";
-        if (semester.equals("SPRING"))
-            semester_code = "2";
-        else if (semester.equals("SUMMER"))
-            semester_code = "3";
-        else if (semester.equals("AUTUMN"))
-            semester_code = "1";
 
         HashMap<String, String> postData = new HashMap<>();
         postData.put("username", username);
         postData.put("password", password);
         postData.put("submit", "query");
         postData.put("years", years);
-        postData.put("semester", semester_code);
+        postData.put("semester", cur_semester + "");
 //        Log.d(TAG, "onClick");
 
         LessonPullTask task = new LessonPullTask(WebApi.get_server_address() + getString(R.string.syllabus_get_api), this);
@@ -338,10 +331,11 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             String username = ((EditText) MainActivity.this.findViewById(R.id.username_edit)).getText().toString();
 //                    String filename = username + "_" + YEARS[position] + "_"
 //                            + semester;
-            String filename = StringDataHelper.generate_syllabus_file_name(username, YEARS[position], semester, "_");
+           // 保存文件 格式是: 14xfdeng_2014-2015_autumn
+            String filename = StringDataHelper.generate_syllabus_file_name(username, YEARS[position], cur_semester, "_");
             if (FileOperation.save_to_file(MainActivity.this, filename, json_data)){
 //                        Toast.makeText(MainActivity.this, "成功保存文件 " + filename, Toast.LENGTH_SHORT).show();
-//                        Log.d(TAG, "saved file " + filename);
+                        Log.d(TAG, "saved file " + filename);
             }
             // 保存用户文件
             FileOperation.save_user(MainActivity.this, USERNAME_FILE, PASSWORD_FILE, username, password_edit.getText().toString());
