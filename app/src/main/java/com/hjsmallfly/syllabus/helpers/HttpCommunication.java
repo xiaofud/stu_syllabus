@@ -24,6 +24,8 @@ public class HttpCommunication {
 
     public static int timeout = 4000; // 4s
 
+    public static final String ERROR_CONNECTION = "ERROR_CONNECTION";
+
     /**
      * 访问远程网站，获取信息
      * @param hostaddr 远程地址

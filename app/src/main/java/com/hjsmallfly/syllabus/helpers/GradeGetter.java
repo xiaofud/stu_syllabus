@@ -2,6 +2,7 @@ package com.hjsmallfly.syllabus.helpers;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import com.hjsmallfly.syllabus.interfaces.GradeHandler;
 import com.hjsmallfly.syllabus.parsers.GradeParser;
@@ -33,6 +34,8 @@ public class GradeGetter extends AsyncTask<HashMap<String, String>, Void, String
     @Override
     protected void onPostExecute(String raw_json_data){
         GradeParser parser = new GradeParser(context);
+        if (!raw_json_data.isEmpty())
+            Toast.makeText(context, "更新成绩成功: )", Toast.LENGTH_SHORT).show();
         handler.handle_grade_list(parser.parse(raw_json_data));
     }
 

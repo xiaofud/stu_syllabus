@@ -32,7 +32,7 @@
         <TextView
             android:id="@+id/grade_grade_text_view"
             android:hint="课程分数"
-            android:textSize="24sp"
+            android:textSize="27sp"
             android:layout_marginRight="4dp"
             android:gravity="right"
             android:layout_weight="1"
@@ -44,7 +44,8 @@
     <TextView
         android:id="@+id/grade_credit_text_view"
         android:hint="显示学分"
-        android:layout_marginRight="4dp"
+        android:textColor="@android:color/holo_red_light"
+        android:layout_marginRight="6dp"
         android:layout_gravity="right"
         android:gravity="right"
         android:layout_width="wrap_content"

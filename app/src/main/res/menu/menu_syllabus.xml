@@ -4,6 +4,12 @@
     tools:context="com.hjsmallfly.syllabus.activities.SyllabusActivity">
 
     <item
+        android:id="@+id/global_discuss_action"
+        android:title="全球吹水"
+        app:showAsAction="always"
+        />
+
+    <item
         android:id="@+id/set_default_syllabus"
         android:title="设置为默认课表"
         app:showAsAction="never"/>

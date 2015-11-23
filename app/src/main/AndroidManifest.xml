@@ -51,6 +51,11 @@
             android:name="com.hjsmallfly.syllabus.activities.GradeActivity"
             android:label="@string/title_activity_grade" >
         </activity>
+        <activity
+            android:name="com.hjsmallfly.syllabus.activities.GlobalDiscussActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:label="@string/title_activity_global_discuss" >
+        </activity>
     </application>
 
 </manifest>

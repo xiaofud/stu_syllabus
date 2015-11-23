@@ -137,6 +137,11 @@ public class SyllabusActivity extends AppCompatActivity {
                 startActivity(grade_intent);
                 break;
 
+            case R.id.global_discuss_action:
+                Intent global_discuss_intent = new Intent(this, GlobalDiscussActivity.class);
+                startActivity(global_discuss_intent);
+                break;
+
             default:
                 break;
         }

@@ -94,7 +94,7 @@ public class GradeParser {
             // 保存原始数据
             FileOperation.save_to_file(context, MainActivity.cur_username + context.getString(R.string.grade_file), raw_data);
 
-            Toast.makeText(context, "更新成绩成功: )", Toast.LENGTH_SHORT).show();
+
             return grade_list;
 
         } catch (JSONException e) {
