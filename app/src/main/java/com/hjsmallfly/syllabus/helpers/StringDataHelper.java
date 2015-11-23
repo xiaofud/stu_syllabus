@@ -47,6 +47,10 @@ public class StringDataHelper {
         return strs;
     }
 
+    public static String generate_exam_file(String username, String years, int semester){
+        return username + "_" + "_" + years + "_" + semester;
+    }
+
     public static String generate_token_file_name(String username){
         return username + "_token";
     }

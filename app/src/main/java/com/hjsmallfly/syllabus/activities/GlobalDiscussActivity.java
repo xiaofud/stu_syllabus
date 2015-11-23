@@ -138,10 +138,11 @@ public class GlobalDiscussActivity extends AppCompatActivity implements Discussi
             global_discussions.clear();
             global_discussions.addAll(all_discussions);
             discussionAdapter.notifyDataSetChanged();
-            // 保证最后一个能看到
-            if (global_discussions.size() > 0)
-                global_list_view.setSelection(global_discussions.size() - 1);
         }
+
+        // 保证最后一个能看到
+        if (global_discussions.size() > 0)
+            global_list_view.setSelection(global_discussions.size() - 1);
     }
 
     @Override

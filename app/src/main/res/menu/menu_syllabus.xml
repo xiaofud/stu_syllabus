@@ -15,6 +15,12 @@
         app:showAsAction="never"/>
 
     <item
+        android:id="@+id/query_exam_action"
+        android:title="显示考试信息"
+        app:showAsAction="never"/>
+
+
+    <item
         android:id="@+id/query_grade_action"
         android:title="查看成绩"
         app:showAsAction="never"/>

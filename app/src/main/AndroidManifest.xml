@@ -53,8 +53,12 @@
         </activity>
         <activity
             android:name="com.hjsmallfly.syllabus.activities.GlobalDiscussActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:label="@string/title_activity_global_discuss" >
+            android:label="@string/title_activity_global_discuss"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name="com.hjsmallfly.syllabus.activities.ExamActivity"
+            android:label="@string/title_activity_exam" >
         </activity>
     </application>
 

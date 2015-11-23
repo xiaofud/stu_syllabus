@@ -111,7 +111,7 @@ public class SyllabusActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.set_default_syllabus: {
                 if (set_default_syllabus()) {
-                    Toast.makeText(SyllabusActivity.this, "成功设置默认课表~~~~", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SyllabusActivity.this, "成功设置默认课表", Toast.LENGTH_SHORT).show();
                     return true;
                 } else
                     return false;
@@ -140,6 +140,11 @@ public class SyllabusActivity extends AppCompatActivity {
             case R.id.global_discuss_action:
                 Intent global_discuss_intent = new Intent(this, GlobalDiscussActivity.class);
                 startActivity(global_discuss_intent);
+                break;
+
+            case R.id.query_exam_action:
+                Intent exam_intent = new Intent(this, ExamActivity.class);
+                startActivity(exam_intent);
                 break;
 
             default:
