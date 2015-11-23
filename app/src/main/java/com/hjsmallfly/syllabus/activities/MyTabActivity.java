@@ -1,6 +1,5 @@
 package com.hjsmallfly.syllabus.activities;
 
-import android.content.ClipboardManager;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;

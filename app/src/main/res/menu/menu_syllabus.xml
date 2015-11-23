@@ -6,7 +6,8 @@
     <item
         android:id="@+id/global_discuss_action"
         android:title="全球吹水"
-        app:showAsAction="always"
+        android:icon="@drawable/public_discuss"
+        app:showAsAction="ifRoom"
         />
 
     <item
@@ -23,7 +24,8 @@
     <item
         android:id="@+id/query_grade_action"
         android:title="查看成绩"
-        app:showAsAction="never"/>
+        android:icon="@drawable/query_grade"
+        app:showAsAction="ifRoom"/>
 
     <!--<item-->
         <!--android:id="@+id/blue_text"-->

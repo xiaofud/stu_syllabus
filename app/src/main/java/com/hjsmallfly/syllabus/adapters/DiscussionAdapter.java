@@ -75,7 +75,8 @@ public class DiscussionAdapter extends ArrayAdapter<Discussion> {
         }
 
         view.setBackgroundResource(res_id);
-        view.setLayoutParams(params);
+        // 这个貌似在很多机器会导致程序闪退。。。注意
+//        view.setLayoutParams(params);
 
         return view;    // view 里面的对象的属性是通过viewHolder修改的
     }

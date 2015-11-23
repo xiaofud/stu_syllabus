@@ -6,6 +6,8 @@
     <item
         android:id="@+id/update_global_discussion_action"
         android:title="更新"
+        android:icon="@drawable/sync"
         app:showAsAction="always"
+
         />
 </menu>
