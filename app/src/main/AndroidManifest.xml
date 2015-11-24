@@ -60,6 +60,10 @@
             android:name="com.hjsmallfly.syllabus.activities.ExamActivity"
             android:label="@string/title_activity_exam" >
         </activity>
+        <activity
+            android:name="com.hjsmallfly.syllabus.activities.PersonalInfoActivity"
+            android:label="@string/title_activity_personal_info" >
+        </activity>
     </application>
 
 </manifest>

@@ -4,10 +4,15 @@
     tools:context="com.hjsmallfly.syllabus.activities.GlobalDiscussActivity">
 
     <item
+        android:id="@+id/personal_info_action"
+        app:showAsAction="ifRoom"
+        android:title="个人信息" />
+
+    <item
         android:id="@+id/update_global_discussion_action"
         android:title="更新"
         android:icon="@drawable/sync"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
 
         />
 </menu>

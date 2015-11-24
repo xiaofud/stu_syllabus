@@ -1,5 +1,6 @@
 package com.hjsmallfly.syllabus.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
@@ -52,12 +53,16 @@ public class GlobalDiscussActivity extends AppCompatActivity implements Discussi
         get_latest_global_discussions();
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_global_discussion, menu);
         return true;
     }
+
+
+
 
     private void find_views(){
         global_list_view = (ListView) findViewById(R.id.global_discuss_list_view);
@@ -82,6 +87,11 @@ public class GlobalDiscussActivity extends AppCompatActivity implements Discussi
         switch (item.getItemId()){
             case R.id.update_global_discussion_action:
                 get_latest_global_discussions();
+                return true;
+
+            case R.id.personal_info_action:
+                Intent person_intent = new Intent(this, PersonalInfoActivity.class);
+                startActivity(person_intent);
                 return true;
 
             default:

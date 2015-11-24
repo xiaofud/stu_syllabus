@@ -16,6 +16,8 @@
     <string name="insert_discussion_api">/api/discuss</string>
     <string name="insert_discussion_api_v1">/api/v1.0/discuss</string>
     <string name="version_control_address">/api/version</string>
+    <string name="get_user_information_api">/api/user/</string>
+    <string name="change_user_information_api">/api/v1.0/modify_user</string>
     <string name="delete_api">/api/v1.0/delete/</string>
     <string name="get_exam_list_api">/exam</string>
     <string name="get_grades_api">/grade</string>
@@ -59,5 +61,6 @@
     <string name="title_activity_grade">查看成绩</string>
     <string name="title_activity_global_discuss">全球吹水</string>
     <string name="title_activity_exam">考试信息</string>
+    <string name="title_activity_personal_info">用户个人信息</string>
 
 </resources>

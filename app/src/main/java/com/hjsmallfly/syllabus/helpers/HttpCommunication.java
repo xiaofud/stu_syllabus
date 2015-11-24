@@ -28,16 +28,16 @@ public class HttpCommunication {
 
     /**
      * 访问远程网站，获取信息
-     * @param hostaddr 远程地址
+     * @param host_address 远程地址
      * @param timeout 秒
      * @return "" 或者具体的内容
      */
-    public static String perform_get_call(String hostaddr, int timeout){
+    public static String perform_get_call(String host_address, int timeout){
         URL url;
         String response = "";
-        Log.d(MainActivity.TAG, "地址是:" + hostaddr);
+        Log.d(MainActivity.TAG, "地址是:" + host_address);
         try {
-            url = new URL(hostaddr);
+            url = new URL(host_address);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setReadTimeout(timeout);
             connection.setConnectTimeout(timeout);
