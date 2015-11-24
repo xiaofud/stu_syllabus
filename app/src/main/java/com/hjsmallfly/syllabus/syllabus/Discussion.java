@@ -17,6 +17,7 @@ public class Discussion {
 
     public String content;
     public String publisher;
+    public String publisher_nickname;
     public long pub_time;
 
     public int id;  // 在数据库中的id

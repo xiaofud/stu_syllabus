@@ -1,12 +1,11 @@
 package com.hjsmallfly.syllabus.adapters;
 
 import android.content.Context;
-import android.view.Gravity;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hjsmallfly.syllabus.activities.MainActivity;
@@ -17,6 +16,7 @@ import java.util.List;
 
 /**
  * Created by STU_nwad on 2015/10/11.
+ *
  */
 public class DiscussionAdapter extends ArrayAdapter<Discussion> {
 
@@ -29,13 +29,13 @@ public class DiscussionAdapter extends ArrayAdapter<Discussion> {
 
     private int layout_id;
 
-    private static LinearLayout.LayoutParams params;
+//    private static LinearLayout.LayoutParams params;
 
     // 构造函数
     public DiscussionAdapter(Context context, int resource, List<Discussion> objects) {
         super(context, resource, objects);
         this.layout_id = resource;
-        params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+//        params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
     }
 
     @Override
@@ -59,19 +59,28 @@ public class DiscussionAdapter extends ArrayAdapter<Discussion> {
         }
 
         // 到这里布局就已经建立好了，接下来是设置数据这些
-        viewHolder.publisher_text.setText(discussion.publisher);
+        if (discussion.publisher_nickname != null) {
+            // 红色代表昵称
+            viewHolder.publisher_text.setText(discussion.publisher_nickname);
+            viewHolder.publisher_text.setTextColor(Color.RED);
+        }
+        else {
+            // 黑色代表账号, 也就是没有昵称的同学
+            viewHolder.publisher_text.setText(discussion.publisher);
+            viewHolder.publisher_text.setTextColor(Color.BLACK);
+        }
         viewHolder.pub_time_text.setText(discussion.transfer_time());
         viewHolder.content_text.setText(discussion.content.trim());   // 去除没必要的空字符
 
-        int res_id = -1;
+        int res_id;
 
         if (!discussion.publisher.equals(MainActivity.cur_username)) {
             res_id = R.drawable.left_msg;
-            params.gravity = Gravity.LEFT;
+//            params.gravity = Gravity.LEFT;
         }
         else {
             res_id = R.drawable.right_msg;
-            params.gravity = Gravity.RIGHT;
+//            params.gravity = Gravity.RIGHT;
         }
 
         view.setBackgroundResource(res_id);

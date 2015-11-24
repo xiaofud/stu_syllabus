@@ -37,12 +37,19 @@ public class DiscussionParser {
                 JSONObject dis_obj = (JSONObject) discussion_json_array.get(i);
                 String content = dis_obj.getString("content");
                 String publisher = dis_obj.getString("publisher");
+                String nick_name;
+                if (dis_obj.isNull("publisher_nickname"))
+                    nick_name = null;
+                else
+                    nick_name = dis_obj.getString("publisher_nickname");
                 long pub_time = dis_obj.getLong("time");
                 int id = dis_obj.getInt("id");  // 在数据库中的主键值
 
                 Discussion discussion = new Discussion();
                 discussion.content = content;
                 discussion.publisher = publisher;
+                // 记得检查这个值
+                discussion.publisher_nickname = nick_name;
                 discussion.pub_time = pub_time;
                 discussion.id = id;
 
