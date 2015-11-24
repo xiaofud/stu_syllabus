@@ -129,6 +129,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+
+
         <!--<ListView-->
         <!--android:id="@+id/syllabus_list_view"-->
         <!--android:layout_weight="1"-->
@@ -159,7 +161,18 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/help_message_view"
+        android:layout_above="@+id/year_semester_selection"
+        android:gravity="right"
+        android:layout_marginRight="7dp"
+        android:text="@string/help_message"
+        android:textColor="#1c7fac"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <LinearLayout
+        android:id="@+id/year_semester_selection"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"

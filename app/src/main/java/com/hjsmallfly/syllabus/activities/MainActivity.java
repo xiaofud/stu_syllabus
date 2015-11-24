@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
     public static  String[] YEARS;// = {"2012-2013", "2013-2014", "2014-2015", "2015-2016", "2016-2017", "2017-2018"};
     public static final String[] SEMESTER = new String[]{"SPRING", "SUMMER", "AUTUMN"};
 
+    public static final String[] SEMESTER_CHINESE = new String[]{"春季学期", "夏季学期", "秋季学期"};
+
 
     private int position = -1;  // 用于决定保存的文件名
 //    private int semester;    // 用于决定保存的文件名
@@ -113,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 //        syllabus_list_view.setAdapter(list_adapter);
 
         year_spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, YEARS));
-        semester_spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, SEMESTER));
+        semester_spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, SEMESTER_CHINESE));
 
         // 读取用户
         String[] user = FileOperation.load_user(this, USERNAME_FILE, PASSWORD_FILE);
@@ -206,7 +208,12 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         }
     }
 
-    private void submit_query_request(int year_index, int semester_index){
+    /**
+     *
+     * @param year_index    年份下标
+     * @param semester_spinner_index    下拉菜单的选中项, 注意这个并不对应学分制所需要的学期参数
+     */
+    private void submit_query_request(int year_index, int semester_spinner_index){
         this.position = year_index;
         String username = username_edit.getText().toString();
         cur_username = username;
@@ -221,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         WebApi.set_server_address(debug_ip_edit.getText().toString());
 
 //        semester = -1;
-        switch (semester_index){
+        switch (semester_spinner_index){
             case 0:
 //                semester = 2;
                 cur_semester = 2;

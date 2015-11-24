@@ -137,9 +137,16 @@ public class GlobalDiscussActivity extends AppCompatActivity implements Discussi
     @Override
     public void deal_with_discussion(ArrayList<Discussion> all_discussions) {
         if (all_discussions == null) {
-            Toast.makeText(GlobalDiscussActivity.this, "没有任何吹水数据呢", Toast.LENGTH_SHORT).show();
+            // 发生了某些错误
+//            Toast.makeText(GlobalDiscussActivity.this, "没有任何吹水数据呢", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        if (all_discussions.size() == 0){
+            Toast.makeText(GlobalDiscussActivity.this, "还没有吹水数据呢", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (global_discussions == null){
             global_discussions = new ArrayList<>(all_discussions);
             discussionAdapter = new DiscussionAdapter(this, R.layout.discuss_item_layout, global_discussions);
@@ -163,7 +170,7 @@ public class GlobalDiscussActivity extends AppCompatActivity implements Discussi
                 Toast.makeText(GlobalDiscussActivity.this, "该账号在其他地方登陆过，请返回主界面清除缓存后重新登陆", Toast.LENGTH_SHORT).show();
                 return;
             }else{
-                Toast.makeText(GlobalDiscussActivity.this, "出现错误: " + error, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(GlobalDiscussActivity.this, "出现错误: " + error, Toast.LENGTH_SHORT).show();
                 return;
             }
         }

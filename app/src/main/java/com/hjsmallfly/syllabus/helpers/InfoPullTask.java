@@ -3,6 +3,7 @@ package com.hjsmallfly.syllabus.helpers;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.hjsmallfly.syllabus.activities.MainActivity;
 import com.hjsmallfly.syllabus.interfaces.DiscussionHandler;
@@ -83,6 +84,12 @@ public class InfoPullTask extends AsyncTask<HashMap<String, String>, Void, Strin
 
     @Override
     protected void onPostExecute(String response){
+
+        if (response.isEmpty()){
+            Toast.makeText(context, "网络连接错误", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (homeworkHandler != null){
             HomeworkParser homeworkParser = new HomeworkParser(context);
             homeworkHandler.deal_with_homework(homeworkParser.parser_json(response));

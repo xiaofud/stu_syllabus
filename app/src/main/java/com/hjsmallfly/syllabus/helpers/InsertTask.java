@@ -2,6 +2,8 @@ package com.hjsmallfly.syllabus.helpers;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.Toast;
+
 import com.hjsmallfly.syllabus.interfaces.InsertHandler;
 import com.hjsmallfly.syllabus.syllabus.R;
 
@@ -31,6 +33,10 @@ public class InsertTask extends AsyncTask<HashMap<String, String>, Void, String>
 
     @Override
     protected void onPostExecute(String raw_data){
+        if (raw_data.isEmpty()){
+            Toast.makeText(context, "网络连接错误", Toast.LENGTH_SHORT).show();
+            return;
+        }
         insert_handler.deal_with_insert_result(raw_data);
     }
 }

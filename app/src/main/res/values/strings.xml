@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">汕大课程表</string>
     <string name="title_activity_syllabus">课程表</string>
-    <string name="help_message">长按可以删除缓存文件</string>
+    <string name="help_message">注意选择学期哟!</string>
     <string name="about_message">Email: 14xfdeng@stu.edu.cn(Android)\n
                                  Email: 14jhwang@stu.edu.cn(IOS)</string>
     <string name="syllabus_get_api">/syllabus</string>
@@ -35,13 +35,13 @@
     <string name="summer">夏季\n学期</string>
 
     <string name="version_code">1</string>
-    <string name="version_name">Ver1.7</string>
+    <string name="version_name">Ver1.8</string>
     <string name="publisher">smallfly</string>
 
     <string name="username">账号</string>
     <string name="password">密码</string>
-    <string name="username_hint">username</string>
-    <string name="password_hint">password</string>
+    <string name="username_hint">校园网账号</string>
+    <string name="password_hint">校园网密码</string>
 
     <string name="query_syllabus_button">查询课表</string>
 
@@ -49,6 +49,7 @@
     <string name="gpa_display_hint">这里显示GPA</string>
 
     <string name="grade_file">grade_file</string>
+
 
     <string name="about_information">
         哈哈，你竟然点进这里来了!
