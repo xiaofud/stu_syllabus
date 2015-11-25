@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,7 +32,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class MainActivity extends AppCompatActivity implements  View.OnClickListener, UpdateHandler, LessonHandler, TokenGetter{
+public class MainActivity extends AppCompatActivity implements  View.OnClickListener, UpdateHandler, LessonHandler, TokenGetter, Spinner.OnItemSelectedListener{
     public static Object[] weekdays_syllabus_data;     // 用于向显示课表的activity传递数据
     public static ArrayList<Lesson> weekends_syllabus_data;
     public static String info_about_syllabus;
@@ -88,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         // 设置web service 的默认地址
         WebApi.set_server_address(getString(R.string.server_ip));
 
+//        semester_spinner.setSelection(cur_semester);
+
         // 检查更新
         if (!has_checked_update)
             check_update();
@@ -140,6 +143,8 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 
         // listener
         query_button.setOnClickListener(this);
+
+        semester_spinner.setOnItemSelectedListener(this);
     }
 
 
@@ -197,14 +202,37 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                     cur_username = info[0];
                     cur_year_string = info[1];
                     cur_semester = StringDataHelper.semester_to_int(info[2]);
+                    // 把选项也弄成当前学期的
+                    semester_spinner.setSelection(StringDataHelper.semester_to_selection_index(cur_semester));
                     for(int i = 0 ; i < YEARS.length ; ++i)
                         if (cur_year_string.equals(YEARS[i]))
                             position = i;
                     info_about_syllabus = cur_username + " " + cur_year_string + " " + info[2];
                     has_showed_default = true;
-                    parse_and_display(json_data);
+                    // 本地课表文件里面存的token可能是过期的.
+                    parse_and_display(json_data, false);
                 }
             }
+        }
+    }
+
+    private void set_cur_semester_with_spinner(int selection_id){
+        switch (selection_id){
+            case 0:
+//                semester = 2;
+                cur_semester = 2;
+                break;
+            case 1:
+//                semester = 3;
+                cur_semester = 3;
+                break;
+            case 2:
+//                semester = 1;
+                cur_semester = 1;
+                break;
+            default:
+                Log.d(TAG, "maybe there is a typo in submit(int, int)");
+                break;
         }
     }
 
@@ -227,33 +255,37 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         // 更新一下 服务器的地址
         WebApi.set_server_address(debug_ip_edit.getText().toString());
 
+        // 后去之前存的 token
+        get_local_token();
+
+        set_cur_semester_with_spinner(semester_spinner_index);
+
 //        semester = -1;
-        switch (semester_spinner_index){
-            case 0:
-//                semester = 2;
-                cur_semester = 2;
-                break;
-            case 1:
-//                semester = 3;
-                cur_semester = 3;
-                break;
-            case 2:
-//                semester = 1;
-                cur_semester = 1;
-                break;
-            default:
-                Log.d(TAG, "maybe there is a typo in submit(int, int)");
-                break;
-        }
+//        switch (semester_spinner_index){
+//            case 0:
+////                semester = 2;
+//                cur_semester = 2;
+//                break;
+//            case 1:
+////                semester = 3;
+//                cur_semester = 3;
+//                break;
+//            case 2:
+////                semester = 1;
+//                cur_semester = 1;
+//                break;
+//            default:
+//                Log.d(TAG, "maybe there is a typo in submit(int, int)");
+//                break;
+//        }
         info_about_syllabus = username + " " + years + " " + StringDataHelper.semester_to_string(cur_semester);
         // 先判断有无之前保存的文件
 //        String filename = username + "_" + years + "_" + semester;
         String filename = StringDataHelper.generate_syllabus_file_name(username, years, cur_semester, "_");
         String json_data = FileOperation.read_from_file(MainActivity.this, filename);
         if (json_data != null) {
-            // 读取之前存的token
-            get_local_token();
-            parse_and_display(json_data);
+            // 本地的文件里面的token可能是过期的
+            parse_and_display(json_data, false);
             return;
         }
 
@@ -318,14 +350,15 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             Toast.makeText(MainActivity.this, "没能成功获取课表数据", Toast.LENGTH_SHORT).show();
             return;
         }
-        parse_and_display(raw_data);
+        // 从网络拉过来的数据中 token 肯定是新的, 所以需要更新本地的token
+        parse_and_display(raw_data, true);
     }
 
-    private void parse_and_display(String json_data){
+    private void parse_and_display(String json_data, boolean update_local_token){
 //        if (classParser == null)
         // 每次用新的classParser [暂时这样修复这个BUG]
         ClassParser classParser = new ClassParser(this, this);
-        if (classParser.parseJSON(json_data)) {
+        if (classParser.parseJSON(json_data, update_local_token)) {
             classParser.inflateTable();     // 用数据填充课表
             MainActivity.weekdays_syllabus_data = classParser.weekdays_syllabus_data;
             MainActivity.weekends_syllabus_data = classParser.weekend_classes;
@@ -387,6 +420,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         String filename = StringDataHelper.generate_token_file_name(cur_username);
         if (FileOperation.hasFile(this, filename)){
             MainActivity.token = FileOperation.read_from_file(this, filename);
+//            Toast.makeText(MainActivity.this, "成功读取Token " + token, Toast.LENGTH_SHORT).show();
         }else
             MainActivity.token = "";
 
@@ -395,7 +429,11 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
     private void delete_cached_file(){
         String username = username_edit.getText().toString();
         int year_index = year_spinner.getSelectedItemPosition();
-        String semester_name = semester_spinner.getSelectedItem().toString();
+//        String semester_name = semester_spinner.getSelectedItem().toString();
+        String semester_name = StringDataHelper.semester_to_string(cur_semester);
+        // 错误的值
+        if (semester_name == null)
+            return;
         String filename = StringDataHelper.generate_syllabus_file_name(username, YEARS[year_index], semester_name, "_");
         //        Toast.makeText(MainActivity.this, "filename: " + filename, Toast.LENGTH_SHORT).show();
         delete_cache_file(this, filename);
@@ -409,5 +447,16 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                 Toast.makeText(context, "删除缓存文件失败", Toast.LENGTH_SHORT).show();
         } else
             Toast.makeText(context, "不存在该缓存文件", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        set_cur_semester_with_spinner(position);
+//        Toast.makeText(MainActivity.this, "position: " + position + " cur_semester = " + cur_semester, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        
     }
 }

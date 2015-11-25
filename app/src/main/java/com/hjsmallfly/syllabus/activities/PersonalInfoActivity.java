@@ -1,6 +1,5 @@
 package com.hjsmallfly.syllabus.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -71,7 +70,7 @@ public class PersonalInfoActivity extends AppCompatActivity implements View.OnCl
 
     private void alter_user_info(){
         String nickname = nickname_edit.getText().toString();
-        if (nickname.isEmpty()){
+        if (nickname.trim().isEmpty()){
             Toast.makeText(PersonalInfoActivity.this, "昵称不能为空", Toast.LENGTH_SHORT).show();
             return;
         }else if(nickname.length() > 20){
@@ -82,7 +81,7 @@ public class PersonalInfoActivity extends AppCompatActivity implements View.OnCl
         HashMap<String, String> post_data = new HashMap<>();
         post_data.put("username", MainActivity.cur_username);
         post_data.put("token", MainActivity.token);
-        post_data.put("nickname", nickname);
+        post_data.put("nickname", nickname.trim());
 
         UserInfoAlter alter = new UserInfoAlter(this, this);
         alter.execute(post_data);

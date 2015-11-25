@@ -90,6 +90,21 @@ public class StringDataHelper {
         return -1;
     }
 
+    public static int semester_to_selection_index(int semester){
+        // 0 1 2
+        // 2 3 1
+        switch (semester){
+            case 1:
+                return 2;
+            case 3:
+                return 1;
+            case 2:
+                return 0;
+            default:
+                return 0;
+        }
+    }
+
 
 //    public static String semester_from_view_id(int id){
 //        String semester;

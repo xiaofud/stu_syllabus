@@ -23,7 +23,7 @@
     <string name="get_grades_api">/grade</string>
 
 
-    <string name="title_activity_history">历 史 记 录</string>
+    <string name="title_activity_history">历史记录</string>
     <string name="title_activity_about">Small Fly\'s Words</string>
     <string name="action_settings">Settings</string>
 
@@ -35,7 +35,7 @@
     <string name="summer">夏季\n学期</string>
 
     <string name="version_code">1</string>
-    <string name="version_name">Ver1.8</string>
+    <string name="version_name">Ver1.9</string>
     <string name="publisher">smallfly</string>
 
     <string name="username">账号</string>

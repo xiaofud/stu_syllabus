@@ -25,6 +25,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <TextView
+        android:id="@+id/exam_comment_text_view"
+        android:layout_margin="4dp"
+        android:textColor="@android:color/holo_red_light"
+        android:hint="备注信息"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 
 
 </LinearLayout>

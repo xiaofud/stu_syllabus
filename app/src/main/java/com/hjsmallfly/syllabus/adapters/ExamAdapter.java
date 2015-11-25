@@ -24,6 +24,7 @@ public class ExamAdapter extends ArrayAdapter<Exam> {
         private TextView location_view;
         private TextView name_text_view;
         private TextView time_text_view;
+        private TextView comment_text_view;
     }
 
     public ExamAdapter(Context context, int resource, List<Exam> objects) {
@@ -48,6 +49,7 @@ public class ExamAdapter extends ArrayAdapter<Exam> {
             viewHolder.location_view = (TextView) view.findViewById(R.id.exam_location_text_view);
             viewHolder.name_text_view = (TextView) view.findViewById(R.id.exam_class_text_view);
             viewHolder.time_text_view = (TextView) view.findViewById(R.id.exam_time_text_view);
+            viewHolder.comment_text_view = (TextView) view.findViewById(R.id.exam_comment_text_view);
             view.setTag(viewHolder);
         } else {  // 之前缓存过的view
             view = convertView;
@@ -58,11 +60,16 @@ public class ExamAdapter extends ArrayAdapter<Exam> {
         String location = exam.exam_location;
         String name = exam.exam_class;
         String time_str = exam.exam_time;
-
+        String exam_comment = "备注信息: ";
+        if (exam.exam_comment.trim().isEmpty()){
+            exam_comment += "无";
+        }else{
+            exam_comment += exam.exam_comment;
+        }
         viewHolder.location_view.setText(location);
         viewHolder.name_text_view.setText(name);
         viewHolder.time_text_view.setText(time_str);
-
+        viewHolder.comment_text_view.setText(exam_comment);
         return view;
     }
 }

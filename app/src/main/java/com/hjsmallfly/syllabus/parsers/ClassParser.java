@@ -72,7 +72,7 @@ public class ClassParser {
      * @param json_data 从服务器返回的代表课程信息的 json 数据
      * @return
      */
-    public boolean parseJSON(String json_data){
+    public boolean parseJSON(String json_data, boolean update_local_token){
         // 用response作为json传给 JSONTOkener
         JSONTokener jsonParser = new JSONTokener(json_data);
         all_classes.clear();
@@ -91,8 +91,11 @@ public class ClassParser {
             }
             // 得到所有课程的数组
             JSONArray classes = curriculum.getJSONArray("classes");
-            String token = curriculum.getString("token");
-            tokenGetter.get_token(token);
+            // 因为本地缓存的课表文件里面含有的token文件可能是过期的.
+            if (update_local_token) {
+                String token = curriculum.getString("token");
+                tokenGetter.get_token(token);
+            }
 //            Toast.makeText(context, "the token is " + token, Toast.LENGTH_SHORT).show();
 //            Log.d(MainActivity.TAG, classes.length() + " classes");
             for (int i = 0; i < classes.length(); ++i) {
