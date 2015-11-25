@@ -132,6 +132,11 @@ public class PersonalInfoActivity extends AppCompatActivity implements View.OnCl
                 Toast.makeText(PersonalInfoActivity.this, "没有该用户!", Toast.LENGTH_SHORT).show();
             else if (error.equals("wrong token"))
                 Toast.makeText(PersonalInfoActivity.this, "该账号在其他地方登录过，请返回主界面清除缓存文件后重新登录！", Toast.LENGTH_SHORT).show();
+            else if (error.equals("the nickname has been used")){
+                Toast.makeText(PersonalInfoActivity.this, "用户名已经被使用", Toast.LENGTH_SHORT).show();
+            }else if(error.equals("not authorized to use this name")){
+                Toast.makeText(PersonalInfoActivity.this, "不允许使用该用户名", Toast.LENGTH_SHORT).show();
+            }
             return;
         }
 
