@@ -14,6 +14,8 @@ public class Homework {
 
     public int id;  // 在数据库中的id
 
+    public String nickname;
+
     public String transfer_time(){
         Calendar calendar =  Calendar.getInstance();
         calendar.setTimeInMillis(pub_time * 1000);  // 这个是毫秒
@@ -28,7 +30,8 @@ public class Homework {
      */
     @Override
     public String toString(){
-        return "发布者 " + publisher + "\n发布时间 " + transfer_time() + "\n" + "上交时间 " + hand_in_time + "\n内容:\n" + content;
+        String publisher_display = nickname == null ? publisher : nickname;
+        return "发布者 " + publisher_display + "\n发布时间 " + transfer_time() + "\n" + "上交时间 " + hand_in_time + "\n内容:\n" + content;
     }
 
 }

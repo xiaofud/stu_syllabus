@@ -77,6 +77,9 @@ public class HomeworkParser {
                 homework.pub_time = homework_obj.getInt("pub_time");
                 homework.hand_in_time = homework_obj.getString("hand_in_time");
                 homework.id = homework_obj.getInt("id");
+                if (!homework_obj.isNull("publisher_nickname")){
+                    homework.nickname = homework_obj.getString("publisher_nickname");
+                }
 //                Log.d(MainActivity.TAG, homework.toString());
                 all_homework.add(homework);
             }
