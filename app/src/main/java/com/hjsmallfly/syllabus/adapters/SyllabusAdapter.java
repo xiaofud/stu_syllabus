@@ -19,7 +19,7 @@ import java.util.Random;
 /**
  * Created by STU_nwad on 2015/9/23.
  */
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
+public class SyllabusAdapter extends RecyclerView.Adapter<SyllabusAdapter.ViewHolder> {
     private Object[] data_set;
     private SyllabusActivity syllabusActivity;
 
@@ -62,14 +62,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public RecyclerAdapter(Object[] myDataset, SyllabusActivity syllabusActivity) {
-        this.data_set = myDataset;
+    public SyllabusAdapter(Object[] my_data_set, SyllabusActivity syllabusActivity) {
+        this.data_set = my_data_set;
         this.syllabusActivity = syllabusActivity;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public RecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+    public SyllabusAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                    int viewType) {
         // create a new view
 //        android.R.layout.simple_list_item_1
@@ -89,16 +89,39 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        if (data_set[position] instanceof Lesson) {
+        if (data_set[position] instanceof Lesson || data_set[position].toString().length() == 2) {
             holder.mTextView.setBackgroundResource(get_random_cell());
             holder.mTextView.getBackground().setAlpha(150);  // 透明  [0,255]
         }
         else
             holder.mTextView.setBackgroundResource(0);
 
+        String display_message = data_set[position].toString();
+        // 在这里添加单双周信息
+        if (data_set[position] instanceof Lesson){
+            Lesson lesson = (Lesson) data_set[position];
+            // 行数，也就是课程的上课节数
+//            int divided_by_column = position / ClassParser.COLUMNS;
+            // 上课的星期数
+            int mod_by_column = position % ClassParser.COLUMNS;
+            for(String key: lesson.days.keySet()){
+                String time_str = lesson.days.get(key);
+                String week_day_str = "w" + mod_by_column;
+                if (!key.equals(week_day_str))
+                    continue;
+
+                boolean has_double = time_str.contains("双");
+                boolean has_single = time_str.contains("单");
+                if (has_double)
+                    display_message = "[双]" + display_message;
+                else if (has_single)
+                    display_message = "[单]" + display_message;
+            }
+        }
+
 //        holder.mTextView.setGravity(View.TEXT_ALIGNMENT_CENTER);
         holder.mTextView.setOnClickListener(new ClickAndShow(position));    // 至于被点击的具体是什么内容就由 ClickAndShow 决定了
-        holder.mTextView.setText(data_set[position].toString());
+        holder.mTextView.setText(display_message);
         holder.mTextView.setClickable(true);
         holder.mTextView.setTextSize(12);
         holder.mTextView.setTextColor(text_color);

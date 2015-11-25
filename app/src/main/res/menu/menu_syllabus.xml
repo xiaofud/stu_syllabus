@@ -17,7 +17,7 @@
 
     <item
         android:id="@+id/query_exam_action"
-        android:title="显示考试信息"
+        android:title="考试安排"
         app:showAsAction="never"/>
 
 

@@ -62,8 +62,10 @@ public class ClassParser {
         all_classes = new ArrayList<>();
         weekend_classes = new ArrayList<>();
         this.context = context;
-        init();     // 生成初始化的数据，在特定位置上填上日期信息之类的
         this.tokenGetter = tokenGetter;
+
+        init();     // 生成初始化的数据，在特定位置上填上日期信息之类的
+
     }
 
 
@@ -202,7 +204,7 @@ public class ClassParser {
 //        Log.d(MainActivity.TAG, "end init()");
     }
 
-    private int change_into_number(char c){
+    public static int change_into_number(char c){
         int num;
         switch (c){
             case '0':
@@ -228,8 +230,9 @@ public class ClassParser {
         weekend_classes.clear();
         // 填充课表数据
         for(int i = 0 ; i < all_classes.size() ; ++i){
-            // 遍历key set
+            // 遍历每一堂课
             Lesson lesson = all_classes.get(i);
+            // 遍历key set, 所以应该上相同课程的格子，实际上添加的是同一个 Lesson 对象
             for (String key : lesson.days.keySet()){
                 // key 的值是  w1 w2 这种格式
                 String class_time = lesson.days.get(key);
@@ -262,15 +265,18 @@ public class ClassParser {
                                 break;
                             case '单':   // 跳过这个字符
                             case '双':
+//                                lesson.comment = c + "";
                                 hasBeenAdded = false;
                                 break;
                             default:
                                 row = c - '0';
                                 break;
                         }
-                        int index = row * COLUMNS + offset;
                         if (row == -1)   // 说明是单双周的情况
                             continue;
+
+                        int index = row * COLUMNS + offset;
+
                         if (!hasBeenAdded) {     // 一节课添加一次即可
                             weekdays_syllabus_data[index] = lesson;   // 将这节课添加到合适的位置
                             hasBeenAdded = true;
@@ -286,6 +292,7 @@ public class ClassParser {
                                     weekdays_syllabus_data[index] = lesson;
                                     continue;
                                 }
+                                // 说明这节课和上面的课是连着的而且是同一节课
                                 weekdays_syllabus_data[index] = "同上";
                             }
 

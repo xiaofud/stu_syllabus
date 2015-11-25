@@ -17,7 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.hjsmallfly.syllabus.adapters.RecyclerAdapter;
+import com.hjsmallfly.syllabus.adapters.SyllabusAdapter;
 import com.hjsmallfly.syllabus.helpers.ColorHelper;
 import com.hjsmallfly.syllabus.helpers.FileOperation;
 import com.hjsmallfly.syllabus.helpers.StringDataHelper;
@@ -42,7 +42,7 @@ public class SyllabusActivity extends AppCompatActivity {
     private static final int CROP_PHOTO_REQUEST = 2; // 结果
 
     private RecyclerView mRecyclerView;
-    private RecyclerAdapter mAdapter;
+    private SyllabusAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private TextView weekend_text;
 //    private TextView info_text;
@@ -55,7 +55,7 @@ public class SyllabusActivity extends AppCompatActivity {
         mLayoutManager = new GridLayoutManager(this, 6, RecyclerView.VERTICAL, false);  // 不管周末的课程先
         GridLayoutManager gridLayoutManager = (GridLayoutManager) mLayoutManager;
         mRecyclerView.setLayoutManager(gridLayoutManager);
-        mAdapter = new RecyclerAdapter(MainActivity.weekdays_syllabus_data, this);
+        mAdapter = new SyllabusAdapter(MainActivity.weekdays_syllabus_data, this);
         mAdapter.set_color(ColorHelper.read_color_from_file(this, COLOR_FILE_NAME));
         mRecyclerView.setAdapter(mAdapter);
 
