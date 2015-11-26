@@ -91,6 +91,9 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 
 //        semester_spinner.setSelection(cur_semester);
 
+        // 读取token
+//        get_local_token();
+
         // 检查更新
         if (!has_checked_update)
             check_update();
@@ -174,11 +177,11 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             return true;
         }
 
-        // 清除之前的缓存文件
-        if (id == R.id.delete_action){
-            delete_cached_file();
-            return true;
-        }
+//        // 清除之前的缓存文件
+//        if (id == R.id.delete_action){
+//            delete_cached_file();
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -200,6 +203,9 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                     // 设置一些相关信息
                     String[] info = default_file_name.split("_");
                     cur_username = info[0];
+                    if (!cur_username.equals(username_edit.getText().toString()))
+                        // 说明用户已经登录了其他账号
+                        return;
                     cur_year_string = info[1];
                     cur_semester = StringDataHelper.semester_to_int(info[2]);
                     // 把选项也弄成当前学期的
@@ -255,29 +261,11 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         // 更新一下 服务器的地址
         WebApi.set_server_address(debug_ip_edit.getText().toString());
 
-        // 后去之前存的 token
+        // 读取之前存的 token
         get_local_token();
 
         set_cur_semester_with_spinner(semester_spinner_index);
 
-//        semester = -1;
-//        switch (semester_spinner_index){
-//            case 0:
-////                semester = 2;
-//                cur_semester = 2;
-//                break;
-//            case 1:
-////                semester = 3;
-//                cur_semester = 3;
-//                break;
-//            case 2:
-////                semester = 1;
-//                cur_semester = 1;
-//                break;
-//            default:
-//                Log.d(TAG, "maybe there is a typo in submit(int, int)");
-//                break;
-//        }
         info_about_syllabus = username + " " + years + " " + StringDataHelper.semester_to_string(cur_semester);
         // 先判断有无之前保存的文件
 //        String filename = username + "_" + years + "_" + semester;
@@ -363,22 +351,28 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             MainActivity.weekdays_syllabus_data = classParser.weekdays_syllabus_data;
             MainActivity.weekends_syllabus_data = classParser.weekend_classes;
 //                    Log.d(TAG, "established adapter");
-            Intent syllabus_activity = new Intent(MainActivity.this, SyllabusActivity.class);
-            startActivity(syllabus_activity);
-//                    Toast.makeText(MainActivity.this, "读取课表成功哟~~~~", Toast.LENGTH_SHORT).show();
 
             // 保存文件 命名格式: name_years_semester
             String username = ((EditText) MainActivity.this.findViewById(R.id.username_edit)).getText().toString();
 //                    String filename = username + "_" + YEARS[position] + "_"
 //                            + semester;
-           // 保存文件 格式是: 14xfdeng_2014-2015_autumn
+            // 保存文件 格式是: 14xfdeng_2014-2015_autumn
             String filename = StringDataHelper.generate_syllabus_file_name(username, YEARS[position], cur_semester, "_");
             if (FileOperation.save_to_file(MainActivity.this, filename, json_data)){
 //                        Toast.makeText(MainActivity.this, "成功保存文件 " + filename, Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "saved file " + filename);
-            }
+                Log.d(TAG, "saved file " + filename);
             // 保存用户文件
             FileOperation.save_user(MainActivity.this, USERNAME_FILE, PASSWORD_FILE, username, password_edit.getText().toString());
+
+            // 读取token
+            get_local_token();
+
+            Intent syllabus_activity = new Intent(MainActivity.this, SyllabusActivity.class);
+            startActivity(syllabus_activity);
+//                    Toast.makeText(MainActivity.this, "读取课表成功哟~~~~", Toast.LENGTH_SHORT).show();
+
+            }
+
         }
     }
 
@@ -409,7 +403,6 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             FileOperation.save_to_file(this, StringDataHelper.generate_token_file_name(cur_username), token);
         if (!saved){
             Toast.makeText(MainActivity.this, "保存Token文件失败", Toast.LENGTH_SHORT).show();
-            return;
         }
     }
 
@@ -420,6 +413,16 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         String filename = StringDataHelper.generate_token_file_name(cur_username);
         if (FileOperation.hasFile(this, filename)){
             MainActivity.token = FileOperation.read_from_file(this, filename);
+//            Toast.makeText(MainActivity.this, "成功读取Token " + token, Toast.LENGTH_SHORT).show();
+        }else
+            MainActivity.token = "";
+
+    }
+
+    public static void set_local_token(Context use_for_file_context){
+        String filename = StringDataHelper.generate_token_file_name(cur_username);
+        if (FileOperation.hasFile(use_for_file_context, filename)){
+            MainActivity.token = FileOperation.read_from_file(use_for_file_context, filename);
 //            Toast.makeText(MainActivity.this, "成功读取Token " + token, Toast.LENGTH_SHORT).show();
         }else
             MainActivity.token = "";

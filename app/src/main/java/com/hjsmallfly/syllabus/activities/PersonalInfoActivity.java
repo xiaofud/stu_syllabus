@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.hjsmallfly.syllabus.helpers.JSONHelper;
 import com.hjsmallfly.syllabus.helpers.PullUserTask;
+import com.hjsmallfly.syllabus.helpers.StringDataHelper;
 import com.hjsmallfly.syllabus.helpers.UserInfoAlter;
 import com.hjsmallfly.syllabus.interfaces.UserAlterHandler;
 import com.hjsmallfly.syllabus.interfaces.UserHandler;
@@ -131,7 +132,7 @@ public class PersonalInfoActivity extends AppCompatActivity implements View.OnCl
             if (error.equals("no such user"))
                 Toast.makeText(PersonalInfoActivity.this, "没有该用户!", Toast.LENGTH_SHORT).show();
             else if (error.equals("wrong token"))
-                Toast.makeText(PersonalInfoActivity.this, "该账号在其他地方登录过，请返回主界面清除缓存文件后重新登录！", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PersonalInfoActivity.this, StringDataHelper.ERROR_TOKEN, Toast.LENGTH_SHORT).show();
             else if (error.equals("the nickname has been used")){
                 Toast.makeText(PersonalInfoActivity.this, "用户名已经被使用", Toast.LENGTH_SHORT).show();
             }else if(error.equals("not authorized to use this name")){

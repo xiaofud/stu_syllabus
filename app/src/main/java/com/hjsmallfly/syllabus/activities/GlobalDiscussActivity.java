@@ -20,6 +20,7 @@ import com.hjsmallfly.syllabus.helpers.DeleteTask;
 import com.hjsmallfly.syllabus.helpers.InfoPullTask;
 import com.hjsmallfly.syllabus.helpers.InsertTask;
 import com.hjsmallfly.syllabus.helpers.JSONHelper;
+import com.hjsmallfly.syllabus.helpers.StringDataHelper;
 import com.hjsmallfly.syllabus.interfaces.AfterDeleteHandler;
 import com.hjsmallfly.syllabus.interfaces.DiscussionHandler;
 import com.hjsmallfly.syllabus.interfaces.InsertHandler;
@@ -110,7 +111,7 @@ public class GlobalDiscussActivity extends AppCompatActivity implements Discussi
         // curl http://127.0.0.1:5000/api/v1.0/discuss -X POST -d "publisher=14xfdeng&pub_time=1000&content=How are you?&number=100000&start_year=2015&end_year=2016&semester=1&token=675054"
 
         HashMap<String, String> post_data = new HashMap<>();
-
+        MainActivity.set_local_token(this);
         String token = MainActivity.token;
         String publisher = MainActivity.cur_username;
         String pub_time = System.currentTimeMillis() * 1000 + "";
@@ -167,7 +168,7 @@ public class GlobalDiscussActivity extends AppCompatActivity implements Discussi
         String error = JSONHelper.check_and_get_error(ret_val);
         if (error != null){
             if (error.equals("wrong token")){
-                Toast.makeText(GlobalDiscussActivity.this, "该账号在其他地方登陆过，请返回主界面清除缓存后重新登陆", Toast.LENGTH_SHORT).show();
+                Toast.makeText(GlobalDiscussActivity.this, StringDataHelper.ERROR_TOKEN, Toast.LENGTH_SHORT).show();
                 return;
             }else{
 //                Toast.makeText(GlobalDiscussActivity.this, "出现错误: " + error, Toast.LENGTH_SHORT).show();
@@ -233,7 +234,7 @@ public class GlobalDiscussActivity extends AppCompatActivity implements Discussi
         if (error != null){
 //            Toast.makeText(MyTabActivity.this, "删除错误: " + error, Toast.LENGTH_SHORT).show();
             if (error.equals(DeleteTask.ERROR_WRONG_TOKEN))
-                Toast.makeText(this, "该账号在其他地方登陆过，请返回主界面清除课程缓存文件。", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, StringDataHelper.ERROR_TOKEN, Toast.LENGTH_SHORT).show();
             else if (error.equals(DeleteTask.ERROR_NO_AUTHORIZED)){
                 Toast.makeText(this, "只能删除自己的信息哟", Toast.LENGTH_SHORT).show();
             }

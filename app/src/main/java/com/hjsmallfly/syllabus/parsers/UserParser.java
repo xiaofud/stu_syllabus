@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.hjsmallfly.syllabus.helpers.JSONHelper;
+import com.hjsmallfly.syllabus.helpers.StringDataHelper;
 import com.hjsmallfly.syllabus.syllabus.UserInformation;
 
 import org.json.JSONException;
@@ -31,7 +32,7 @@ public class UserParser {
         String error = JSONHelper.check_and_get_error(raw_data);
         if (error != null){
             if (error.equals("wrong token")){
-                Toast.makeText(context, "该用户在其他地方登录过，请回到主界面清除缓存数据后重新登录!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, StringDataHelper.ERROR_TOKEN, Toast.LENGTH_SHORT).show();
                 return null;
             }else if (error.equals("no such user")){
                 Toast.makeText(context, "没有该用户", Toast.LENGTH_SHORT).show();

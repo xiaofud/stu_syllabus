@@ -7,10 +7,10 @@
         android:id="@+id/delete_default_syllabus"
         app:showAsAction="never"/>
 
-    <item
-        android:title="清除缓存文件"
-        android:id="@+id/delete_action"
-        app:showAsAction="never"/>
+    <!--<item-->
+        <!--android:title="清除缓存文件"-->
+        <!--android:id="@+id/delete_action"-->
+        <!--app:showAsAction="never"/>-->
 
 
     <item

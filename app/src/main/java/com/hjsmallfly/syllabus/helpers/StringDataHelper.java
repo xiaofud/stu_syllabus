@@ -13,6 +13,8 @@ public class StringDataHelper {
     public static String ERROR_CREDIT_TIME_OUT = "连接学分制超时";
     public static String ERROR_WRONG_PASSWORD = "密码错误";
 
+    public static String ERROR_TOKEN = "该用户在其他设备上登录过, 请在课表界面上点击更新课表, 再重试";
+
     public static String NO_CLASSES = "No classes";
     public static String WRONG_PASSWORD = "the password is wrong";
     public static String TIMEOUT = "timeout";

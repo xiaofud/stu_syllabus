@@ -508,7 +508,7 @@ public class MyTabActivity extends AppCompatActivity implements View.OnClickList
         if (error != null){
 //            Toast.makeText(MyTabActivity.this, "删除错误: " + error, Toast.LENGTH_SHORT).show();
             if (error.equals(DeleteTask.ERROR_WRONG_TOKEN))
-                Toast.makeText(MyTabActivity.this, "该账号在其他地方登陆过，请返回主界面清除课程缓存文件。", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MyTabActivity.this, StringDataHelper.ERROR_TOKEN, Toast.LENGTH_SHORT).show();
             else if (error.equals(DeleteTask.ERROR_NO_AUTHORIZED)){
                 Toast.makeText(MyTabActivity.this, "只能删除自己的信息哟", Toast.LENGTH_SHORT).show();
             }
