@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.hjsmallfly.syllabus.adapters.SyllabusAdapter;
@@ -52,6 +53,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
     private SyllabusAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private TextView weekend_text;
+    private Button show_oa_button;
 //    private TextView info_text;
 
     private Bitmap wall_paper;
@@ -83,7 +85,14 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         // 设置字体颜色
 //        set_text_color(ColorHelper.read_color_from_file(this, COLOR_FILE_NAME));
 
-
+        show_oa_button = (Button) findViewById(R.id.syllabus_show_oa_button);
+        show_oa_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SyllabusActivity.this, OAActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -158,6 +167,11 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 // 更新课表
                 sync_syllabus();
                 break;
+            case R.id.show_oa_action:
+                Intent intent = new Intent(this, OAActivity.class);
+                startActivity(intent);
+                break;
+
             default:
                 break;
         }

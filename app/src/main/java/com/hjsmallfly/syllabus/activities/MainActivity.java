@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
     }
 
     private void setupViews(){
-//        ListViewAdapter list_adapter = new ListViewAdapter(this);
+//        YearSemesterChooseParser list_adapter = new YearSemesterChooseParser(this);
 //        syllabus_list_view.setAdapter(list_adapter);
 
         year_spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, YEARS));

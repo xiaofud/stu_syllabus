@@ -64,6 +64,13 @@
             android:name="com.hjsmallfly.syllabus.activities.PersonalInfoActivity"
             android:label="@string/title_activity_personal_info" >
         </activity>
+        <activity
+            android:name="com.hjsmallfly.syllabus.activities.OAActivity"
+            android:label="@string/oa_label" >
+        </activity>
+        <activity android:name="com.hjsmallfly.syllabus.activities.OAWebViewActivity"
+            android:label="@string/oa_web_view_label">
+        </activity>
     </application>
 
 </manifest>

@@ -14,7 +14,7 @@ import com.hjsmallfly.syllabus.syllabus.R;
 /**
  * Created by STU_nwad on 2015/10/1.
  */
-public class ListViewAdapter extends BaseAdapter {
+public class YearSemesterChooseParser extends BaseAdapter {
 
     // 存放近四年的课表
     public static final int COUNT = 4;
@@ -38,7 +38,7 @@ public class ListViewAdapter extends BaseAdapter {
 
     private LayoutInflater layoutInflater;
 
-    public ListViewAdapter(Context context){
+    public YearSemesterChooseParser(Context context){
         super();
         this.context = context;
         this.layoutInflater = LayoutInflater.from(context);

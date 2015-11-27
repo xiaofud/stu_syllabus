@@ -40,6 +40,10 @@
         <!--app:showAsAction="never"/>-->
 
     <item
+        android:id="@+id/show_oa_action"
+        android:title="查看办公自动化" />
+
+    <item
         android:id="@+id/black_text"
         android:title="黑色字"
         app:showAsAction="never"/>

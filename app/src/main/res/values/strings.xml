@@ -21,6 +21,7 @@
     <string name="delete_api">/api/v1.0/delete/</string>
     <string name="get_exam_list_api">/exam</string>
     <string name="get_grades_api">/grade</string>
+    <string name="get_oa_list_api">/oa</string>
 
 
     <string name="title_activity_history">历史记录</string>
@@ -49,6 +50,9 @@
     <string name="gpa_display_hint">这里显示GPA</string>
 
     <string name="grade_file">grade_file</string>
+
+    <string name="oa_label">办公自动化(请接入内网使用)</string>
+    <string name="oa_web_view_label">办公自动化详情页</string>
 
 
     <string name="about_information">
