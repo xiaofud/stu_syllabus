@@ -24,6 +24,7 @@ public class ExamAdapter extends ArrayAdapter<Exam> {
         private TextView location_view;
         private TextView name_text_view;
         private TextView time_text_view;
+        private TextView sit_position_text_view;
         private TextView comment_text_view;
     }
 
@@ -49,6 +50,7 @@ public class ExamAdapter extends ArrayAdapter<Exam> {
             viewHolder.location_view = (TextView) view.findViewById(R.id.exam_location_text_view);
             viewHolder.name_text_view = (TextView) view.findViewById(R.id.exam_class_text_view);
             viewHolder.time_text_view = (TextView) view.findViewById(R.id.exam_time_text_view);
+            viewHolder.sit_position_text_view = (TextView) view.findViewById(R.id.sit_position);
             viewHolder.comment_text_view = (TextView) view.findViewById(R.id.exam_comment_text_view);
             view.setTag(viewHolder);
         } else {  // 之前缓存过的view
@@ -58,8 +60,9 @@ public class ExamAdapter extends ArrayAdapter<Exam> {
 
         // 设置需要显示的数据
         String location = exam.exam_location;
-        String name = exam.exam_class;
+        String name = "考试科目: " +  exam.exam_class;
         String time_str = exam.exam_time;
+        String sit_position = "座位号: " +  exam.exam_stu_position;
         String exam_comment = "备注信息: ";
         if (exam.exam_comment.trim().isEmpty()){
             exam_comment += "无";
@@ -69,6 +72,7 @@ public class ExamAdapter extends ArrayAdapter<Exam> {
         viewHolder.location_view.setText(location);
         viewHolder.name_text_view.setText(name);
         viewHolder.time_text_view.setText(time_str);
+        viewHolder.sit_position_text_view.setText(sit_position);
         viewHolder.comment_text_view.setText(exam_comment);
         return view;
     }
