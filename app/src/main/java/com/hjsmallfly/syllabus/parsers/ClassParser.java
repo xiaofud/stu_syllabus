@@ -76,6 +76,7 @@ public class ClassParser {
      */
     public boolean parseJSON(String json_data, boolean update_local_token){
         // 用response作为json传给 JSONTOkener
+        // 检查是否外网流量已经用完
         JSONTokener jsonParser = new JSONTokener(json_data);
         all_classes.clear();
         try {

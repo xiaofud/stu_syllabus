@@ -33,6 +33,11 @@ public class InsertTask extends AsyncTask<HashMap<String, String>, Void, String>
 
     @Override
     protected void onPostExecute(String raw_data){
+
+        if (HttpCommunication.is_internet_flow_used_up()){
+            raw_data = "";
+        }
+
         if (raw_data.isEmpty()){
             Toast.makeText(context, "网络连接错误", Toast.LENGTH_SHORT).show();
             return;

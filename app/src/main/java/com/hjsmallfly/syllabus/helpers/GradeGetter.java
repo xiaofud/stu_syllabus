@@ -33,9 +33,17 @@ public class GradeGetter extends AsyncTask<HashMap<String, String>, Void, String
 
     @Override
     protected void onPostExecute(String raw_json_data){
-        GradeParser parser = new GradeParser(context);
+
+        if (HttpCommunication.is_internet_flow_used_up()){
+            raw_json_data = "";
+        }
+
         if (!raw_json_data.isEmpty())
             Toast.makeText(context, "更新成绩成功: )", Toast.LENGTH_SHORT).show();
+
+        GradeParser parser = new GradeParser(context);
+
+
         handler.handle_grade_list(parser.parse(raw_json_data));
     }
 

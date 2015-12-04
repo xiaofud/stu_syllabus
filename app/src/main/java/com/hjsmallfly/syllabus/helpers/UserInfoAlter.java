@@ -31,6 +31,9 @@ public class UserInfoAlter extends AsyncTask<HashMap<String, String>, Void, Stri
 
     @Override
     protected void onPostExecute(String response){
+        if (HttpCommunication.is_internet_flow_used_up()){
+            response = "";
+        }
         handler.handle_user_alter(response);
     }
 }

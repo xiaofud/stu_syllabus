@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.hjsmallfly.syllabus.adapters.OAAdapter;
+import com.hjsmallfly.syllabus.helpers.HttpCommunication;
 import com.hjsmallfly.syllabus.helpers.HttpPostTask;
 import com.hjsmallfly.syllabus.helpers.JSONHelper;
 import com.hjsmallfly.syllabus.helpers.StringDataHelper;
@@ -135,6 +136,11 @@ public class OAActivity extends AppCompatActivity  implements PostDataGetter, Vi
 
     @Override
     public void handle_post_response(String response) {
+
+        if (HttpCommunication.is_internet_flow_used_up()){
+            response = "";
+        }
+
         if (response.isEmpty()){
             Toast.makeText(OAActivity.this, "网络连接错误", Toast.LENGTH_SHORT).show();
             return;

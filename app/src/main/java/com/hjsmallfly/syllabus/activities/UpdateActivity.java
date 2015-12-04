@@ -133,9 +133,9 @@ public class UpdateActivity extends AppCompatActivity implements UpdateHandler, 
                         download_apk(remote_version.dowload_address);
                     Toast.makeText(UpdateActivity.this, "开始下载文件", Toast.LENGTH_SHORT).show();
                 }else if (version_state == UpdateHandler.ALREADY_UPDATED){
-                    Toast.makeText(UpdateActivity.this, "已经是最新版本啦~~~~", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UpdateActivity.this, "已经是最新版本啦", Toast.LENGTH_SHORT).show();
                 }else if (version_state == UpdateHandler.CONNECTION_ERROR){
-                    Toast.makeText(UpdateActivity.this, "重新检查版本情况~~~~", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UpdateActivity.this, "重新检查版本情况", Toast.LENGTH_SHORT).show();
                     check_update();
                 }
                 break;

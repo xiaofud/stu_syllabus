@@ -15,6 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,6 +27,13 @@ public class HttpCommunication {
 
     public static final String ERROR_CONNECTION = "ERROR_CONNECTION";
 
+    // 用于标志流量是否已经用完
+    private static boolean THE_INTERNET_FLOW_IS_USED_UP = false;
+
+    public static boolean is_internet_flow_used_up(){
+        return THE_INTERNET_FLOW_IS_USED_UP;
+    }
+
     /**
      * 访问远程网站，获取信息
      * @param host_address 远程地址
@@ -35,6 +43,7 @@ public class HttpCommunication {
     public static String perform_get_call(String host_address, int timeout){
         URL url;
         String response = "";
+        THE_INTERNET_FLOW_IS_USED_UP = false;
         Log.d(MainActivity.TAG, "地址是:" + host_address);
         try {
             url = new URL(host_address);
@@ -45,6 +54,11 @@ public class HttpCommunication {
             connection.connect();
             int response_code = connection.getResponseCode();
             if (response_code == HttpURLConnection.HTTP_OK) {
+//                Map<String, List<String>> headers = connection.getHeaderFields();
+//                for(String key: headers.keySet()){
+//                    Log.d("HTTP_GET",key + ": " + headers.get(key).toString());
+//                }
+                THE_INTERNET_FLOW_IS_USED_UP = check_internet_flow_used_up(connection);
                 String line;
                 BufferedReader br=new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 while ((line=br.readLine()) != null) {
@@ -68,6 +82,7 @@ public class HttpCommunication {
     public static String perform_delete_call(String address, int timeout){
         URL url;
         String response = "";
+        THE_INTERNET_FLOW_IS_USED_UP = false;
         try {
             url = new URL(address);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -78,6 +93,7 @@ public class HttpCommunication {
             connection.connect();
             int response_code = connection.getResponseCode();
             if (response_code == HttpURLConnection.HTTP_OK){
+                THE_INTERNET_FLOW_IS_USED_UP = check_internet_flow_used_up(connection);
                 String line;
                 BufferedReader br=new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 while ((line=br.readLine()) != null) {
@@ -99,6 +115,7 @@ public class HttpCommunication {
                                    HashMap<String, String> postDataParams) {
         URL url;
         String response = "";
+        THE_INTERNET_FLOW_IS_USED_UP = false;
         try {
             url = new URL(requestURL);
             Log.d(MainActivity.TAG, "地址是:" + requestURL);
@@ -123,6 +140,7 @@ public class HttpCommunication {
             int responseCode=conn.getResponseCode();
 
             if (responseCode == HttpURLConnection.HTTP_OK) {
+                THE_INTERNET_FLOW_IS_USED_UP = check_internet_flow_used_up(conn);
                 String line;
                 BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 while ((line=br.readLine()) != null) {
@@ -158,6 +176,16 @@ public class HttpCommunication {
         }
 //        Log.d(MainActivity.TAG, result.toString());
         return result.toString();
+    }
+
+    public static boolean check_internet_flow_used_up(HttpURLConnection connection){
+        String server_field = connection.getHeaderField("Server");
+        if (server_field != null){
+            if (server_field.equals("xhttpd/1.0")){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

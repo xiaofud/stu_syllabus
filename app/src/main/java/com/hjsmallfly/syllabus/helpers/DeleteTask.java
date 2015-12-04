@@ -57,6 +57,9 @@ public class DeleteTask extends AsyncTask<HashMap<String, String>, Void, String>
 
     @Override
     protected void onPostExecute(String response){
+        if (HttpCommunication.is_internet_flow_used_up()){
+            response = "";
+        }
         afterDeleteHandler.deal_with_delete(response, position);
     }
 

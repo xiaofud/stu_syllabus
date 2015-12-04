@@ -30,6 +30,9 @@ public class LessonPullTask extends AsyncTask<HashMap<String, String>, Void, Str
 
     @Override
     protected void onPostExecute(String raw_data){
+        if (HttpCommunication.is_internet_flow_used_up()){
+            raw_data = "";
+        }
         lessonHandler.deal_with_lessons(raw_data);
     }
 

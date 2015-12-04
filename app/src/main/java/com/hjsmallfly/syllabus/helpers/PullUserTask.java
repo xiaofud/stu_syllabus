@@ -44,8 +44,11 @@ public class PullUserTask extends AsyncTask<HashMap<String, String>, Void, Strin
     @Override
     protected void onPostExecute(String raw_user_data){
         // 解析数据
-        Log.d(USER_TASK_TAG, "原始信息是: " +  raw_user_data);
+//        Log.d(USER_TASK_TAG, "原始信息是: " +  raw_user_data);
         UserParser parser = new UserParser(context);
+        if (HttpCommunication.is_internet_flow_used_up()){
+            raw_user_data = "";
+        }
         UserInformation user =  parser.parse_user(raw_user_data);
         handler.handle_user(user);
     }

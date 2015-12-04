@@ -98,6 +98,11 @@ public class UpdateHelper {
 
         @Override
         protected void onPostExecute(String response){
+
+            if (HttpCommunication.is_internet_flow_used_up()){
+                response = "";
+            }
+
             if (response.isEmpty()){
 //                Toast.makeText(context, "无法访问服务器", Toast.LENGTH_SHORT).show();
                 updateHandler.deal_with_update(UpdateHandler.CONNECTION_ERROR, null);

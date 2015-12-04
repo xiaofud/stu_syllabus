@@ -30,10 +30,16 @@ public class ExamGetter extends AsyncTask<HashMap<String, String>, Void, String>
 
     @Override
     protected void onPostExecute(String raw_data){
+
+        if (HttpCommunication.is_internet_flow_used_up()){
+            raw_data = "";
+        }
         if (raw_data.isEmpty()){
             Toast.makeText(context, "网络连接出错", Toast.LENGTH_SHORT).show();
             return;
         }
+
+
 
         String error = JSONHelper.check_and_get_error(raw_data);
         if (error != null){

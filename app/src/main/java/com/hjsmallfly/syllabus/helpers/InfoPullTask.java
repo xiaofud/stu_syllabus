@@ -85,10 +85,16 @@ public class InfoPullTask extends AsyncTask<HashMap<String, String>, Void, Strin
     @Override
     protected void onPostExecute(String response){
 
+        if (HttpCommunication.is_internet_flow_used_up()){
+            response = "";
+        }
+
         if (response.isEmpty()){
             Toast.makeText(context, "网络连接错误", Toast.LENGTH_SHORT).show();
             return;
         }
+
+
 
         if (homeworkHandler != null){
             HomeworkParser homeworkParser = new HomeworkParser(context);
