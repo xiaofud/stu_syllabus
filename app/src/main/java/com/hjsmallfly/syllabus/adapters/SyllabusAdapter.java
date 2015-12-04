@@ -89,8 +89,9 @@ public class SyllabusAdapter extends RecyclerView.Adapter<SyllabusAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        if (data_set[position] instanceof Lesson || data_set[position].toString().length() == 2) {
-            holder.mTextView.setBackgroundResource(get_random_cell());
+        // 同上的情况不加框框了
+        if (data_set[position] instanceof Lesson /*|| data_set[position].toString().length() == 2*/) {
+            holder.mTextView.setBackgroundResource(( (Lesson) data_set[position] ).color_code);
             holder.mTextView.getBackground().setAlpha(150);  // 透明  [0,255]
         }
         else

@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.hjsmallfly.syllabus.activities.MainActivity;
+import com.hjsmallfly.syllabus.adapters.SyllabusAdapter;
 import com.hjsmallfly.syllabus.helpers.StringDataHelper;
 import com.hjsmallfly.syllabus.interfaces.TokenGetter;
 import com.hjsmallfly.syllabus.syllabus.Lesson;
@@ -101,6 +102,10 @@ public class ClassParser {
             }
 //            Toast.makeText(context, "the token is " + token, Toast.LENGTH_SHORT).show();
 //            Log.d(MainActivity.TAG, classes.length() + " classes");
+            // 得到颜色的种类数
+            int color_counts = SyllabusAdapter.class_cell_drawable.length;
+            // 颜色 指针
+            int color_index = -1;
             for (int i = 0; i < classes.length(); ++i) {
                 // 得到每一节课
                 JSONObject lesson = (JSONObject) classes.get(i);
@@ -125,6 +130,10 @@ public class ClassParser {
                 cls.room = room;
                 cls.duration = duration;
                 cls.credit = credit;
+
+                // 会重复使用之前的色彩
+                color_index = (color_index + 1) % color_counts;
+                cls.color_code = SyllabusAdapter.class_cell_drawable[color_index];
 
 //                Log.d(MainActivity.TAG, duration);
 
@@ -295,6 +304,7 @@ public class ClassParser {
                                 }
                                 // 说明这节课和上面的课是连着的而且是同一节课
                                 weekdays_syllabus_data[index] = "同上";
+//                                weekdays_syllabus_data[index] = lesson;
                             }
 
                         }

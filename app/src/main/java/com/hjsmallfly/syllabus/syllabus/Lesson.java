@@ -20,6 +20,9 @@ public class Lesson {
     public int end_year;
     public int semester;
 
+    // 颜色编号
+    public int color_code;
+
     // 记录课程是否分为单双周
     public String comment;
 
