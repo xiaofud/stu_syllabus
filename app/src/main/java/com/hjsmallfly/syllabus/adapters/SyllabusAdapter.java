@@ -30,10 +30,10 @@ public class SyllabusAdapter extends RecyclerView.Adapter<SyllabusAdapter.ViewHo
 
     public static final Random rand = new Random(System.currentTimeMillis());
 
-    public static int get_random_cell(){
-        int index = rand.nextInt(class_cell_drawable.length);
-        return class_cell_drawable[index];
-    }
+//    public static int get_random_cell(){
+//        int index = rand.nextInt(class_cell_drawable.length);
+//        return class_cell_drawable[index];
+//    }
 
     public void set_color(int color){
         text_color = color;
@@ -73,8 +73,11 @@ public class SyllabusAdapter extends RecyclerView.Adapter<SyllabusAdapter.ViewHo
                                                    int viewType) {
         // create a new view
 //        android.R.layout.simple_list_item_1
+//        View v = LayoutInflater.from(parent.getContext())
+//                .inflate(android.R.layout.simple_list_item_1, parent, false);
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(android.R.layout.simple_list_item_1, parent, false);
+                .inflate(R.layout.class_cell_text_view, parent, false);
+
         // set the view's size, margins, paddings and layout parameters
 //        TextView text_view = (TextView) v.findViewById(R.id.class_grid_text);
 
@@ -101,6 +104,7 @@ public class SyllabusAdapter extends RecyclerView.Adapter<SyllabusAdapter.ViewHo
         // 在这里添加单双周信息
         if (data_set[position] instanceof Lesson){
             Lesson lesson = (Lesson) data_set[position];
+
             // 行数，也就是课程的上课节数
 //            int divided_by_column = position / ClassParser.COLUMNS;
             // 上课的星期数
@@ -119,8 +123,10 @@ public class SyllabusAdapter extends RecyclerView.Adapter<SyllabusAdapter.ViewHo
                     display_message = "[单]" + display_message;
             }
         }
+//        else{
+//            holder.mTextView.setTextSize(14);
+//        }
 
-//        holder.mTextView.setGravity(View.TEXT_ALIGNMENT_CENTER);
         holder.mTextView.setOnClickListener(new ClickAndShow(position));    // 至于被点击的具体是什么内容就由 ClickAndShow 决定了
         holder.mTextView.setText(display_message);
         holder.mTextView.setClickable(true);
@@ -155,7 +161,11 @@ public class SyllabusAdapter extends RecyclerView.Adapter<SyllabusAdapter.ViewHo
                     return;
                 }
 
-                if (text.length() == 2 || text.length() == 3) // 点了同上、星期几
+                if (text.length() == 2 /*|| text.length() == 3*/) // 点了同上
+                    return;
+
+                // 点击的是星期几
+                if (position >= 1 && position <= 5)
                     return;
 
                 // 这里以后才是真的课程哟~

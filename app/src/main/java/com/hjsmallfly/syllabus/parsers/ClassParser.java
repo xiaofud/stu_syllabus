@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -26,7 +27,8 @@ public class ClassParser {
     public ArrayList<Lesson> weekend_classes;  // 存放周末的课程
 
     public static final String EMPTY_CLASS_STRING = "";
-    public static final String[] LABELS = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+//    public static final String[] LABELS = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+public static final String[] LABELS = {"周一", "周二", "周三", "周四", "周五", "周六", "周日"};
     public static final HashMap<String, String> time_table;
     public static final Set<String> class_table;
     // 静态的初始化过程
@@ -177,8 +179,9 @@ public class ClassParser {
             if (i <= 5){    // 一个空白格子，外加 周一到周五
                 if (i == 0)
                     weekdays_syllabus_data[i] = "";   // 空白的一个格子
-                else
-                    weekdays_syllabus_data[i] = LABELS[i - 1];    // 转化为中文的数字
+                else {
+                    weekdays_syllabus_data[i] = LABELS[i - 1];    // 转化为英文表示的星期数
+                }
 
             }else if (i % COLUMNS == 0){
                 // 处理第一列的 课的节数
@@ -212,6 +215,19 @@ public class ClassParser {
 //            }
         }
 //        Log.d(MainActivity.TAG, "end init()");
+        // 为星期几添加日期
+        Calendar day_helper = Calendar.getInstance();
+        // 第一天是周日 1 第七天是 周日 7
+        int today_in_week = day_helper.get(Calendar.DAY_OF_WEEK);
+        // 先算出周一(2)的日期
+        day_helper.add(Calendar.DAY_OF_WEEK, - (today_in_week - 2 ));
+        // 只显示周一到周五
+        for(int i = 1 ; i < 6 ; ++i){
+            int month =  day_helper.get(Calendar.MONTH) + 1;
+            int day = day_helper.get(Calendar.DAY_OF_MONTH);
+            weekdays_syllabus_data[i] = month + "-" + day + "\n" + weekdays_syllabus_data[i].toString();
+            day_helper.add(Calendar.DAY_OF_MONTH, 1);
+        }
     }
 
     public static int change_into_number(char c){
