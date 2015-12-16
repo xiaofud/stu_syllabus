@@ -167,10 +167,10 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 // 更新课表
                 sync_syllabus();
                 break;
-            case R.id.show_oa_action:
-                Intent intent = new Intent(this, OAActivity.class);
-                startActivity(intent);
-                break;
+//            case R.id.show_oa_action:
+//                Intent intent = new Intent(this, OAActivity.class);
+//                startActivity(intent);
+//                break;
 
             default:
                 break;

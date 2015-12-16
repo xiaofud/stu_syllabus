@@ -177,6 +177,12 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             return true;
         }
 
+        if (id == R.id.about_us_action){
+            Intent intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
 //        // 清除之前的缓存文件
 //        if (id == R.id.delete_action){
 //            delete_cached_file();
@@ -429,28 +435,28 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 
     }
 
-    private void delete_cached_file(){
-        String username = username_edit.getText().toString();
-        int year_index = year_spinner.getSelectedItemPosition();
-//        String semester_name = semester_spinner.getSelectedItem().toString();
-        String semester_name = StringDataHelper.semester_to_string(cur_semester);
-        // 错误的值
-        if (semester_name == null)
-            return;
-        String filename = StringDataHelper.generate_syllabus_file_name(username, YEARS[year_index], semester_name, "_");
-        //        Toast.makeText(MainActivity.this, "filename: " + filename, Toast.LENGTH_SHORT).show();
-        delete_cache_file(this, filename);
-    }
+//    private void delete_cached_file(){
+//        String username = username_edit.getText().toString();
+//        int year_index = year_spinner.getSelectedItemPosition();
+////        String semester_name = semester_spinner.getSelectedItem().toString();
+//        String semester_name = StringDataHelper.semester_to_string(cur_semester);
+//        // 错误的值
+//        if (semester_name == null)
+//            return;
+//        String filename = StringDataHelper.generate_syllabus_file_name(username, YEARS[year_index], semester_name, "_");
+//        //        Toast.makeText(MainActivity.this, "filename: " + filename, Toast.LENGTH_SHORT).show();
+//        delete_cache_file(this, filename);
+//    }
 
-    private void delete_cache_file(Context context, String file_name) {
-        if (FileOperation.hasFile(context, file_name)) {
-            if (FileOperation.delete_file(context, file_name))
-                Toast.makeText(context, "成功删除缓存文件", Toast.LENGTH_SHORT).show();
-            else
-                Toast.makeText(context, "删除缓存文件失败", Toast.LENGTH_SHORT).show();
-        } else
-            Toast.makeText(context, "不存在该缓存文件", Toast.LENGTH_SHORT).show();
-    }
+//    private void delete_cache_file(Context context, String file_name) {
+//        if (FileOperation.hasFile(context, file_name)) {
+//            if (FileOperation.delete_file(context, file_name))
+//                Toast.makeText(context, "成功删除缓存文件", Toast.LENGTH_SHORT).show();
+//            else
+//                Toast.makeText(context, "删除缓存文件失败", Toast.LENGTH_SHORT).show();
+//        } else
+//            Toast.makeText(context, "不存在该缓存文件", Toast.LENGTH_SHORT).show();
+//    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

@@ -167,7 +167,7 @@
         android:gravity="right"
         android:layout_marginRight="7dp"
         android:text="@string/help_message"
-        android:textColor="#1c7fac"
+        android:textColor="@android:color/holo_red_light"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -191,6 +191,7 @@
             android:layout_height="wrap_content"/>
 
     </LinearLayout>
+
 
 
 </RelativeLayout>

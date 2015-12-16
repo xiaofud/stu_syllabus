@@ -1,13 +1,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.hjsmallfly.syllabus.activities.AboutActivity">
 
     <TextView
-        android:id="@+id/about_text"
+        android:layout_weight="1"
+        android:text="@string/github_app_address"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" />
+
+    <TextView
+        android:gravity="center"
+        android:textColor="@android:color/white"
         android:background="@drawable/input_box"
-        android:text="@string/about_information"
-        android:inputType="textMultiLine"
+        android:text="@string/about_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

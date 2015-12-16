@@ -8,6 +8,11 @@
     tools:context="com.hjsmallfly.syllabus.activities.UpdateActivity">
 
     <TextView
+        android:text="@string/update_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
         android:id="@+id/current_version_text"
         android:text="显示当前版本信息"
         android:layout_width="match_parent"
@@ -16,6 +21,14 @@
     <TextView
         android:id="@+id/new_version_info"
         android:text="新版本信息"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:layout_margin="4dp"
+        android:id="@+id/copy_download_address_button"
+        android:text="复制下载链接"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

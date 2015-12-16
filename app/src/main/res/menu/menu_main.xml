@@ -18,4 +18,9 @@
         android:title="检查更新"
         app:showAsAction="ifRoom"/>
 
+    <item
+        android:id="@+id/about_us_action"
+        android:title="关于我们"
+        app:showAsAction="never"/>
+
 </menu>

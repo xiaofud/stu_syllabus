@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hjsmallfly.syllabus.helpers.ClipBoardHelper;
 import com.hjsmallfly.syllabus.helpers.UpdateHelper;
 import com.hjsmallfly.syllabus.interfaces.UpdateHandler;
 import com.hjsmallfly.syllabus.syllabus.R;
@@ -23,16 +24,19 @@ public class UpdateActivity extends AppCompatActivity implements UpdateHandler, 
     // views
     private TextView cur_version_text;
     private TextView new_version_text;
+    private Button copy_button;
     private Button update_button;
 
     private void find_views(){
         cur_version_text = (TextView) findViewById(R.id.current_version_text);
         new_version_text = (TextView) findViewById(R.id.new_version_info);
+        copy_button = (Button) findViewById(R.id.copy_download_address_button);
         update_button = (Button) findViewById(R.id.update_button);
     }
 
     private void setup_views(){
         // add listeners
+        copy_button.setOnClickListener(this);
         update_button.setOnClickListener(this);
     }
 
@@ -106,19 +110,29 @@ public class UpdateActivity extends AppCompatActivity implements UpdateHandler, 
     @Override
     public void deal_with_update(int flag, SyllabusVersion version) {
         version_state = flag;
+        remote_version = version;
         // 存在更新
         if (flag == UpdateHandler.EXIST_UPDATE){
-            new_version_text.setText("[新版本信息]:\n版本名称: " + version.version_name + "\n发布者: " + version.version_releaser + "\n描述: " + version.description);
+            String new_version_info = "[新版本信息]:\n版本名称: " + version.version_name + "\n发布者: " + version.version_releaser + "\n描述: " + version.description;
+            new_version_text.setText(new_version_info);
             remote_version = version;
             update_button.setText("发现新版本!快点我更新!");
+
+            copy_button.setVisibility(View.VISIBLE);
+
         }else if (flag == UpdateHandler.ALREADY_UPDATED){
             new_version_text.setText("已经是最新版本啦!");
-            remote_version = null;
+            remote_version = version;
             update_button.setText("已经是最新版本啦!");
+
+            copy_button.setVisibility(View.VISIBLE);
+
         }else if (flag == UpdateHandler.CONNECTION_ERROR){
             new_version_text.setText("没有成功连接到服务器");
             remote_version = null;
             update_button.setText("点我重试检查更新");
+
+            copy_button.setVisibility(View.GONE);
         }
     }
 
@@ -138,6 +152,22 @@ public class UpdateActivity extends AppCompatActivity implements UpdateHandler, 
                     Toast.makeText(UpdateActivity.this, "重新检查版本情况", Toast.LENGTH_SHORT).show();
                     check_update();
                 }
+                break;
+            case R.id.copy_download_address_button:
+
+                if (remote_version == null)
+                    break;
+
+                // copy to clipboard
+                ClipBoardHelper.setContent(this, remote_version.dowload_address);
+                String flash_message = "";
+                if (version_state == UpdateHandler.ALREADY_UPDATED)
+                    flash_message = "已经复制当前版本下载地址到剪贴板中";
+                else if (version_state == UpdateHandler.EXIST_UPDATE)
+                    flash_message = "已经复制新版本下载地址到剪贴板中";
+                Toast.makeText(UpdateActivity.this, flash_message, Toast.LENGTH_SHORT).show();
+                break;
+            default:
                 break;
         }
     }

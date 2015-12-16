@@ -9,7 +9,7 @@ import java.util.HashMap;
  */
 public class StringDataHelper {
 
-    public static String ERROR_NO_CLASSES = "没有这学期的课程";
+    public static String ERROR_NO_CLASSES = "请选择有课程的学期";
     public static String ERROR_CREDIT_TIME_OUT = "连接学分制超时";
     public static String ERROR_WRONG_PASSWORD = "密码错误";
 
