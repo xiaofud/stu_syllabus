@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.hjsmallfly.syllabus.syllabus.R;
+import com.umeng.analytics.MobclickAgent;
 
 public class AboutActivity extends AppCompatActivity {
 
@@ -13,6 +14,18 @@ public class AboutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
+    }
+
+    // 友盟的统计功能
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @Override

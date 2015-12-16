@@ -16,6 +16,7 @@ import com.hjsmallfly.syllabus.interfaces.ExamHandler;
 import com.hjsmallfly.syllabus.parsers.ExamParser;
 import com.hjsmallfly.syllabus.syllabus.Exam;
 import com.hjsmallfly.syllabus.syllabus.R;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,6 +46,18 @@ public class ExamActivity extends AppCompatActivity implements View.OnClickListe
         }else
             get_exam_list();
 
+    }
+
+    // 友盟的统计功能
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     private void find_views(){

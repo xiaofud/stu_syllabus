@@ -22,6 +22,7 @@ import com.hjsmallfly.syllabus.interfaces.HomeworkHandler;
 import com.hjsmallfly.syllabus.helpers.InfoPullTask;
 import com.hjsmallfly.syllabus.syllabus.Lesson;
 import com.hjsmallfly.syllabus.syllabus.R;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -84,6 +85,18 @@ public class HistoryActivity extends AppCompatActivity implements HomeworkHandle
         setContentView(R.layout.activity_history);
         find_views();
         setup_views();
+    }
+
+    // 友盟的统计功能
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @Override

@@ -14,6 +14,7 @@ import com.hjsmallfly.syllabus.helpers.UpdateHelper;
 import com.hjsmallfly.syllabus.interfaces.UpdateHandler;
 import com.hjsmallfly.syllabus.syllabus.R;
 import com.hjsmallfly.syllabus.syllabus.SyllabusVersion;
+import com.umeng.analytics.MobclickAgent;
 
 public class UpdateActivity extends AppCompatActivity implements UpdateHandler, View.OnClickListener {
 
@@ -52,6 +53,18 @@ public class UpdateActivity extends AppCompatActivity implements UpdateHandler, 
 
         get_current_version();
         check_update();
+    }
+
+    // 友盟的统计功能
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @Override

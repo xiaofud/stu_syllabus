@@ -20,6 +20,7 @@ import com.hjsmallfly.syllabus.interfaces.PostDataGetter;
 import com.hjsmallfly.syllabus.parsers.OAParser;
 import com.hjsmallfly.syllabus.syllabus.OAObject;
 import com.hjsmallfly.syllabus.syllabus.R;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -78,6 +79,18 @@ public class OAActivity extends AppCompatActivity  implements PostDataGetter, Vi
         setup_views();
         send_oa_request(current_page);
         set_page_edit_index(current_page);
+    }
+
+    // 友盟的统计功能
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     private void set_page_edit_index(int index){

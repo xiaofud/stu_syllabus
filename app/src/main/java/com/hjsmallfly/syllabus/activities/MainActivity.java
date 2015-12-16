@@ -27,6 +27,7 @@ import com.hjsmallfly.syllabus.helpers.FileOperation;
 import com.hjsmallfly.syllabus.syllabus.Lesson;
 import com.hjsmallfly.syllabus.syllabus.R;
 import com.hjsmallfly.syllabus.syllabus.SyllabusVersion;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -89,10 +90,13 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         // 设置web service 的默认地址
         WebApi.set_server_address(getString(R.string.server_ip));
 
+//        MobclickAgent.setDebugMode(true);
 //        semester_spinner.setSelection(cur_semester);
 
         // 读取token
 //        get_local_token();
+
+
 
         // 检查更新
         if (!has_checked_update)
@@ -100,7 +104,19 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         if (!has_showed_default)
             load_default_syllabus();
 
+    }
 
+
+    // 友盟的统计功能
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     private void getAllViews(){
@@ -164,6 +180,8 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         int id = item.getItemId();
 
         if (id == R.id.check_update_action){
+            // 友盟
+            MobclickAgent.onEvent(this, "Check_Update");
             Intent update_activity = new Intent(this, UpdateActivity.class);
             startActivity(update_activity);
             return true;
@@ -178,6 +196,8 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         }
 
         if (id == R.id.about_us_action){
+            // 友盟
+            MobclickAgent.onEvent(this, "Setting_Aboutus");
             Intent intent = new Intent(this, AboutActivity.class);
             startActivity(intent);
             return true;
@@ -344,7 +364,11 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             Toast.makeText(MainActivity.this, "没能成功获取课表数据", Toast.LENGTH_SHORT).show();
             return;
         }
+        // 统计用户登陆
+        MobclickAgent.onProfileSignIn(MainActivity.cur_username);
+
         // 从网络拉过来的数据中 token 肯定是新的, 所以需要更新本地的token
+
         parse_and_display(raw_data, true);
     }
 

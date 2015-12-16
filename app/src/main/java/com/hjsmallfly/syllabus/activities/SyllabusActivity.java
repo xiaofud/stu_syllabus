@@ -30,6 +30,8 @@ import com.hjsmallfly.syllabus.interfaces.TokenGetter;
 import com.hjsmallfly.syllabus.parsers.ClassParser;
 import com.hjsmallfly.syllabus.syllabus.Lesson;
 import com.hjsmallfly.syllabus.syllabus.R;
+import com.umeng.analytics.MobclickAgent;
+
 import java.io.File;
 import java.util.HashMap;
 
@@ -89,6 +91,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         show_oa_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MobclickAgent.onEvent(SyllabusActivity.this, "More_OA");
                 Intent intent = new Intent(SyllabusActivity.this, OAActivity.class);
                 startActivity(intent);
             }
@@ -108,7 +111,22 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 //        Toast.makeText(SyllabusActivity.this, "the token is " + MainActivity.token, Toast.LENGTH_SHORT).show();
     }
 
+    // 友盟的统计功能
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
     public void showClassInfo(Lesson lesson){
+        // 友盟
+        MobclickAgent.onEvent(this, "Main_ShowDetail");
+
         clicked_lesson = lesson;
         Intent tab_intent = new Intent(this, MyTabActivity.class);
         startActivity(tab_intent);
@@ -148,6 +166,10 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 break;
 
             case R.id.query_grade_action:
+
+                // 友盟
+                MobclickAgent.onEvent(this, "More_Grade");
+
                 // 查看成绩
                 Intent grade_intent = new Intent(this, GradeActivity.class);
                 startActivity(grade_intent);
@@ -159,19 +181,22 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 break;
 
             case R.id.query_exam_action:
+                // 友盟
+                MobclickAgent.onEvent(this, "More_Exam");
                 Intent exam_intent = new Intent(this, ExamActivity.class);
                 startActivity(exam_intent);
                 break;
 
             case R.id.sync_syllabus_action:
                 // 更新课表
+                // 友盟
+                MobclickAgent.onEvent(this, "More_Sync");
                 sync_syllabus();
                 break;
 //            case R.id.show_oa_action:
 //                Intent intent = new Intent(this, OAActivity.class);
 //                startActivity(intent);
 //                break;
-
             default:
                 break;
         }
@@ -213,8 +238,12 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 }
                 break;
             case CROP_PHOTO_REQUEST:
-                if (resultCode == RESULT_OK)
+                if (resultCode == RESULT_OK) {
                     set_syllabus_wallpaper();
+
+                    // 添加友盟的统计数据
+                    MobclickAgent.onEvent(this, "Setting_Background_Custom");
+                }
                 break;
         }
     }
@@ -323,6 +352,9 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
             SyllabusAdapter new_adapter = new SyllabusAdapter(MainActivity.weekdays_syllabus_data, this);
             syllabus_view.setAdapter(new_adapter);
             Toast.makeText(SyllabusActivity.this, "课表同步成功", Toast.LENGTH_SHORT).show();
+
+            // 统计用户登陆次数
+            MobclickAgent.onProfileSignIn(MainActivity.cur_username);
         }
 //                    Toast.makeText(MainActivity.this, "读取课表成功哟~~~~", Toast.LENGTH_SHORT).show();
     }

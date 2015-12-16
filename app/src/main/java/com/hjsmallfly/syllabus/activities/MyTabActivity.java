@@ -35,6 +35,7 @@ import com.hjsmallfly.syllabus.helpers.HttpCommunication;
 import com.hjsmallfly.syllabus.helpers.InfoPullTask;
 import com.hjsmallfly.syllabus.syllabus.Lesson;
 import com.hjsmallfly.syllabus.syllabus.R;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -178,6 +179,18 @@ public class MyTabActivity extends AppCompatActivity implements View.OnClickList
         setup_views();
         setLesson(SyllabusActivity.clicked_lesson);
 
+    }
+
+    // 友盟的统计功能
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @Override
@@ -387,6 +400,9 @@ public class MyTabActivity extends AppCompatActivity implements View.OnClickList
         // 添加hash_code
         add_hash_code(data, MainActivity.cur_username + timestamp);
 
+        // 友盟
+        MobclickAgent.onEvent(this, "Detail_Post_Homework");
+
         InsertTask insert_homework_task = new InsertTask(WebApi.get_server_address() + getString(R.string.insert_home_work_api));
         insert_homework_task.execute(data);
 
@@ -418,6 +434,9 @@ public class MyTabActivity extends AppCompatActivity implements View.OnClickList
 
         // 增加hash_code
         add_hash_code(data, MainActivity.cur_username + timestamp);
+
+        // 友盟
+        MobclickAgent.onEvent(this, "Detail_Post_Discuss");
 
         InsertDiscussionTask task = new InsertDiscussionTask(WebApi.get_server_address() + getString(R.string.insert_discussion_api));
         task.execute(data);

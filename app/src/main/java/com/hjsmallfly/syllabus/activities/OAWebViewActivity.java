@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.hjsmallfly.syllabus.helpers.ClipBoardHelper;
 import com.hjsmallfly.syllabus.syllabus.R;
+import com.umeng.analytics.MobclickAgent;
 
 public class OAWebViewActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -48,6 +49,18 @@ public class OAWebViewActivity extends AppCompatActivity implements View.OnClick
 
         find_views();
         setup_views();
+    }
+
+    // 友盟的统计功能
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
 

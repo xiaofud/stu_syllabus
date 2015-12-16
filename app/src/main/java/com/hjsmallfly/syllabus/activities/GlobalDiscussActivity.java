@@ -26,6 +26,7 @@ import com.hjsmallfly.syllabus.interfaces.DiscussionHandler;
 import com.hjsmallfly.syllabus.interfaces.InsertHandler;
 import com.hjsmallfly.syllabus.syllabus.Discussion;
 import com.hjsmallfly.syllabus.syllabus.R;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,6 +53,18 @@ public class GlobalDiscussActivity extends AppCompatActivity implements Discussi
 
         // 拉取数据
         get_latest_global_discussions();
+    }
+
+    // 友盟的统计功能
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
 
@@ -175,6 +188,9 @@ public class GlobalDiscussActivity extends AppCompatActivity implements Discussi
                 return;
             }
         }
+        // 友盟
+        MobclickAgent.onEvent(this, "Global_Post_Discuss");
+
         Toast.makeText(GlobalDiscussActivity.this, "吐槽成功", Toast.LENGTH_SHORT).show();
         global_discuss_edit.setText("");
         get_latest_global_discussions();

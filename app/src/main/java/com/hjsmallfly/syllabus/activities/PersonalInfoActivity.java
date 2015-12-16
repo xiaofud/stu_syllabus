@@ -17,6 +17,7 @@ import com.hjsmallfly.syllabus.interfaces.UserAlterHandler;
 import com.hjsmallfly.syllabus.interfaces.UserHandler;
 import com.hjsmallfly.syllabus.syllabus.R;
 import com.hjsmallfly.syllabus.syllabus.UserInformation;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.HashMap;
 
@@ -38,6 +39,18 @@ public class PersonalInfoActivity extends AppCompatActivity implements View.OnCl
 
         get_user_info();
 
+    }
+
+    // 友盟的统计功能
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @Override
@@ -140,6 +153,9 @@ public class PersonalInfoActivity extends AppCompatActivity implements View.OnCl
             }
             return;
         }
+
+        // 友盟
+        MobclickAgent.onEvent(this, "Setting_Nickname");
 
         Toast.makeText(PersonalInfoActivity.this, "修改成功!", Toast.LENGTH_SHORT).show();
 

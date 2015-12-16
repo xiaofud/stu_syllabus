@@ -18,6 +18,7 @@ import com.hjsmallfly.syllabus.interfaces.GradeHandler;
 import com.hjsmallfly.syllabus.parsers.GradeParser;
 import com.hjsmallfly.syllabus.syllabus.Grade;
 import com.hjsmallfly.syllabus.syllabus.R;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,6 +45,18 @@ public class GradeActivity extends AppCompatActivity implements View.OnClickList
         }else
         // 从服务器获取信息
             get_grades();
+    }
+
+    // 友盟的统计功能
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     private void find_views(){
