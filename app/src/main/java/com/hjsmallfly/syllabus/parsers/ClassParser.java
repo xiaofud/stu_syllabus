@@ -319,8 +319,9 @@ public static final String[] LABELS = {"周一", "周二", "周三", "周四", "
                                     continue;
                                 }
                                 // 说明这节课和上面的课是连着的而且是同一节课
-                                weekdays_syllabus_data[index] = "同上";
-//                                weekdays_syllabus_data[index] = lesson;
+//                                weekdays_syllabus_data[index] = "同上";
+                                // 取消同上
+                                weekdays_syllabus_data[index] = lesson;
                             }
 
                         }

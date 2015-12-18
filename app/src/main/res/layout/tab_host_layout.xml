@@ -133,7 +133,7 @@
 
 
                     <Button
-                        android:text="提交"
+                        android:text="发布"
                         android:layout_weight="1"
                         android:id="@+id/homework_submit_button"
                         android:layout_width="0dp"
@@ -195,7 +195,7 @@
                     <Button
                         android:layout_weight="1"
                         android:id="@+id/submit_discussion_button"
-                        android:text="提交"
+                        android:text="发布"
                         android:layout_width="0dp"
                         android:layout_height="match_parent" />
 
