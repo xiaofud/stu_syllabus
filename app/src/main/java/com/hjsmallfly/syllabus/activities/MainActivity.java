@@ -305,6 +305,10 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 
         Toast.makeText(MainActivity.this, "正在获取课表信息", Toast.LENGTH_SHORT).show();
 
+
+        // 禁用按钮
+        query_button.setEnabled(false);
+
 //            {"SPRING", "SUMMER", "AUTUMN"}
 
         HashMap<String, String> postData = new HashMap<>();
@@ -317,6 +321,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 
         LessonPullTask task = new LessonPullTask(WebApi.get_server_address() + getString(R.string.syllabus_get_api), this);
         task.execute(postData);
+
 
 //        syllabusGetter.execute(postData);
     }
@@ -360,6 +365,10 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 
     @Override
     public void deal_with_lessons(String raw_data) {
+
+        // 恢复按钮
+        query_button.setEnabled(true);
+
         if (raw_data.isEmpty()){
             Toast.makeText(MainActivity.this, "没能成功获取课表数据", Toast.LENGTH_SHORT).show();
             return;

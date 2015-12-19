@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">汕大课程表</string>
     <string name="title_activity_syllabus">课程表</string>
-    <string name="help_message">注意选择学期哟!</string>
+    <string name="help_message">在课表界面的菜单里可以设置默认学期</string>
     <string name="about_message">邓晓拂: 14xfdeng@stu.edu.cn(Android)\n
                                  王俊皓: 14jhwang@stu.edu.cn(IOS)</string>
     <string name="github_app_address">本项目开源:https://github.com/Hjsmallfly/stu_syllabus</string>
@@ -37,7 +37,7 @@
     <string name="summer">夏季\n学期</string>
 
     <string name="version_code">1</string>
-    <string name="version_name">v1.0.0</string>
+    <string name="version_name">v1.0.1</string>
     <string name="publisher">smallfly</string>
 
     <string name="username">账号</string>
@@ -55,7 +55,7 @@
     <string name="oa_label">办公自动化(请接入内网使用)</string>
     <string name="oa_web_view_label">办公自动化详情页</string>
 
-    <string name="update_message">[请接入内网升级应用]\n[如果安装失败需要卸载旧版本, 再手动安装]\n[下载的apk文件在sd卡的download目录下]</string>
+    <string name="update_message">[如果安装失败需要卸载旧版本, 再手动安装]\n[下载的apk文件在sd卡的download目录下]</string>
 
     <string name="about_information">
         哈哈，你竟然点进这里来了!

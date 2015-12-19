@@ -145,11 +145,18 @@ public class GlobalDiscussActivity extends AppCompatActivity implements Discussi
         InsertTask insert_discussion_task = new InsertTask(this, this);
         insert_discussion_task.execute(post_data);
 
+        // 禁用按钮
+        global_discuss_button.setEnabled(false);
+
 
     }
 
     @Override
     public void deal_with_discussion(ArrayList<Discussion> all_discussions) {
+
+        // 恢复按钮
+        global_discuss_button.setEnabled(true);
+
         if (all_discussions == null) {
             // 发生了某些错误
 //            Toast.makeText(GlobalDiscussActivity.this, "没有任何吹水数据呢", Toast.LENGTH_SHORT).show();
@@ -199,9 +206,26 @@ public class GlobalDiscussActivity extends AppCompatActivity implements Discussi
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
         super.onCreateContextMenu(menu, v, menuInfo);
-        menu.setHeaderTitle("请选择一个操作");
+
+        String header_title = "请选择一个操作";
         menu.add(0, v.getId(), 0, "复制");
         menu.add(0, v.getId(), 0, "删除");
+
+
+
+        if (MainActivity.cur_username.equals("14xfdeng") || MainActivity.cur_username.equals("14jhwang") || MainActivity.cur_username.equals("13yjli3")){
+            // 加入一些管理功能
+            MenuItem item = menu.getItem(0);
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+            int index = info.position;
+            Discussion discussion = (Discussion) global_list_view.getItemAtPosition(index);
+            header_title += "(" + discussion.publisher + ")";
+        }
+
+        menu.setHeaderTitle(header_title);
+
+
+//        Toast.makeText(GlobalDiscussActivity.this, discussion.publisher, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -215,7 +239,7 @@ public class GlobalDiscussActivity extends AppCompatActivity implements Discussi
             int index = info.position; // 被点击的项的所在位置
             Discussion discussion = (Discussion) global_list_view.getItemAtPosition(index);
             ClipBoardHelper.setContent(this, discussion.content);
-            Toast.makeText(this, "成功复制到剪贴板", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "成功复制内容到剪贴板", Toast.LENGTH_SHORT).show();
             return true;
         }else if (item.getTitle().equals("删除")){
             // 删除信息
