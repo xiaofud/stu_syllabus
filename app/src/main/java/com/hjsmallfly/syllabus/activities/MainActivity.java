@@ -388,7 +388,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         if (classParser.parseJSON(json_data, update_local_token)) {
             classParser.inflateTable();     // 用数据填充课表
             MainActivity.weekdays_syllabus_data = classParser.weekdays_syllabus_data;
-            MainActivity.weekends_syllabus_data = classParser.weekend_classes;
+//            MainActivity.weekends_syllabus_data = classParser.weekend_classes;
 //                    Log.d(TAG, "established adapter");
 
             // 保存文件 命名格式: name_years_semester

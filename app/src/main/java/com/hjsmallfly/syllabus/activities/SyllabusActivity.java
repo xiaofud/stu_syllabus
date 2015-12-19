@@ -1,7 +1,9 @@
 package com.hjsmallfly.syllabus.activities;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -13,27 +15,36 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.GridLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.hjsmallfly.syllabus.adapters.SyllabusAdapter;
+
 import com.hjsmallfly.syllabus.helpers.ColorHelper;
+import com.hjsmallfly.syllabus.helpers.DisplayUtil;
 import com.hjsmallfly.syllabus.helpers.FileOperation;
 import com.hjsmallfly.syllabus.helpers.LessonPullTask;
 import com.hjsmallfly.syllabus.helpers.StringDataHelper;
 import com.hjsmallfly.syllabus.helpers.WebApi;
 import com.hjsmallfly.syllabus.interfaces.LessonHandler;
 import com.hjsmallfly.syllabus.interfaces.TokenGetter;
+import com.hjsmallfly.syllabus.otherViews.SyncHorizontalScrollView;
+import com.hjsmallfly.syllabus.otherViews.SyncScrollView;
 import com.hjsmallfly.syllabus.parsers.ClassParser;
 import com.hjsmallfly.syllabus.syllabus.Lesson;
 import com.hjsmallfly.syllabus.syllabus.R;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 
 public class SyllabusActivity extends AppCompatActivity implements LessonHandler, TokenGetter {
@@ -51,35 +62,57 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
     private static final int PICK_PHOTO_FROM_GALLERY = 1; // 从相册中选择
     private static final int CROP_PHOTO_REQUEST = 2; // 结果
 
-    private RecyclerView syllabus_view;
-    private SyllabusAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private TextView weekend_text;
     private Button show_oa_button;
 //    private TextView info_text;
 
     private Bitmap wall_paper;
 
-    private void setupViews(){
-        // 设置 RecyclerView
-        syllabus_view = (RecyclerView) findViewById(R.id.my_recycler_view);
-        mLayoutManager = new GridLayoutManager(this, 6, RecyclerView.VERTICAL, false);  // 不管周末的课程先
-        GridLayoutManager gridLayoutManager = (GridLayoutManager) mLayoutManager;
-        syllabus_view.setLayoutManager(gridLayoutManager);
-        mAdapter = new SyllabusAdapter(MainActivity.weekdays_syllabus_data, this);
-        mAdapter.set_color(ColorHelper.read_color_from_file(this, COLOR_FILE_NAME));
-        syllabus_view.setAdapter(mAdapter);
 
-        // 显示周末的信息
-        weekend_text = (TextView) findViewById(R.id.weekend_syllabus_text);
-        String text = "";
-        if (MainActivity.weekends_syllabus_data.size() != 0){
-            for(Lesson lesson : MainActivity.weekends_syllabus_data)
-                text += lesson.weekend_classes() + "\n";
-        }else{
-            weekend_text.setVisibility(View.GONE);
-        }
-        weekend_text.setText(text);
+    //课表显示滚动的那四个滚动条
+    SyncHorizontalScrollView gridScrollView;
+    SyncHorizontalScrollView dayScrollView;
+    SyncScrollView classScrollView;
+    SyncScrollView timeScrollView;
+
+    //课表显示GridLayout
+    GridLayout myClassTable;
+
+    final int[] bgColor = {
+            R.color.classColor1,
+            R.color.classColor2,
+            R.color.classColor3,
+            R.color.classColor4,
+            R.color.classColor5,
+            R.color.classColor6,
+            R.color.classColor7,
+            R.color.classColor8,
+            R.color.classColor9,
+            R.color.classColor10,
+            R.color.classColor11,
+            R.color.classColor12,
+            R.color.classColor13,
+            R.color.classColor14,
+            R.color.classColor15,
+            R.color.classColor16,
+    };
+
+    private void setupViews() {
+
+        //设置同步滚动
+        gridScrollView = (SyncHorizontalScrollView) findViewById(R.id.gridScrollView);
+        dayScrollView = (SyncHorizontalScrollView) findViewById(R.id.dayScrollView);
+        gridScrollView.setScrollView(dayScrollView);
+        dayScrollView.setScrollView(gridScrollView);
+        dayScrollView.setHorizontalScrollBarEnabled(false);
+
+        classScrollView = (SyncScrollView) findViewById(R.id.classScrollView);
+        timeScrollView = (SyncScrollView) findViewById(R.id.timeScrollView);
+        classScrollView.setScrollView(timeScrollView);
+        timeScrollView.setScrollView(classScrollView);
+        timeScrollView.setHorizontalScrollBarEnabled(false);
+
+        myClassTable = (GridLayout) findViewById(R.id.myClassTable);
+        showSyllabus();
 
         // 读取之前的壁纸
         load_syllabus_wallpaper();
@@ -96,6 +129,104 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 startActivity(intent);
             }
         });
+
+    }
+
+
+    public void showSyllabus() {
+        Object[] weekdays_syllabus_data = MainActivity.weekdays_syllabus_data;
+        myClassTable.removeAllViews();
+
+
+        final int defalultGridWidth = DisplayUtil.dip2px(this, 50);
+        final int defalultGridHeight = DisplayUtil.dip2px(this, 60);
+
+        String prevClassName = null;
+        boolean isNotLesson;
+
+        int colorIndex = 0;
+        for (int i = 0; i < 7; ++i) {
+            for (int j = 1; j <= 13; j++) {
+
+                int index = j * 8 + i;
+                Lesson lesson = null;
+
+                if (!(weekdays_syllabus_data[index] instanceof Lesson)) {
+                    isNotLesson = true;
+                } else {
+                    isNotLesson = false;
+                    lesson = (Lesson) weekdays_syllabus_data[index];
+                    /*if(prevClassName!=null)Log.v("prevClassName",prevClassName);
+                    else Log.v("prevClassName","null");
+                    Log.v("index",index+"");
+                    Log.v("Name",lesson.name);*/
+
+                    if (prevClassName != null && prevClassName.equals(lesson.name)) {
+                        continue;
+                    }
+                }
+
+
+
+                LinearLayout ll = new LinearLayout(this);
+                TextView textView = new TextView(this);
+                textView.setTextSize(11);
+                textView.setTextColor(Color.WHITE);
+                textView.setWidth(defalultGridWidth);
+                textView.setHeight(defalultGridHeight);
+                GridLayout.Spec rowSpec = GridLayout.spec(j - 1);
+                GridLayout.Spec columnSpec = GridLayout.spec(i);
+
+                if (!isNotLesson) {
+
+
+                    textView.setText(lesson.name + "@" + lesson.room);
+                    textView.setGravity(Gravity.CENTER);
+
+                    //计算下面有多少节相同的课程
+                    int timeOfClass = 1;
+
+                    for (int k = j + 1; k <= 13; k++) {
+                        int nextIndex = index + (k - j) * 8;
+                        if (!(weekdays_syllabus_data[nextIndex] instanceof Lesson)) {
+                            break;
+                        }
+                        Lesson otherlesson = (Lesson) weekdays_syllabus_data[nextIndex];
+                        if (otherlesson.name.equals(lesson.name)) {
+                            ++timeOfClass;
+                        } else break;
+                    }
+                    textView.setHeight(defalultGridHeight * timeOfClass);
+                    rowSpec = GridLayout.spec(j - 1, timeOfClass);
+                    Log.v("Note", timeOfClass + "");
+
+                    textView.setBackgroundColor(textView.getResources().getColor(
+                            bgColor[colorIndex++]
+                    ));
+                }
+
+                ll.addView(textView);
+                LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) textView.getLayoutParams();
+                lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                lp.setMargins(0, 1, 0, 0);
+                textView.requestLayout();
+
+                myClassTable.addView(ll, new GridLayout.LayoutParams(rowSpec, columnSpec));
+                ViewGroup.LayoutParams llp = ll.getLayoutParams();
+                llp.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                llp.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                ll.setLayoutParams(llp);
+                ll.setGravity(Gravity.FILL);
+                ll.requestLayout();
+
+                if (!isNotLesson) prevClassName = lesson.name;
+                else prevClassName = null;
+
+
+                myClassTable.requestLayout();
+            }
+        }
 
     }
 
@@ -123,7 +254,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         MobclickAgent.onPause(this);
     }
 
-    public void showClassInfo(Lesson lesson){
+    public void showClassInfo(Lesson lesson) {
         // 友盟
         MobclickAgent.onEvent(this, "Main_ShowDetail");
 
@@ -142,7 +273,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.set_default_syllabus: {
                 if (set_default_syllabus()) {
                     Toast.makeText(SyllabusActivity.this, "成功设置默认课表", Toast.LENGTH_SHORT).show();
@@ -207,7 +338,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
     /**
      * 设置默认学期
      */
-    private boolean set_default_syllabus(){
+    private boolean set_default_syllabus() {
         String syllabus_file_name = StringDataHelper.generate_syllabus_file_name(MainActivity.cur_username, MainActivity.cur_year_string,
                 MainActivity.cur_semester, "_");
         // Debug
@@ -216,7 +347,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 
     }
 
-    private void pick_photo(){
+    private void pick_photo() {
         Intent pick_intent = new Intent(Intent.ACTION_PICK, null);
         if (!FileOperation.is_sd_mounted() || !FileOperation.create_app_folder()) {
             Toast.makeText(SyllabusActivity.this, "读取错误", Toast.LENGTH_SHORT).show();
@@ -228,13 +359,10 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        switch (requestCode){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
             case PICK_PHOTO_FROM_GALLERY:
                 if (resultCode == RESULT_OK) {
-                    int width = syllabus_view.getWidth();
-                    int height = syllabus_view.getHeight();
-                    startPhotoZoom(data.getData(), width, height);
                 }
                 break;
             case CROP_PHOTO_REQUEST:
@@ -248,13 +376,12 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         }
     }
 
-    private void load_bitmap(String file_path){
+    private void load_bitmap(String file_path) {
         wall_paper = BitmapFactory.decodeFile(file_path);
         Drawable drawable = new BitmapDrawable(getResources(), wall_paper);
-        syllabus_view.setBackground(drawable);
     }
 
-    private void set_syllabus_wallpaper(){
+    private void set_syllabus_wallpaper() {
         String file_path = Environment.getExternalStorageDirectory() + "/" + FileOperation.APP_FOLDER + "/" + WALL_PAPER_FILE_TEMP;
         String wall_paper_file = Environment.getExternalStorageDirectory() + "/" + FileOperation.APP_FOLDER + "/" + WALL_PAPER_FILE_NAME;
         FileOperation.copy_file(new File(file_path), new File(wall_paper_file));
@@ -262,10 +389,10 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
     }
 
 
-    private void load_syllabus_wallpaper(){
-        String file_path = FileOperation.get_app_folder(true) +  WALL_PAPER_FILE_NAME;
+    private void load_syllabus_wallpaper() {
+        String file_path = FileOperation.get_app_folder(true) + WALL_PAPER_FILE_NAME;
         File wall_paper_file = new File(file_path);
-        if (wall_paper_file.exists()){
+        if (wall_paper_file.exists()) {
             load_bitmap(file_path);
         }
     }
@@ -300,19 +427,17 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
     }
 
 
-    private void set_text_color(int color){
+    private void set_text_color(int color) {
 
-        mAdapter.set_text_color(color);
-        mAdapter.set_color(color);
         ColorHelper.save_color_to_file(this, color, COLOR_FILE_NAME);
     }
 
-    private void set_random_color(){
+    private void set_random_color() {
         int color = ColorHelper.get_random_color();
         set_text_color(color);
     }
 
-    private void sync_syllabus(){
+    private void sync_syllabus() {
         LessonPullTask sync_task = new LessonPullTask(WebApi.get_server_address() + getString(R.string.syllabus_get_api), this);
         HashMap<String, String> postData = new HashMap<>();
         postData.put("username", MainActivity.cur_username);
@@ -325,7 +450,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 
     @Override
     public void deal_with_lessons(String raw_data) {
-        if (raw_data.isEmpty()){
+        if (raw_data.isEmpty()) {
             Toast.makeText(SyllabusActivity.this, "网络连接错误", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -334,7 +459,6 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         if (classParser.parseJSON(raw_data, true)) {
             classParser.inflateTable();     // 用数据填充课表
             MainActivity.weekdays_syllabus_data = classParser.weekdays_syllabus_data;
-            MainActivity.weekends_syllabus_data = classParser.weekend_classes;
 //                    Log.d(TAG, "established adapter");
 
             // 保存文件 命名格式: name_years_semester
@@ -349,8 +473,8 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
             }
             // 保存用户文件
             FileOperation.save_user(this, MainActivity.USERNAME_FILE, MainActivity.PASSWORD_FILE, username, MainActivity.cur_password);
-            SyllabusAdapter new_adapter = new SyllabusAdapter(MainActivity.weekdays_syllabus_data, this);
-            syllabus_view.setAdapter(new_adapter);
+
+
             Toast.makeText(SyllabusActivity.this, "课表同步成功", Toast.LENGTH_SHORT).show();
 
             // 统计用户登陆次数

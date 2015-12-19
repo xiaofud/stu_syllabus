@@ -24,13 +24,13 @@ import java.util.Set;
 public class ClassParser {
 
     private ArrayList<Lesson> all_classes;
-    public ArrayList<Lesson> weekend_classes;  // 存放周末的课程
 
     public static final String EMPTY_CLASS_STRING = "";
-//    public static final String[] LABELS = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
-public static final String[] LABELS = {"周一", "周二", "周三", "周四", "周五", "周六", "周日"};
+    //    public static final String[] LABELS = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+    public static final String[] LABELS = {"周一", "周二", "周三", "周四", "周五", "周六", "周日"};
     public static final HashMap<String, String> time_table;
     public static final Set<String> class_table;
+
     // 静态的初始化过程
     static {
         time_table = new HashMap<>();
@@ -50,34 +50,37 @@ public static final String[] LABELS = {"周一", "周二", "周三", "周四", "
 
         class_table = time_table.keySet();
     }
+
     public static final String ERROR = "ERROR";
 
     public static final int ROWS = 14;
-    public static final int COLUMNS = 6;    // 包含了 一个 空单元 以及 星期一到星期五
+    public static final int COLUMNS = 8;    // 包含了 一个 空单元 以及 星期一到星期五
     public Object[] weekdays_syllabus_data;  // 用于适配 课表的 view 的数据
 
     private Context context;
 
     private TokenGetter tokenGetter;
 
-    public ClassParser(Context context, TokenGetter tokenGetter){
-        weekdays_syllabus_data = new Object[ROWS * COLUMNS];
+    public ClassParser(Context context, TokenGetter tokenGetter) {
+        weekdays_syllabus_data = new Object[ROWS * (COLUMNS + 1)];
         all_classes = new ArrayList<>();
-        weekend_classes = new ArrayList<>();
+//        weekend_classes = new ArrayList<>();
         this.context = context;
         this.tokenGetter = tokenGetter;
 
-        init();     // 生成初始化的数据，在特定位置上填上日期信息之类的
+        //init();     // 生成初始化的数据，在特定位置上填上日期信息之类的
 
     }
 
 
     /**
      * 解析json数据
+     *
      * @param json_data 从服务器返回的代表课程信息的 json 数据
      * @return
      */
-    public boolean parseJSON(String json_data, boolean update_local_token){
+
+    public boolean parseJSON(String json_data, boolean update_local_token) {
         // 用response作为json传给 JSONTOkener
         // 检查是否外网流量已经用完
         JSONTokener jsonParser = new JSONTokener(json_data);
@@ -85,7 +88,7 @@ public static final String[] LABELS = {"周一", "周二", "周三", "周四", "
         try {
             JSONObject curriculum = (JSONObject) jsonParser.nextValue();
             // 判断有没有错误先
-            if (curriculum.has(ERROR)){
+            if (curriculum.has(ERROR)) {
                 String error = curriculum.getString(ERROR);
 //                Toast.makeText(context, "错误代码: " + error, Toast.LENGTH_SHORT).show();
                 String err_resp = StringDataHelper.get_error_response(error);
@@ -161,38 +164,38 @@ public static final String[] LABELS = {"周一", "周二", "周三", "周四", "
                 all_classes.add(cls);
             }
             return true;
-        }catch (JSONException e) {
+        } catch (JSONException e) {
             Log.d(MainActivity.TAG, e.toString());
             return false;
         }
     }
 
-    private void init(){
+    private void init() {
 //        Log.d(MainActivity.TAG, "start init()");
 
-        for(int i = 0 ; i < weekdays_syllabus_data.length ; ++i)
+        for (int i = 0; i < weekdays_syllabus_data.length; ++i)
             weekdays_syllabus_data[i] = EMPTY_CLASS_STRING;   // 初始化数据
 
         // 处理非课程的数据
-        for (int i = 0 ; i < weekdays_syllabus_data.length ; ++i){
+        for (int i = 0; i < weekdays_syllabus_data.length; ++i) {
             // 处理星期几这些日期
-            if (i <= 5){    // 一个空白格子，外加 周一到周五
+            if (i <= 7) {    // 一个空白格子，外加 周一到周五
                 if (i == 0)
                     weekdays_syllabus_data[i] = "";   // 空白的一个格子
                 else {
                     weekdays_syllabus_data[i] = LABELS[i - 1];    // 转化为英文表示的星期数
                 }
 
-            }else if (i % COLUMNS == 0){
+            } else if (i % COLUMNS == 0) {
                 // 处理第一列的 课的节数
                 // 表明目前第i个元素位于 i / COLUMNS 行的第一个位置
                 if (i / COLUMNS <= 9) {   // 这里还是用数字表示
                     int num = i / COLUMNS;
                     weekdays_syllabus_data[i] = num + "";  // i.e. 123..ABC
-                }else{
+                } else {
                     // 用ABC代替
                     String label = "";
-                    switch (i / COLUMNS){
+                    switch (i / COLUMNS) {
                         case 10:
                             label = "0";
                             break;
@@ -220,26 +223,26 @@ public static final String[] LABELS = {"周一", "周二", "周三", "周四", "
         // 第一天是周日 1 第七天是 周日 7
         int today_in_week = day_helper.get(Calendar.DAY_OF_WEEK);
         // 先算出周一(2)的日期
-        day_helper.add(Calendar.DAY_OF_WEEK, - (today_in_week - 2 ));
+        day_helper.add(Calendar.DAY_OF_WEEK, -(today_in_week - 2));
         // 只显示周一到周五
-        for(int i = 1 ; i < 6 ; ++i){
-            int month =  day_helper.get(Calendar.MONTH) + 1;
+        for (int i = 0; i < 6; ++i) {
+            int month = day_helper.get(Calendar.MONTH) + 1;
             int day = day_helper.get(Calendar.DAY_OF_MONTH);
             weekdays_syllabus_data[i] = month + "-" + day + "\n" + weekdays_syllabus_data[i].toString();
             day_helper.add(Calendar.DAY_OF_MONTH, 1);
         }
     }
 
-    public static int change_into_number(char c){
+    public static int change_into_number(char c) {
         int num;
-        switch (c){
+        switch (c) {
             case '0':
                 num = 10;
                 break;
             case 'A':
             case 'B':
             case 'C':
-                num = ( c - 'A' ) + 11;
+                num = (c - 'A') + 11;
                 break;
             default:
                 num = c - '0';
@@ -251,32 +254,37 @@ public static final String[] LABELS = {"周一", "周二", "周三", "周四", "
     /**
      * 用解析得到的课程填充 weekdays_syllabus_data
      */
-    public void inflateTable(){
+    public void inflateTable() {
 //        Log.d(MainActivity.TAG, "before inflate class_table");
-        weekend_classes.clear();
         // 填充课表数据
-        for(int i = 0 ; i < all_classes.size() ; ++i){
+        for (int i = 0; i < all_classes.size(); ++i) {
             // 遍历每一堂课
             Lesson lesson = all_classes.get(i);
             // 遍历key set, 所以应该上相同课程的格子，实际上添加的是同一个 Lesson 对象
-            for (String key : lesson.days.keySet()){
+            for (String key : lesson.days.keySet()) {
                 // key 的值是  w1 w2 这种格式
                 String class_time = lesson.days.get(key);
 //                Log.d(MainActivity.TAG, "class_time " + class_time);
-                if (!class_time.equals(EMPTY_CLASS_STRING)){
+                if (!class_time.equals(EMPTY_CLASS_STRING)) {
                     // 添加到obj数组中
-                    int offset = Integer.parseInt( key.substring(1));   // 得到 w1 中的数字部分
-                    if (offset == 0 || offset == 6) {     // 忽略周六周日的课
-//                        offset = 7;     // 因为web api返回的数据 w0 是代表周日
-                        weekend_classes.add(all_classes.get(i));    // 添加周末的课程到此
-                        continue;
-                    }
+                    int offset = Integer.parseInt(key.substring(1));   // 得到 w1 中的数字部分
+                    // 因为json的w0 指 周日
+                    //       if (offset == 0)
+                    //          offset = 7;
+
+//                    if (offset == 0 || offset == 6) {     // 忽略周六周日的课
+////                        offset = 7;     // 因为web api返回的数据 w0 是代表周日
+////                        weekend_classes.add(all_classes.get(i));    // 添加周末的课程到此
+////                        continue;11111
+//                    }
+//                    ++offset;
+                    Log.v("offset", offset + " ");
                     boolean hasBeenAdded = false;
-                    for(int count = 0 ; count < class_time.length() ; ++count){
+                    for (int count = 0; count < class_time.length(); ++count) {
 
                         char c = class_time.charAt(count);  // 得到数据
                         int row = -1;
-                        switch (c){
+                        switch (c) {
                             case '0':
                                 row = 10;
                                 break;
@@ -302,14 +310,14 @@ public static final String[] LABELS = {"周一", "周二", "周三", "周四", "
                             continue;
 
                         int index = row * COLUMNS + offset;
-
+                        Log.v("index", index + " ");
                         if (!hasBeenAdded) {     // 一节课添加一次即可
                             weekdays_syllabus_data[index] = lesson;   // 将这节课添加到合适的位置
                             hasBeenAdded = true;
-                        }else{
+                        } else {
                             // 找前一个位置
                             char pre_char = count == 0 ? 0 : class_time.charAt(count - 1);
-                            if (pre_char > 0){
+                            if (pre_char > 0) {
                                 // 这里也要注意 90 这种情况 要把 0 转化为 10 , A 11 B 12 C 13
                                 int pre_row = change_into_number(pre_char);
                                 int diff = row - pre_row;

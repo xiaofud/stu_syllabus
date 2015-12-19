@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="defaultTopBgColor">#c8bc4b3b</color>
+    <color name="defaultBgColor">#c8bc4b3b</color>
+    <color name="defaultLineColor">#666</color>
+
+
+    <color name="classColor1">#1cc4b3</color>
+    <color name="classColor2">#50c1fa</color>
+    <color name="classColor3">#2cb1f5</color>
+    <color name="classColor4">#02C597</color>
+    <color name="classColor5">#FE8D41</color>
+    <color name="classColor6">#F77D8A</color>
+    <color name="classColor7">#5486ea</color>
+    <color name="classColor8">#C83265</color>
+    <color name="classColor9">#72CC3B</color>
+    <color name="classColor10">#667cb1</color>
+    <color name="classColor11">#2B90CD</color>
+    <color name="classColor12">#7AA6C9</color>
+    <color name="classColor13">#4ed91b</color>
+    <color name="classColor14">#e23891</color>
+    <color name="classColor15">#6d377b</color>
+    <color name="classColor16">#E377C3</color>
+
+
+
+    <color name="classNameColor">#34CED9</color>
+
+    <color name="alpha0Color">#00ffffff</color>
+</resources>
