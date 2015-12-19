@@ -62,7 +62,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
     private static final int PICK_PHOTO_FROM_GALLERY = 1; // 从相册中选择
     private static final int CROP_PHOTO_REQUEST = 2; // 结果
 
-    private Button show_oa_button;
+    //private Button show_oa_button;
 //    private TextView info_text;
 
     private Bitmap wall_paper;
@@ -76,25 +76,9 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 
     //课表显示GridLayout
     GridLayout myClassTable;
+    LinearLayout syllabus_bg;
 
-    final int[] bgColor = {
-            R.color.classColor1,
-            R.color.classColor2,
-            R.color.classColor3,
-            R.color.classColor4,
-            R.color.classColor5,
-            R.color.classColor6,
-            R.color.classColor7,
-            R.color.classColor8,
-            R.color.classColor9,
-            R.color.classColor10,
-            R.color.classColor11,
-            R.color.classColor12,
-            R.color.classColor13,
-            R.color.classColor14,
-            R.color.classColor15,
-            R.color.classColor16,
-    };
+
 
     private void setupViews() {
 
@@ -112,6 +96,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         timeScrollView.setHorizontalScrollBarEnabled(false);
 
         myClassTable = (GridLayout) findViewById(R.id.myClassTable);
+        syllabus_bg = (LinearLayout) findViewById(R.id.syllabus_bg);
         showSyllabus();
 
         // 读取之前的壁纸
@@ -120,15 +105,15 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         // 设置字体颜色
 //        set_text_color(ColorHelper.read_color_from_file(this, COLOR_FILE_NAME));
 
-        show_oa_button = (Button) findViewById(R.id.syllabus_show_oa_button);
-        show_oa_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MobclickAgent.onEvent(SyllabusActivity.this, "More_OA");
-                Intent intent = new Intent(SyllabusActivity.this, OAActivity.class);
-                startActivity(intent);
-            }
-        });
+//        show_oa_button = (Button) findViewById(R.id.syllabus_show_oa_button);
+//        show_oa_button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MobclickAgent.onEvent(SyllabusActivity.this, "More_OA");
+//                Intent intent = new Intent(SyllabusActivity.this, OAActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
     }
 
@@ -144,7 +129,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         String prevClassName = null;
         boolean isNotLesson;
 
-        int colorIndex = 0;
+
         for (int i = 0; i < 7; ++i) {
             for (int j = 1; j <= 13; j++) {
 
@@ -196,13 +181,23 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                             ++timeOfClass;
                         } else break;
                     }
+                    textView.setAlpha(0.7f);
                     textView.setHeight(defalultGridHeight * timeOfClass);
                     rowSpec = GridLayout.spec(j - 1, timeOfClass);
                     Log.v("Note", timeOfClass + "");
 
                     textView.setBackgroundColor(textView.getResources().getColor(
-                            bgColor[colorIndex++]
+                            lesson.colorID
                     ));
+
+                    final Lesson finalLesson = lesson;
+                    ll.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            showClassInfo(finalLesson);
+                        }
+                    });
+
                 }
 
                 ll.addView(textView);
@@ -284,17 +279,17 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
             case R.id.pick_wallpaper:
                 pick_photo();
                 break;
-
-            case R.id.random_color_text:
-                set_random_color();
-                break;
+//
+//            case R.id.random_color_text:
+//                set_random_color();
+//                break;
 
 //            case R.id.blue_text:
-            case R.id.black_text:
-//            case R.id.gray_text:
-            case R.id.white_text:
-                set_text_color(ColorHelper.get_color_from_id(item.getItemId()));
-                break;
+//            case R.id.black_text:
+////            case R.id.gray_text:
+//            case R.id.white_text:
+//                set_text_color(ColorHelper.get_color_from_id(item.getItemId()));
+//                break;
 
             case R.id.query_grade_action:
 
@@ -324,10 +319,10 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 MobclickAgent.onEvent(this, "More_Sync");
                 sync_syllabus();
                 break;
-//            case R.id.show_oa_action:
-//                Intent intent = new Intent(this, OAActivity.class);
-//                startActivity(intent);
-//                break;
+            case R.id.show_oa_action:
+                Intent intent = new Intent(this, OAActivity.class);
+                startActivity(intent);
+                break;
             default:
                 break;
         }
@@ -363,6 +358,9 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         switch (requestCode) {
             case PICK_PHOTO_FROM_GALLERY:
                 if (resultCode == RESULT_OK) {
+                    int width = syllabus_bg.getWidth();
+                    int height = syllabus_bg.getHeight();
+                    startPhotoZoom(data.getData(), width, height);
                 }
                 break;
             case CROP_PHOTO_REQUEST:
@@ -379,6 +377,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
     private void load_bitmap(String file_path) {
         wall_paper = BitmapFactory.decodeFile(file_path);
         Drawable drawable = new BitmapDrawable(getResources(), wall_paper);
+        syllabus_bg.setBackground(drawable);
     }
 
     private void set_syllabus_wallpaper() {

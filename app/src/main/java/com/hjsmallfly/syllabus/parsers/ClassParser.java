@@ -9,6 +9,7 @@ import com.hjsmallfly.syllabus.adapters.SyllabusAdapter;
 import com.hjsmallfly.syllabus.helpers.StringDataHelper;
 import com.hjsmallfly.syllabus.interfaces.TokenGetter;
 import com.hjsmallfly.syllabus.syllabus.Lesson;
+import com.hjsmallfly.syllabus.syllabus.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,6 +31,25 @@ public class ClassParser {
     public static final String[] LABELS = {"周一", "周二", "周三", "周四", "周五", "周六", "周日"};
     public static final HashMap<String, String> time_table;
     public static final Set<String> class_table;
+
+    final int[] bgColor = {
+            R.color.classColor1,
+            R.color.classColor2,
+            R.color.classColor3,
+            R.color.classColor4,
+            R.color.classColor5,
+            R.color.classColor6,
+            R.color.classColor7,
+            R.color.classColor8,
+            R.color.classColor9,
+            R.color.classColor10,
+            R.color.classColor11,
+            R.color.classColor12,
+            R.color.classColor13,
+            R.color.classColor14,
+            R.color.classColor15,
+            R.color.classColor16,
+    };
 
     // 静态的初始化过程
     static {
@@ -111,6 +131,7 @@ public class ClassParser {
             int color_counts = SyllabusAdapter.class_cell_drawable.length;
             // 颜色 指针
             int color_index = -1;
+            int colorIndex = 0;
             for (int i = 0; i < classes.length(); ++i) {
                 // 得到每一节课
                 JSONObject lesson = (JSONObject) classes.get(i);
@@ -135,7 +156,7 @@ public class ClassParser {
                 cls.room = room;
                 cls.duration = duration;
                 cls.credit = credit;
-
+                cls.colorID = bgColor[colorIndex++ % bgColor.length];
                 // 会重复使用之前的色彩
                 color_index = (color_index + 1) % color_counts;
                 cls.color_code = SyllabusAdapter.class_cell_drawable[color_index];

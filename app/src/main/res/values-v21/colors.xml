@@ -3,8 +3,10 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="defaultTopBgColor">#c8bc4b3b</color>
-    <color name="defaultBgColor">#c8bc4b3b</color>
+
+    <color name="defaultTopBgColor">#ffffff</color>
+    <color name="defaultBgColor">#ffffff</color>
+
     <color name="defaultLineColor">#666</color>
 
 

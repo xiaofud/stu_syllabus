@@ -39,29 +39,29 @@
         <!--android:title="蓝色字"-->
         <!--app:showAsAction="never"/>-->
 
-    <!--<item-->
-        <!--android:id="@+id/show_oa_action"-->
-        <!--android:title="查看办公自动化" />-->
-
     <item
-        android:id="@+id/black_text"
-        android:title="黑色字"
-        app:showAsAction="never"/>
+        android:id="@+id/show_oa_action"
+        android:title="查看办公自动化" />
+
+    <!--<item-->
+        <!--android:id="@+id/black_text"-->
+        <!--android:title="黑色字"-->
+        <!--app:showAsAction="never"/>-->
 
     <!--<item-->
         <!--android:id="@+id/gray_text"-->
         <!--android:title="灰色字"-->
         <!--app:showAsAction="never"/>-->
 
-    <item
-        android:id="@+id/white_text"
-        android:title="白色字"
-        app:showAsAction="never"/>
+    <!--<item-->
+        <!--android:id="@+id/white_text"-->
+        <!--android:title="白色字"-->
+        <!--app:showAsAction="never"/>-->
 
-    <item
-        android:id="@+id/random_color_text"
-        android:title="随机色"
-        app:showAsAction="never"/>
+    <!--<item-->
+        <!--android:id="@+id/random_color_text"-->
+        <!--android:title="随机色"-->
+        <!--app:showAsAction="never"/>-->
 
     <item
         android:id="@+id/pick_wallpaper"

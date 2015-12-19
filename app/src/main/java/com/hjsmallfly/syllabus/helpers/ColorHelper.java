@@ -25,12 +25,12 @@ public class ColorHelper {
     public static int get_color_from_id(int action_id){
 //        if (action_id == R.id.blue_text)
 //            return Color.BLUE;
-        if (action_id == R.id.black_text)
+//        if (action_id == R.id.black_text)
             return Color.BLACK;
 //        else if (action_id == R.id.gray_text)
 //            return Color.GRAY;
-        else
-            return Color.WHITE;
+//        else
+//            return Color.WHITE;
 
     }
 

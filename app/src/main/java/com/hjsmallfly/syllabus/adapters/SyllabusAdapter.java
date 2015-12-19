@@ -54,11 +54,11 @@ public class SyllabusAdapter extends RecyclerView.Adapter<SyllabusAdapter.ViewHo
 
     private ArrayList<ViewHolder> all_view_holders = new ArrayList<>();
 
-    public void set_text_color(int color){
-        for(ViewHolder vh: all_view_holders){
-            vh.mTextView.setTextColor(color);
-        }
-    }
+//    public void set_text_color(int color){
+//        for(ViewHolder vh: all_view_holders){
+//            vh.mTextView.setTextColor(color);
+//        }
+//    }
 
 
     // Provide a suitable constructor (depends on the kind of dataset)

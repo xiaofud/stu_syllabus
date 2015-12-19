@@ -202,26 +202,38 @@
 
         </com.hjsmallfly.syllabus.otherViews.SyncScrollView>
 
-
-        <com.hjsmallfly.syllabus.otherViews.SyncScrollView
-            android:id="@+id/classScrollView"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <com.hjsmallfly.syllabus.otherViews.SyncHorizontalScrollView
-                android:id="@+id/gridScrollView"
+            <LinearLayout
+                android:orientation="vertical"
+                android:id="@+id/syllabus_bg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <GridLayout
-                    android:id="@+id/myClassTable"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/defaultLineColor">
+            </LinearLayout>
 
-                </GridLayout>
-            </com.hjsmallfly.syllabus.otherViews.SyncHorizontalScrollView>
-        </com.hjsmallfly.syllabus.otherViews.SyncScrollView>
+            <com.hjsmallfly.syllabus.otherViews.SyncScrollView
+                android:id="@+id/classScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.hjsmallfly.syllabus.otherViews.SyncHorizontalScrollView
+                    android:id="@+id/gridScrollView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <GridLayout
+                        android:id="@+id/myClassTable"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                    </GridLayout>
+                </com.hjsmallfly.syllabus.otherViews.SyncHorizontalScrollView>
+            </com.hjsmallfly.syllabus.otherViews.SyncScrollView>
+        </FrameLayout>
+
+
     </LinearLayout>
 
 </LinearLayout>

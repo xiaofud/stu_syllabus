@@ -7,12 +7,17 @@
     tools:context="com.hjsmallfly.syllabus.activities.SyllabusActivity">
 
 
+
+
+
     <include layout="@layout/syllabus_layout"></include>
 
-    <Button
-        android:id="@+id/syllabus_show_oa_button"
-        android:text="查看办公自动化"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+
+
+    <!--<Button-->
+        <!--android:id="@+id/syllabus_show_oa_button"-->
+        <!--android:text="查看办公自动化"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content" />-->
 
 </LinearLayout>

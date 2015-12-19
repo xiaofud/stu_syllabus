@@ -14,6 +14,7 @@ public class Lesson {
     public String duration;
     public String credit;
     public HashMap<String, String> days;
+    public int colorID;
 
     // 额外的信息
     public int start_year;
