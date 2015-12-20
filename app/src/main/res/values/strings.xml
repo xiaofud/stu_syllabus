@@ -37,8 +37,8 @@
     <string name="summer">夏季\n学期</string>
 
     <string name="version_code">1</string>
-    <string name="version_name">v1.0.4</string>
-    <string name="publisher">李宇杰</string>
+    <string name="version_name">v1.0.5</string>
+    <string name="publisher">呆呆杰</string>
 
     <string name="username">账号</string>
     <string name="password">密码</string>
@@ -63,7 +63,7 @@
         诶诶，希望你喜欢这个应用: ) 那是最大的鼓励.
         By 晓拂, 2015/10/14 21:14
     </string>
-    <string name="title_activity_update">更新界面</string>
+    <string name="title_activity_update">fir.im/syllabus</string>
     <!--<string name="title_activity_main2">Main2Activity</string>-->
     <string name="title_activity_grade">查看成绩</string>
     <string name="title_activity_global_discuss">全球吹水</string>
