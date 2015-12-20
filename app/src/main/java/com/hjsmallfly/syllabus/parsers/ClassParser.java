@@ -1,6 +1,8 @@
 package com.hjsmallfly.syllabus.parsers;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -33,22 +35,22 @@ public class ClassParser {
     public static final Set<String> class_table;
 
     final int[] bgColor = {
-            R.color.classColor1,
-            R.color.classColor2,
-            R.color.classColor3,
-            R.color.classColor4,
-            R.color.classColor5,
-            R.color.classColor6,
-            R.color.classColor7,
-            R.color.classColor8,
-            R.color.classColor9,
-            R.color.classColor10,
-            R.color.classColor11,
-            R.color.classColor12,
-            R.color.classColor13,
-            R.color.classColor14,
-            R.color.classColor15,
-            R.color.classColor16,
+            Color.rgb(28,196,179),
+            Color.rgb(80,193,250),
+            Color.rgb(44,177,245),
+            Color.rgb(2,197,151),
+            Color.rgb(254,141,65),
+            Color.rgb(247,125,138),
+            Color.rgb(84,134,234),
+            Color.rgb(200,50,101),
+            Color.rgb(114,204,59),
+            Color.rgb(102,124,177),
+            Color.rgb(43,144,205),
+            Color.rgb(122,166,201),
+            Color.rgb(78,217,27),
+            Color.rgb(226,56,145),
+            Color.rgb(109,55,123),
+            Color.rgb(227,119,195),
     };
 
     // 静态的初始化过程

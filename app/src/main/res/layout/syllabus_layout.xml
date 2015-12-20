@@ -8,68 +8,68 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="@dimen/default_grid_width"
-            android:layout_height="@dimen/default_top_height"
-            android:background="@color/defaultTopBgColor"
+            android:layout_width="50dp"
+            android:layout_height="35dp"
+            android:background="#F5F5F5"
             android:gravity="center"
             android:text="" />
 
         <com.hjsmallfly.syllabus.otherViews.SyncHorizontalScrollView
             android:id="@+id/dayScrollView"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/default_top_height">
+            android:layout_height="35dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/default_top_height">
+                android:layout_height="35dp">
 
 
                 <TextView
-                    android:layout_width="@dimen/default_grid_width"
-                    android:layout_height="@dimen/default_top_height"
-                    android:background="@color/defaultTopBgColor"
+                    android:layout_width="50dp"
+                    android:layout_height="35dp"
+                    android:background="#F5F5F5"
                     android:gravity="center"
                     android:text="星期日" />
 
                 <TextView
-                    android:layout_width="@dimen/default_grid_width"
-                    android:layout_height="@dimen/default_top_height"
-                    android:background="@color/defaultTopBgColor"
+                    android:layout_width="50dp"
+                    android:layout_height="35dp"
+                    android:background="#F5F5F5"
                     android:gravity="center"
                     android:text="星期一" />
 
                 <TextView
-                    android:layout_width="@dimen/default_grid_width"
-                    android:layout_height="@dimen/default_top_height"
-                    android:background="@color/defaultTopBgColor"
+                    android:layout_width="50dp"
+                    android:layout_height="35dp"
+                    android:background="#F5F5F5"
                     android:gravity="center"
                     android:text="星期二" />
 
                 <TextView
-                    android:layout_width="@dimen/default_grid_width"
-                    android:layout_height="@dimen/default_top_height"
-                    android:background="@color/defaultTopBgColor"
+                    android:layout_width="50dp"
+                    android:layout_height="35dp"
+                    android:background="#F5F5F5"
                     android:gravity="center"
                     android:text="星期三" />
 
                 <TextView
-                    android:layout_width="@dimen/default_grid_width"
-                    android:layout_height="@dimen/default_top_height"
-                    android:background="@color/defaultTopBgColor"
+                    android:layout_width="50dp"
+                    android:layout_height="35dp"
+                    android:background="#F5F5F5"
                     android:gravity="center"
                     android:text="星期四" />
 
                 <TextView
-                    android:layout_width="@dimen/default_grid_width"
-                    android:layout_height="@dimen/default_top_height"
-                    android:background="@color/defaultTopBgColor"
+                    android:layout_width="50dp"
+                    android:layout_height="35dp"
+                    android:background="#F5F5F5"
                     android:gravity="center"
                     android:text="星期五" />
 
                 <TextView
-                    android:layout_width="@dimen/default_grid_width"
-                    android:layout_height="@dimen/default_top_height"
-                    android:background="@color/defaultTopBgColor"
+                    android:layout_width="50dp"
+                    android:layout_height="35dp"
+                    android:background="#F5F5F5"
                     android:gravity="center"
                     android:text="星期六" />
             </LinearLayout>
@@ -92,109 +92,109 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="@color/defaultLineColor"
+                android:background="#666"
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="@dimen/default_grid_width"
-                    android:layout_height="@dimen/default_grid_height"
-                    android:background="@color/defaultTopBgColor"
+                    android:layout_width="50dp"
+                    android:layout_height="60dp"
+                    android:background="#F5F5F5"
                     android:gravity="center"
                     android:text="8:00\n\n1" />
 
                 <TextView
-                    android:layout_width="@dimen/default_grid_width"
-                    android:layout_height="@dimen/default_grid_height"
+                    android:layout_width="50dp"
+                    android:layout_height="60dp"
                     android:layout_marginTop="1px"
-                    android:background="@color/defaultTopBgColor"
+                    android:background="#F5F5F5"
                     android:gravity="center"
                     android:text="9:00\n\n2" />
 
                 <TextView
-                    android:layout_width="@dimen/default_grid_width"
-                    android:layout_height="@dimen/default_grid_height"
+                    android:layout_width="50dp"
+                    android:layout_height="60dp"
                     android:layout_marginTop="1px"
-                    android:background="@color/defaultTopBgColor"
+                    android:background="#F5F5F5"
                     android:gravity="center"
                     android:text="10:10\n\n3" />
 
                 <TextView
-                    android:layout_width="@dimen/default_grid_width"
-                    android:layout_height="@dimen/default_grid_height"
+                    android:layout_width="50dp"
+                    android:layout_height="60dp"
                     android:layout_marginTop="1px"
-                    android:background="@color/defaultTopBgColor"
+                    android:background="#F5F5F5"
                     android:gravity="center"
                     android:text="11:10\n\n4" />
 
                 <TextView
-                    android:layout_width="@dimen/default_grid_width"
-                    android:layout_height="@dimen/default_grid_height"
+                    android:layout_width="50dp"
+                    android:layout_height="60dp"
                     android:layout_marginTop="1px"
-                    android:background="@color/defaultTopBgColor"
+                    android:background="#F5F5F5"
                     android:gravity="center"
                     android:text="13:00\n\n5" />
 
                 <TextView
-                    android:layout_width="@dimen/default_grid_width"
-                    android:layout_height="@dimen/default_grid_height"
+                    android:layout_width="50dp"
+                    android:layout_height="60dp"
                     android:layout_marginTop="1px"
-                    android:background="@color/defaultTopBgColor"
+                    android:background="#F5F5F5"
                     android:gravity="center"
                     android:text="14:00\n\n6" />
 
                 <TextView
-                    android:layout_width="@dimen/default_grid_width"
-                    android:layout_height="@dimen/default_grid_height"
+                    android:layout_width="50dp"
+                    android:layout_height="60dp"
                     android:layout_marginTop="1px"
-                    android:background="@color/defaultTopBgColor"
+                    android:background="#F5F5F5"
                     android:gravity="center"
                     android:text="15:00\n\n7" />
 
                 <TextView
-                    android:layout_width="@dimen/default_grid_width"
-                    android:layout_height="@dimen/default_grid_height"
+                    android:layout_width="50dp"
+                    android:layout_height="60dp"
                     android:layout_marginTop="1px"
-                    android:background="@color/defaultTopBgColor"
+                    android:background="#F5F5F5"
                     android:gravity="center"
                     android:text="16:10\n\n8" />
 
                 <TextView
-                    android:layout_width="@dimen/default_grid_width"
-                    android:layout_height="@dimen/default_grid_height"
+                    android:layout_width="50dp"
+                    android:layout_height="60dp"
                     android:layout_marginTop="1px"
-                    android:background="@color/defaultTopBgColor"
+                    android:background="#F5F5F5"
                     android:gravity="center"
                     android:text="17:10\n\n9" />
 
                 <TextView
-                    android:layout_width="@dimen/default_grid_width"
-                    android:layout_height="@dimen/default_grid_height"
+                    android:layout_width="50dp"
+                    android:layout_height="60dp"
                     android:layout_marginTop="1px"
-                    android:background="@color/defaultTopBgColor"
+                    android:background="#F5F5F5"
                     android:gravity="center"
                     android:text="18:10\n\n0" />
 
                 <TextView
-                    android:layout_width="@dimen/default_grid_width"
-                    android:layout_height="@dimen/default_grid_height"
+                    android:layout_width="50dp"
+                    android:layout_height="60dp"
                     android:layout_marginTop="1px"
-                    android:background="@color/defaultTopBgColor"
+                    android:background="#F5F5F5"
                     android:gravity="center"
                     android:text="19:10\n\nA" />
 
                 <TextView
-                    android:layout_width="@dimen/default_grid_width"
-                    android:layout_height="@dimen/default_grid_height"
+                    android:layout_width="50dp"
+                    android:layout_height="60dp"
                     android:layout_marginTop="1px"
-                    android:background="@color/defaultTopBgColor"
+                    android:background="#F5F5F5"
                     android:gravity="center"
                     android:text="20:10\n\nB" />
 
                 <TextView
-                    android:layout_width="@dimen/default_grid_width"
-                    android:layout_height="@dimen/default_grid_height"
+                    android:layout_width="50dp"
+                    android:layout_height="60dp"
                     android:layout_marginTop="1px"
-                    android:background="@color/defaultTopBgColor"
+                    android:background="#F5F5F5"
                     android:gravity="center"
                     android:text="21:10\n\nC" />
 

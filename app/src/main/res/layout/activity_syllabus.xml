@@ -7,9 +7,6 @@
     tools:context="com.hjsmallfly.syllabus.activities.SyllabusActivity">
 
 
-
-
-
     <include layout="@layout/syllabus_layout"></include>
 
 

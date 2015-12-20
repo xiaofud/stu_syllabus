@@ -4,8 +4,4 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
-    <dimen name="default_grid_width">50dp</dimen>
-    <dimen name="default_grid_height">60dp</dimen>
-    <dimen name="default_top_height">35dp</dimen>
-
 </resources>

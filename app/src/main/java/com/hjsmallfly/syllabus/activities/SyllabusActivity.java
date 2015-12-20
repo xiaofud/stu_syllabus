@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
@@ -153,8 +154,8 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 
 
 
-                LinearLayout ll = new LinearLayout(this);
-                TextView textView = new TextView(this);
+                LinearLayout ll = new LinearLayout(SyllabusActivity.this);
+                TextView textView = new TextView(SyllabusActivity.this);
                 textView.setTextSize(11);
                 textView.setTextColor(Color.WHITE);
                 textView.setWidth(defalultGridWidth);
@@ -186,9 +187,10 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                     rowSpec = GridLayout.spec(j - 1, timeOfClass);
                     Log.v("Note", timeOfClass + "");
 
-                    textView.setBackgroundColor(textView.getResources().getColor(
-                            lesson.colorID
-                    ));
+//                    textView.setBackgroundColor(textView.getResources().getColor(
+//                            lesson.colorID
+//                    ));
+                    textView.setBackground(new ColorDrawable(lesson.colorID));
 
                     final Lesson finalLesson = lesson;
                     ll.setOnClickListener(new View.OnClickListener() {
