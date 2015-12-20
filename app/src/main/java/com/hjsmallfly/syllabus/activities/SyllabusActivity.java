@@ -145,9 +145,9 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                     /*if(prevClassName!=null)Log.v("prevClassName",prevClassName);
                     else Log.v("prevClassName","null");
                     Log.v("index",index+"");
-                    Log.v("Name",lesson.name);*/
+                    Log.v("Name",lesson.toString());*/
 
-                    if (prevClassName != null && prevClassName.equals(lesson.name)) {
+                    if (prevClassName != null && prevClassName.equals(lesson.toString())) {
                         continue;
                     }
                 }
@@ -166,7 +166,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 if (!isNotLesson) {
 
 
-                    textView.setText(lesson.name + "@" + lesson.room);
+                    textView.setText(lesson.toString() /* + "@" + lesson.room */);
                     textView.setGravity(Gravity.CENTER);
 
                     //计算下面有多少节相同的课程
@@ -178,11 +178,11 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                             break;
                         }
                         Lesson otherlesson = (Lesson) weekdays_syllabus_data[nextIndex];
-                        if (otherlesson.name.equals(lesson.name)) {
+                        if (otherlesson.toString().equals(lesson.toString())) {
                             ++timeOfClass;
                         } else break;
                     }
-                    textView.setAlpha(0.7f);
+                    textView.setAlpha(0.9f);
                     textView.setHeight(defalultGridHeight * timeOfClass);
                     rowSpec = GridLayout.spec(j - 1, timeOfClass);
                     Log.v("Note", timeOfClass + "");
@@ -217,7 +217,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 ll.setGravity(Gravity.FILL);
                 ll.requestLayout();
 
-                if (!isNotLesson) prevClassName = lesson.name;
+                if (!isNotLesson) prevClassName = lesson.toString();
                 else prevClassName = null;
 
 
