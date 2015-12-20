@@ -127,7 +127,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         final int defalultGridWidth = DisplayUtil.dip2px(this, 50);
         final int defalultGridHeight = DisplayUtil.dip2px(this, 60);
 
-        String prevClassName = null;
+        String prevClassID = null;
         boolean isNotLesson;
 
 
@@ -142,12 +142,12 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 } else {
                     isNotLesson = false;
                     lesson = (Lesson) weekdays_syllabus_data[index];
-                    /*if(prevClassName!=null)Log.v("prevClassName",prevClassName);
-                    else Log.v("prevClassName","null");
+                    /*if(prevClassID!=null)Log.v("prevClassID",prevClassID);
+                    else Log.v("prevClassID","null");
                     Log.v("index",index+"");
                     Log.v("Name",lesson.toString());*/
 
-                    if (prevClassName != null && prevClassName.equals(lesson.toString())) {
+                    if (prevClassID != null && prevClassID.equals(lesson.id)) {
                         continue;
                     }
                 }
@@ -165,8 +165,30 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 
                 if (!isNotLesson) {
 
+                    String lesson_str = lesson.toString();
 
-                    textView.setText(lesson.toString() /* + "@" + lesson.room */);
+                    // 单双周显示
+                    int w = -1;
+                    int day = -1;
+                    String has_single_or_double = null;
+                    for(String day_obj: lesson.days.keySet()){
+                        String time_str = lesson.days.get(day_obj);
+                        if (time_str.contains("单")){
+                            has_single_or_double = "单";
+                            w = Integer.parseInt(day_obj.substring(1));
+                        }else if (time_str.contains("双")){
+                            has_single_or_double = "双";
+                            w = Integer.parseInt(day_obj.substring(1));
+                        }
+                    }
+
+                    if (has_single_or_double != null){
+                        if (w == i){
+                            lesson_str = "[" + has_single_or_double + "]" + lesson_str;
+                        }
+                    }
+
+                    textView.setText(lesson_str /* + "@" + lesson.room */);
                     textView.setGravity(Gravity.CENTER);
 
                     //计算下面有多少节相同的课程
@@ -217,8 +239,8 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 ll.setGravity(Gravity.FILL);
                 ll.requestLayout();
 
-                if (!isNotLesson) prevClassName = lesson.toString();
-                else prevClassName = null;
+                if (!isNotLesson) prevClassID = lesson.id;
+                else prevClassID = null;
 
 
                 myClassTable.requestLayout();
@@ -256,6 +278,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         MobclickAgent.onEvent(this, "Main_ShowDetail");
 
         clicked_lesson = lesson;
+        Toast.makeText(SyllabusActivity.this, lesson.days.toString(), Toast.LENGTH_SHORT).show();
         Intent tab_intent = new Intent(this, MyTabActivity.class);
         startActivity(tab_intent);
     }
