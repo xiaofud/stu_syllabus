@@ -7,6 +7,9 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RoundRectShape;
+import android.graphics.drawable.shapes.Shape;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -30,6 +33,7 @@ import android.widget.Toast;
 import com.hjsmallfly.syllabus.helpers.ColorHelper;
 import com.hjsmallfly.syllabus.helpers.DisplayUtil;
 import com.hjsmallfly.syllabus.helpers.FileOperation;
+import com.hjsmallfly.syllabus.helpers.LessonItemShapeDrawable;
 import com.hjsmallfly.syllabus.helpers.LessonPullTask;
 import com.hjsmallfly.syllabus.helpers.StringDataHelper;
 import com.hjsmallfly.syllabus.helpers.WebApi;
@@ -78,7 +82,6 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
     //课表显示GridLayout
     GridLayout myClassTable;
     LinearLayout syllabus_bg;
-
 
 
     private void setupViews() {
@@ -153,7 +156,6 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 }
 
 
-
                 LinearLayout ll = new LinearLayout(SyllabusActivity.this);
                 TextView textView = new TextView(SyllabusActivity.this);
                 textView.setTextSize(11);
@@ -171,19 +173,19 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                     int w = -1;
                     int day = -1;
                     String has_single_or_double = null;
-                    for(String day_obj: lesson.days.keySet()){
+                    for (String day_obj : lesson.days.keySet()) {
                         String time_str = lesson.days.get(day_obj);
-                        if (time_str.contains("单")){
+                        if (time_str.contains("单")) {
                             has_single_or_double = "单";
                             w = Integer.parseInt(day_obj.substring(1));
-                        }else if (time_str.contains("双")){
+                        } else if (time_str.contains("双")) {
                             has_single_or_double = "双";
                             w = Integer.parseInt(day_obj.substring(1));
                         }
                     }
 
-                    if (has_single_or_double != null){
-                        if (w == i){
+                    if (has_single_or_double != null) {
+                        if (w == i) {
                             lesson_str = "[" + has_single_or_double + "]" + lesson_str;
                         }
                     }
@@ -204,7 +206,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                             ++timeOfClass;
                         } else break;
                     }
-                    textView.setAlpha(0.9f);
+                    textView.setAlpha(0.7f);
                     textView.setHeight(defalultGridHeight * timeOfClass);
                     rowSpec = GridLayout.spec(j - 1, timeOfClass);
                     Log.v("Note", timeOfClass + "");
@@ -212,7 +214,14 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 //                    textView.setBackgroundColor(textView.getResources().getColor(
 //                            lesson.colorID
 //                    ));
-                    textView.setBackground(new ColorDrawable(lesson.colorID));
+                    //textView.setBackground(new ColorDrawable(lesson.colorID));
+
+                    float roundR = 22.0f;
+                    float[] outerR = new float[] { roundR, roundR, roundR, roundR,roundR, roundR, roundR, roundR  };
+                    Shape shape = new
+                            RoundRectShape(outerR, null, null);
+
+                    textView.setBackground(new LessonItemShapeDrawable(shape, lesson.colorID));
 
                     final Lesson finalLesson = lesson;
                     ll.setOnClickListener(new View.OnClickListener() {
@@ -228,7 +237,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) textView.getLayoutParams();
                 lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
                 lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                lp.setMargins(0, 1, 0, 0);
+                lp.setMargins(0, 1, 2, 0);
                 textView.requestLayout();
 
                 myClassTable.addView(ll, new GridLayout.LayoutParams(rowSpec, columnSpec));
@@ -278,7 +287,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         MobclickAgent.onEvent(this, "Main_ShowDetail");
 
         clicked_lesson = lesson;
-        Toast.makeText(SyllabusActivity.this, lesson.days.toString(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(SyllabusActivity.this, lesson.days.toString(), Toast.LENGTH_SHORT).show();
         Intent tab_intent = new Intent(this, MyTabActivity.class);
         startActivity(tab_intent);
     }
