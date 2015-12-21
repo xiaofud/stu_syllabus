@@ -126,9 +126,10 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         Object[] weekdays_syllabus_data = MainActivity.weekdays_syllabus_data;
         myClassTable.removeAllViews();
 
-
-        final int defalultGridWidth = DisplayUtil.dip2px(this, 50);
-        final int defalultGridHeight = DisplayUtil.dip2px(this, 60);
+        final int defalultGridWidth = DisplayUtil.dip2px(this, 48);
+        final int defalultGridHeight = DisplayUtil.dip2px(this, 58);
+        final int defalultLLWidth = DisplayUtil.dip2px(this, 50);
+        final int defalultLLHeight = DisplayUtil.dip2px(this, 60);
 
         String prevClassID = null;
         boolean isNotLesson;
@@ -161,6 +162,11 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 textView.setTextSize(11);
                 textView.setTextColor(Color.WHITE);
                 textView.setWidth(defalultGridWidth);
+                textView.setHeight(defalultGridHeight);
+                ll.setMinimumWidth(defalultLLWidth);
+                ll.setMinimumHeight(defalultLLHeight);
+                ll.setGravity(Gravity.CENTER);
+
                 textView.setHeight(defalultGridHeight);
                 GridLayout.Spec rowSpec = GridLayout.spec(j - 1);
                 GridLayout.Spec columnSpec = GridLayout.spec(i);
@@ -206,8 +212,9 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                             ++timeOfClass;
                         } else break;
                     }
-                    textView.setAlpha(0.7f);
+//                    textView.setAlpha(0.7f);
                     textView.setHeight(defalultGridHeight * timeOfClass);
+                    ll.setMinimumHeight(defalultLLHeight * timeOfClass);
                     rowSpec = GridLayout.spec(j - 1, timeOfClass);
                     Log.v("Note", timeOfClass + "");
 
@@ -230,22 +237,21 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                             showClassInfo(finalLesson);
                         }
                     });
-
                 }
 
+                //ll.setPadding(5,5,5,5);
                 ll.addView(textView);
                 LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) textView.getLayoutParams();
                 lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
                 lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                lp.setMargins(0, 1, 2, 0);
                 textView.requestLayout();
+
 
                 myClassTable.addView(ll, new GridLayout.LayoutParams(rowSpec, columnSpec));
                 ViewGroup.LayoutParams llp = ll.getLayoutParams();
                 llp.height = ViewGroup.LayoutParams.MATCH_PARENT;
                 llp.width = ViewGroup.LayoutParams.MATCH_PARENT;
                 ll.setLayoutParams(llp);
-                ll.setGravity(Gravity.FILL);
                 ll.requestLayout();
 
                 if (!isNotLesson) prevClassID = lesson.id;

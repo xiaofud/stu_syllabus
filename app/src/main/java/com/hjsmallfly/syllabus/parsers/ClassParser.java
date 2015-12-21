@@ -35,22 +35,22 @@ public class ClassParser {
     public static final Set<String> class_table;
 
     final int[] bgColor = {
-            Color.rgb(28,196,179),
-            Color.rgb(80,193,250),
-            Color.rgb(44,177,245),
-            Color.rgb(2,197,151),
-            Color.rgb(254,141,65),
-            Color.rgb(247,125,138),
-            Color.rgb(84,134,234),
-            Color.rgb(200,50,101),
-            Color.rgb(114,204,59),
-            Color.rgb(102,124,177),
-            Color.rgb(43,144,205),
-            Color.rgb(122,166,201),
-            Color.rgb(78,217,27),
-            Color.rgb(226,56,145),
-            Color.rgb(109,55,123),
-            Color.rgb(227,119,195),
+            Color.argb(178,28,196,179),
+            Color.argb(178,80,193,250),
+            Color.argb(178,44,177,245),
+            Color.argb(178,2,197,151),
+            Color.argb(178,254,141,65),
+            Color.argb(178,247,125,138),
+            Color.argb(178,84,134,234),
+            Color.argb(178,200,50,101),
+            Color.argb(178,114,204,59),
+            Color.argb(178,102,124,177),
+            Color.argb(178,43,144,205),
+            Color.argb(178,122,166,201),
+            Color.argb(178,78,217,27),
+            Color.argb(178,226,56,145),
+            Color.argb(178,109,55,123),
+            Color.argb(178,227,119,195),
     };
 
     // 静态的初始化过程

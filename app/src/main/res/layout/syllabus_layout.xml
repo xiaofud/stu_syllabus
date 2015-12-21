@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:id="@+id/syllabus_bg"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -10,7 +13,8 @@
         <TextView
             android:layout_width="50dp"
             android:layout_height="35dp"
-            android:background="#F5F5F5"
+            android:background="@drawable/orange_border"
+            android:textColor="@android:color/black"
             android:gravity="center"
             android:text="" />
 
@@ -25,60 +29,60 @@
 
 
                 <TextView
-                    android:layout_marginRight="2px"
                     android:layout_width="50dp"
                     android:layout_height="35dp"
-                    android:background="#F5F5F5"
+                    android:background="@drawable/orange_border"
+                    android:textColor="@android:color/black"
                     android:gravity="center"
-                    android:text="星期日" />
+                    android:text="周日" />
 
                 <TextView
-                    android:layout_marginRight="2px"
                     android:layout_width="50dp"
                     android:layout_height="35dp"
-                    android:background="#F5F5F5"
+                    android:background="@drawable/orange_border"
+                    android:textColor="@android:color/black"
                     android:gravity="center"
-                    android:text="星期一" />
+                    android:text="周一" />
 
                 <TextView
-                    android:layout_marginRight="2px"
                     android:layout_width="50dp"
                     android:layout_height="35dp"
-                    android:background="#F5F5F5"
+                    android:background="@drawable/orange_border"
+                    android:textColor="@android:color/black"
                     android:gravity="center"
-                    android:text="星期二" />
+                    android:text="周二" />
 
                 <TextView
-                    android:layout_marginRight="2px"
                     android:layout_width="50dp"
                     android:layout_height="35dp"
-                    android:background="#F5F5F5"
+                    android:background="@drawable/orange_border"
+                    android:textColor="@android:color/black"
                     android:gravity="center"
-                    android:text="星期三" />
+                    android:text="周三" />
 
                 <TextView
-                    android:layout_marginRight="2px"
                     android:layout_width="50dp"
                     android:layout_height="35dp"
-                    android:background="#F5F5F5"
+                    android:background="@drawable/orange_border"
+                    android:textColor="@android:color/black"
                     android:gravity="center"
-                    android:text="星期四" />
+                    android:text="周四" />
 
                 <TextView
-                    android:layout_marginRight="2px"
                     android:layout_width="50dp"
                     android:layout_height="35dp"
-                    android:background="#F5F5F5"
+                    android:background="@drawable/orange_border"
+                    android:textColor="@android:color/black"
                     android:gravity="center"
-                    android:text="星期五" />
+                    android:text="周五" />
 
                 <TextView
-                    android:layout_marginRight="2px"
                     android:layout_width="50dp"
                     android:layout_height="35dp"
-                    android:background="#F5F5F5"
+                    android:background="@drawable/orange_border"
+                    android:textColor="@android:color/black"
                     android:gravity="center"
-                    android:text="星期六" />
+                    android:text="周六" />
             </LinearLayout>
         </com.hjsmallfly.syllabus.otherViews.SyncHorizontalScrollView>
 
@@ -88,7 +92,6 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="#777"
         android:orientation="horizontal">
 
         <com.hjsmallfly.syllabus.otherViews.SyncScrollView
@@ -99,109 +102,109 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:background="#666"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="50dp"
                     android:layout_height="60dp"
-                    android:background="#F5F5F5"
+                    android:background="@drawable/orange_border"
+                    android:textColor="@android:color/black"
                     android:gravity="center"
                     android:text="8:00\n\n1" />
 
                 <TextView
                     android:layout_width="50dp"
                     android:layout_height="60dp"
-                    android:layout_marginTop="1px"
-                    android:background="#F5F5F5"
+                    android:background="@drawable/orange_border"
+                    android:textColor="@android:color/black"
                     android:gravity="center"
                     android:text="9:00\n\n2" />
 
                 <TextView
                     android:layout_width="50dp"
                     android:layout_height="60dp"
-                    android:layout_marginTop="1px"
-                    android:background="#F5F5F5"
+                    android:background="@drawable/orange_border"
+                    android:textColor="@android:color/black"
                     android:gravity="center"
                     android:text="10:10\n\n3" />
 
                 <TextView
                     android:layout_width="50dp"
                     android:layout_height="60dp"
-                    android:layout_marginTop="1px"
-                    android:background="#F5F5F5"
+                    android:background="@drawable/orange_border"
+                    android:textColor="@android:color/black"
                     android:gravity="center"
                     android:text="11:10\n\n4" />
 
                 <TextView
                     android:layout_width="50dp"
                     android:layout_height="60dp"
-                    android:layout_marginTop="1px"
-                    android:background="#F5F5F5"
+                    android:background="@drawable/orange_border"
+                    android:textColor="@android:color/black"
                     android:gravity="center"
                     android:text="13:00\n\n5" />
 
                 <TextView
                     android:layout_width="50dp"
                     android:layout_height="60dp"
-                    android:layout_marginTop="1px"
-                    android:background="#F5F5F5"
+                    android:background="@drawable/orange_border"
+                    android:textColor="@android:color/black"
                     android:gravity="center"
                     android:text="14:00\n\n6" />
 
                 <TextView
                     android:layout_width="50dp"
                     android:layout_height="60dp"
-                    android:layout_marginTop="1px"
-                    android:background="#F5F5F5"
+                    android:background="@drawable/orange_border"
+                    android:textColor="@android:color/black"
                     android:gravity="center"
                     android:text="15:00\n\n7" />
 
                 <TextView
                     android:layout_width="50dp"
                     android:layout_height="60dp"
-                    android:layout_marginTop="1px"
-                    android:background="#F5F5F5"
+                    android:background="@drawable/orange_border"
+                    android:textColor="@android:color/black"
                     android:gravity="center"
                     android:text="16:10\n\n8" />
 
                 <TextView
                     android:layout_width="50dp"
                     android:layout_height="60dp"
-                    android:layout_marginTop="1px"
-                    android:background="#F5F5F5"
+                    android:background="@drawable/orange_border"
+                    android:textColor="@android:color/black"
                     android:gravity="center"
                     android:text="17:10\n\n9" />
 
                 <TextView
                     android:layout_width="50dp"
                     android:layout_height="60dp"
-                    android:layout_marginTop="1px"
-                    android:background="#F5F5F5"
+                    android:background="@drawable/orange_border"
+                    android:textColor="@android:color/black"
                     android:gravity="center"
                     android:text="18:10\n\n0" />
 
                 <TextView
                     android:layout_width="50dp"
                     android:layout_height="60dp"
-                    android:layout_marginTop="1px"
-                    android:background="#F5F5F5"
+                    android:background="@drawable/orange_border"
+                    android:textColor="@android:color/black"
                     android:gravity="center"
                     android:text="19:10\n\nA" />
 
                 <TextView
                     android:layout_width="50dp"
                     android:layout_height="60dp"
-                    android:layout_marginTop="1px"
-                    android:background="#F5F5F5"
+                    android:background="@drawable/orange_border"
+                    android:textColor="@android:color/black"
                     android:gravity="center"
                     android:text="20:10\n\nB" />
 
                 <TextView
                     android:layout_width="50dp"
                     android:layout_height="60dp"
-                    android:layout_marginTop="1px"
-                    android:background="#F5F5F5"
+                    android:background="@drawable/orange_border"
+                    android:textColor="@android:color/black"
                     android:gravity="center"
                     android:text="21:10\n\nC" />
 
@@ -209,36 +212,25 @@
 
         </com.hjsmallfly.syllabus.otherViews.SyncScrollView>
 
-        <FrameLayout
+
+        <com.hjsmallfly.syllabus.otherViews.SyncScrollView
+            android:id="@+id/classScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <LinearLayout
-                android:orientation="vertical"
-                android:id="@+id/syllabus_bg"
+
+            <com.hjsmallfly.syllabus.otherViews.SyncHorizontalScrollView
+                android:id="@+id/gridScrollView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-            </LinearLayout>
-
-            <com.hjsmallfly.syllabus.otherViews.SyncScrollView
-                android:id="@+id/classScrollView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <com.hjsmallfly.syllabus.otherViews.SyncHorizontalScrollView
-                    android:id="@+id/gridScrollView"
+                <GridLayout
+                    android:id="@+id/myClassTable"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <GridLayout
-                        android:id="@+id/myClassTable"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                    </GridLayout>
-                </com.hjsmallfly.syllabus.otherViews.SyncHorizontalScrollView>
-            </com.hjsmallfly.syllabus.otherViews.SyncScrollView>
-        </FrameLayout>
+                </GridLayout>
+            </com.hjsmallfly.syllabus.otherViews.SyncHorizontalScrollView>
+        </com.hjsmallfly.syllabus.otherViews.SyncScrollView>
 
 
     </LinearLayout>

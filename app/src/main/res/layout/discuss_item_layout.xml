@@ -10,6 +10,7 @@
         android:layout_height="wrap_content">
 
         <TextView
+            android:text="daidaijie"
             android:id="@+id/discuss_speaker_text"
             android:layout_gravity="start"
             android:textColor="@android:color/holo_red_light"
@@ -20,6 +21,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:text="2013点"
             android:id="@+id/discuss_time_text"
             android:layout_marginRight="2dp"
             android:layout_gravity="end"
@@ -31,6 +33,7 @@
     </LinearLayout>
 
     <TextView
+        android:text="dansui"
         android:id="@+id/discuss_content"
         android:textSize="12sp"
         android:layout_width="match_parent"
