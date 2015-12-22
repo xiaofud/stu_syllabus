@@ -223,7 +223,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 //                    ));
                     //textView.setBackground(new ColorDrawable(lesson.colorID));
 
-                    float roundR = 22.0f;
+                    float roundR = 15.0f;
                     float[] outerR = new float[] { roundR, roundR, roundR, roundR,roundR, roundR, roundR, roundR  };
                     Shape shape = new
                             RoundRectShape(outerR, null, null);

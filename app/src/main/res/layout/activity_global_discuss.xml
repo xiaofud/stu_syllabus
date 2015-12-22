@@ -27,7 +27,7 @@
         android:orientation="horizontal">
 
         <EditText
-            android:paddingBottom="20dp"
+            android:textColor="@android:color/black"
             android:id="@+id/global_discuss_edit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -43,8 +43,8 @@
 
             <Button
                 android:id="@+id/global_discuss_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
                 android:background="@drawable/button_shape"
                 android:text="提交"
                 android:textColor="@android:color/white" />
