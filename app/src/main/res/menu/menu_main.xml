@@ -19,6 +19,10 @@
         app:showAsAction="ifRoom"/>
 
     <item
+        android:id="@+id/help_action"
+        android:title="帮助信息"/>
+
+    <item
         android:id="@+id/about_us_action"
         android:title="关于我们"
         app:showAsAction="never"/>

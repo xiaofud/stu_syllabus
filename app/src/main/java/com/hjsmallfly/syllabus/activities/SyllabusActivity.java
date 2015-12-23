@@ -33,6 +33,7 @@ import android.widget.Toast;
 import com.hjsmallfly.syllabus.helpers.ColorHelper;
 import com.hjsmallfly.syllabus.helpers.DisplayUtil;
 import com.hjsmallfly.syllabus.helpers.FileOperation;
+import com.hjsmallfly.syllabus.helpers.InternetLogin;
 import com.hjsmallfly.syllabus.helpers.LessonItemShapeDrawable;
 import com.hjsmallfly.syllabus.helpers.LessonPullTask;
 import com.hjsmallfly.syllabus.helpers.StringDataHelper;
@@ -106,18 +107,6 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         // 读取之前的壁纸
         load_syllabus_wallpaper();
 
-        // 设置字体颜色
-//        set_text_color(ColorHelper.read_color_from_file(this, COLOR_FILE_NAME));
-
-//        show_oa_button = (Button) findViewById(R.id.syllabus_show_oa_button);
-//        show_oa_button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                MobclickAgent.onEvent(SyllabusActivity.this, "More_OA");
-//                Intent intent = new Intent(SyllabusActivity.this, OAActivity.class);
-//                startActivity(intent);
-//            }
-//        });
 
     }
 
@@ -126,10 +115,10 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         Object[] weekdays_syllabus_data = MainActivity.weekdays_syllabus_data;
         myClassTable.removeAllViews();
 
-        final int defalultGridWidth = DisplayUtil.dip2px(this, 48);
-        final int defalultGridHeight = DisplayUtil.dip2px(this, 58);
-        final int defalultLLWidth = DisplayUtil.dip2px(this, 50);
-        final int defalultLLHeight = DisplayUtil.dip2px(this, 60);
+        final int defaultGridWidth = DisplayUtil.dip2px(this, 48);
+        final int defaultGridHeight = DisplayUtil.dip2px(this, 58);
+        final int defaultLLWidth = DisplayUtil.dip2px(this, 50);
+        final int defaultLLHeight = DisplayUtil.dip2px(this, 60);
 
         String prevClassID = null;
         boolean isNotLesson;
@@ -161,13 +150,13 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 TextView textView = new TextView(SyllabusActivity.this);
                 textView.setTextSize(11);
                 textView.setTextColor(Color.WHITE);
-                textView.setWidth(defalultGridWidth);
-                textView.setHeight(defalultGridHeight);
-                ll.setMinimumWidth(defalultLLWidth);
-                ll.setMinimumHeight(defalultLLHeight);
+                textView.setWidth(defaultGridWidth);
+                textView.setHeight(defaultGridHeight);
+                ll.setMinimumWidth(defaultLLWidth);
+                ll.setMinimumHeight(defaultLLHeight);
                 ll.setGravity(Gravity.CENTER);
 
-                textView.setHeight(defalultGridHeight);
+                textView.setHeight(defaultGridHeight);
                 GridLayout.Spec rowSpec = GridLayout.spec(j - 1);
                 GridLayout.Spec columnSpec = GridLayout.spec(i);
 
@@ -213,8 +202,8 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                         } else break;
                     }
 //                    textView.setAlpha(0.7f);
-                    textView.setHeight(defalultGridHeight * timeOfClass);
-                    ll.setMinimumHeight(defalultLLHeight * timeOfClass);
+                    textView.setHeight(defaultGridHeight * timeOfClass);
+                    ll.setMinimumHeight(defaultLLHeight * timeOfClass);
                     rowSpec = GridLayout.spec(j - 1, timeOfClass);
                     Log.v("Note", timeOfClass + "");
 
@@ -271,7 +260,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         setupViews();
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null)
-            actionBar.setTitle(MainActivity.cur_year_string.replace("-", " ") + " " +
+            actionBar.setTitle(MainActivity.cur_year_string/*.replace("-", " ")*/ + " " +
                     StringDataHelper.SEMESTER_LANGUAGE.get(StringDataHelper.semester_to_string(MainActivity.cur_semester)));
 //        Toast.makeText(SyllabusActivity.this, "the token is " + MainActivity.token, Toast.LENGTH_SHORT).show();
     }
@@ -362,6 +351,10 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
             case R.id.show_oa_action:
                 Intent intent = new Intent(this, OAActivity.class);
                 startActivity(intent);
+                break;
+
+            case R.id.login_to_internet:
+                InternetLogin.login_to_internet(this, MainActivity.cur_username, MainActivity.cur_password);
                 break;
             default:
                 break;

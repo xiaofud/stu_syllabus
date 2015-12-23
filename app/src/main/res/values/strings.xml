@@ -37,8 +37,8 @@
     <string name="summer">夏季\n学期</string>
 
     <string name="version_code">1</string>
-    <string name="version_name">v1.0.5</string>
-    <string name="publisher">呆呆杰</string>
+    <string name="version_name">v1.0.7</string>
+    <string name="publisher">呆呆杰 和 smallfly</string>
 
     <string name="username">账号</string>
     <string name="password">密码</string>
@@ -69,5 +69,13 @@
     <string name="title_activity_global_discuss">全球吹水</string>
     <string name="title_activity_exam">考试信息</string>
     <string name="title_activity_personal_info">用户个人信息</string>
+
+    <string name="help_activity_message">帮助:\n
+    1.设置默认课程表(在课表的界面的菜单上),设置以后便不用每次都重新登录了\n
+    2.查看办公自动化 成绩 考试安排 一键连网等功能都在课表界面的菜单里面\n
+    3.使用一键接入外网功能请注意有可能需要多次连接(因为学校服务器并不是很稳定)\n
+    4.关于更新,由于apk的服务器在外网所以下载可能需要10多秒的时间(安装包很小请放心)\n
+    5.如果觉得该app好用请推荐给朋友\n
+    6.目前的地址是 fir.im/syllabus\n</string>
 
 </resources>

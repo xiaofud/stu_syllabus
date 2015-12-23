@@ -203,11 +203,11 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             return true;
         }
 
-//        // 清除之前的缓存文件
-//        if (id == R.id.delete_action){
-//            delete_cached_file();
-//            return true;
-//        }
+        if (id == R.id.help_action){
+            Intent intent = new Intent(this, HelpActivity.class);
+            startActivity(intent);
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -347,6 +347,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 //                    Intent update_activity = new Intent(MainActivity.this, UpdateActivity.class);
 //                    startActivity(update_activity);
                     updateHelper.download(version.dowload_address, version);
+                    Toast.makeText(MainActivity.this, "开始下载", Toast.LENGTH_SHORT).show();
 //                    dialog.dismiss();
                 }
             });

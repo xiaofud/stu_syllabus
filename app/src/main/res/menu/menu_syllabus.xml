@@ -43,6 +43,11 @@
         android:id="@+id/show_oa_action"
         android:title="查看办公自动化" />
 
+    <item
+        android:id="@+id/login_to_internet"
+        android:title="一键连接外网"
+        />
+
     <!--<item-->
         <!--android:id="@+id/black_text"-->
         <!--android:title="黑色字"-->

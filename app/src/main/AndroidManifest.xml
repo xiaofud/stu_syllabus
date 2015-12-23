@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hjsmallfly.syllabus.syllabus"
-    android:versionCode="26"
+    android:versionCode="28"
     android:versionName="@string/version_name" >
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -21,9 +19,12 @@
         android:icon="@mipmap/syllabus_icon2"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-
-        <meta-data android:value="565fd457e0f55adeec0002dd" android:name="UMENG_APPKEY" />
-        <meta-data android:value="smallfly" android:name="UMENG_CHANNEL"/>
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="565fd457e0f55adeec0002dd" />
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="smallfly" />
 
         <activity
             android:name="com.hjsmallfly.syllabus.activities.MainActivity"
@@ -80,8 +81,11 @@
             android:name="com.hjsmallfly.syllabus.activities.OAActivity"
             android:label="@string/oa_label" >
         </activity>
-        <activity android:name="com.hjsmallfly.syllabus.activities.OAWebViewActivity"
-            android:label="@string/oa_web_view_label">
+        <activity
+            android:name="com.hjsmallfly.syllabus.activities.OAWebViewActivity"
+            android:label="@string/oa_web_view_label" >
+        </activity>
+        <activity android:name="com.hjsmallfly.syllabus.activities.HelpActivity" >
         </activity>
     </application>
 
