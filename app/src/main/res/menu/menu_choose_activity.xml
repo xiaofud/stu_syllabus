@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/save_chosen_class"
+        android:title="保存已排课表"/>
+
+    <item
+        android:id="@+id/clean_chosen_class"
+        android:title="清除已排课表"/>
+</menu>

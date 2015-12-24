@@ -98,7 +98,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         timeScrollView = (SyncScrollView) findViewById(R.id.timeScrollView);
         classScrollView.setScrollView(timeScrollView);
         timeScrollView.setScrollView(classScrollView);
-        timeScrollView.setHorizontalScrollBarEnabled(false);
+        timeScrollView.setVerticalScrollBarEnabled(false);
 
         myClassTable = (GridLayout) findViewById(R.id.myClassTable);
         syllabus_bg = (LinearLayout) findViewById(R.id.syllabus_bg);
@@ -351,6 +351,11 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
             case R.id.show_oa_action:
                 Intent intent = new Intent(this, OAActivity.class);
                 startActivity(intent);
+                break;
+
+            case R.id.choose_class_action:
+                Intent choose_activity = new Intent(this, ChooseLessonActivity.class);
+                startActivity(choose_activity);
                 break;
 
             case R.id.login_to_internet:

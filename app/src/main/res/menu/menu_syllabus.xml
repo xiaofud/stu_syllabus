@@ -48,7 +48,11 @@
         android:title="一键连接外网"
         />
 
-    <!--<item-->
+    <item
+        android:id="@+id/choose_class_action"
+        android:title="模拟排课"/>
+
+   <!--<item-->
         <!--android:id="@+id/black_text"-->
         <!--android:title="黑色字"-->
         <!--app:showAsAction="never"/>-->
