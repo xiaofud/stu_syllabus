@@ -2,6 +2,7 @@ package com.hjsmallfly.syllabus.activities;
 
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -10,6 +11,7 @@ import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
@@ -26,7 +28,7 @@ import java.util.TimerTask;
 
 public class ForMandyActivity extends AppCompatActivity {
 
-    public List<Snowflake> snowFlakeList;
+//    public List<Snowflake> snowFlakeList;
 
     private float sx = 0.1f;
     private float sy = 4.0f;
@@ -35,10 +37,19 @@ public class ForMandyActivity extends AppCompatActivity {
 
     ImageView daijieMail;
 
+    static Handler handler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();//隐藏掉整个ActionBar，包括下面的Tabs
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null){
+            actionBar.hide();
+        }
+
+        // 取消再次显示
+        MainActivity.has_show_special_girl = true;
+
         setContentView(R.layout.activity_for_mandy);
         initView();
     }
@@ -55,6 +66,13 @@ public class ForMandyActivity extends AppCompatActivity {
 
         display.getMetrics(metrics);
 
+        Button skip_button = (Button) findViewById(R.id.skip_button);
+        skip_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         //画雪花
         /*for (int i = 0; i < 20; i++) {
@@ -70,7 +88,7 @@ public class ForMandyActivity extends AppCompatActivity {
             Log.v("x",snowflake.currentX+"");
         }*/
 
-        final Handler handler = new Handler() {
+        handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 if (msg.what == 0x1233) {

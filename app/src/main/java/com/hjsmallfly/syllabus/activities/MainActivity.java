@@ -30,6 +30,7 @@ import com.hjsmallfly.syllabus.syllabus.SyllabusVersion;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 
@@ -39,6 +40,11 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
     public static String info_about_syllabus;
     public static final String USERNAME_FILE = "username.txt";
     public static final String PASSWORD_FILE = "password.txt";
+
+    // 呆呆杰的女神
+    public static boolean is_this_special_girl = false;
+    public static boolean has_show_special_girl = false;
+    public static boolean need_to_show_special_girl = false;
 
     // 用户的token数据
     public static String token = "";
@@ -90,18 +96,31 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         // 设置web service 的默认地址
         WebApi.set_server_address(getString(R.string.server_ip));
 
-//        MobclickAgent.setDebugMode(true);
-//        semester_spinner.setSelection(cur_semester);
 
-        // 读取token
-//        get_local_token();
+        // 检查日期
+        Calendar calendar = Calendar.getInstance();
 
+//        int year = calendar.get(Calendar.YEAR);
+        int month =  calendar.get(Calendar.MONTH);  // start from zero
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        if (month == 11 && (day ==24 || day == 25 ))
+            need_to_show_special_girl = true;
+//        Toast.makeText(MainActivity.this, "Today: " + year + "-" + month + "-" + day, Toast.LENGTH_SHORT).show();
+
+        // special girl
+        if (is_this_special_girl && need_to_show_special_girl && !has_show_special_girl) {
+            Intent special_intent = new Intent(this, ForMandyActivity.class);
+            startActivity(special_intent);
+            // 通过那个activity来设定这个布尔值
+//            has_show_special_girl = true;
+        }
 
 
         // 检查更新
         if (!has_checked_update)
             check_update();
-        if (!has_showed_default)
+        if (!has_showed_default && !is_this_special_girl || ( is_this_special_girl && has_show_special_girl  ))
             load_default_syllabus();
 
     }
@@ -145,10 +164,15 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             username_edit.setText(user[0]);
             password_edit.setText(user[1]);
             cur_password = user[1];
+            // special girl for daidaijie
+            if (user[0].equals("15mtzhong"))
+//            if (user[0].equals("14xfdeng"))
+                is_this_special_girl = true;
 
             if (user[0].equals("14xfdeng")){
                 // 开启debug模式
                 debug_ip_edit.setVisibility(View.VISIBLE);
+
             }else{
                 debug_ip_edit.setVisibility(View.GONE);
             }
@@ -263,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                 cur_semester = 1;
                 break;
             default:
-                Log.d(TAG, "maybe there is a typo in submit(int, int)");
+                Log.d(TAG, "maybe there is a typo  in submit(int, int)");
                 break;
         }
     }
