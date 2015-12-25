@@ -469,10 +469,10 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         ColorHelper.save_color_to_file(this, color, COLOR_FILE_NAME);
     }
 
-    private void set_random_color() {
-        int color = ColorHelper.get_random_color();
-        set_text_color(color);
-    }
+//    private void set_random_color() {
+//        int color = ColorHelper.get_random_color();
+//        set_text_color(color);
+//    }
 
     private void sync_syllabus() {
         LessonPullTask sync_task = new LessonPullTask(WebApi.get_server_address() + getString(R.string.syllabus_get_api), this);
@@ -511,6 +511,8 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
             // 保存用户文件
             FileOperation.save_user(this, MainActivity.USERNAME_FILE, MainActivity.PASSWORD_FILE, username, MainActivity.cur_password);
 
+            // 记得重新显示
+            showSyllabus();
 
             Toast.makeText(SyllabusActivity.this, "课表同步成功", Toast.LENGTH_SHORT).show();
 
