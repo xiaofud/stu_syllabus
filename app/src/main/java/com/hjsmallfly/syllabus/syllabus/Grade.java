@@ -13,6 +13,8 @@ public class Grade {
     public String semester;
     public String years;
 
+    public static String GPA = "0.00";
+
     /**
      * 因为有些课程名字 前后都有 [xxx] [xxx], 所以现在简化出来
      * @return

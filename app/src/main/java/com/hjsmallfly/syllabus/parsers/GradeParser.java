@@ -51,6 +51,7 @@ public class GradeParser {
             }
 
             JSONObject json_obj = (JSONObject) json_parser.nextValue();
+            Grade.GPA = json_obj.getString("GPA");
             JSONArray all_grades = json_obj.getJSONArray("GRADES");
             List<Grade> grade_list = new ArrayList<>();
             for(int i = 0 ; i < all_grades.length() ; ++i){

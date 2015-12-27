@@ -77,24 +77,9 @@ public class GradeActivity extends AppCompatActivity implements View.OnClickList
         if (grade_list == null)
             return;
 
-        double grade_point_sum = 0.0;
-        double credit_sum = 0.0;
-        for(int i = 0 ; i < grade_list.size() ; ++i) {
-//            sb.append(grade_list.get(i).toString() + "\n");
 
-            // 计算gpa
-            double grade_point = Double.parseDouble(grade_list.get(i).class_grade) - 50;
-            double credit = Double.parseDouble(grade_list.get(i).class_credit);
-            if (grade_point < 60 - 50)
-                // 不及格的话
-                grade_point = 0;
-            grade_point_sum += grade_point / 10 * credit;
-            credit_sum += credit;
-        }
 
-        double gpa = grade_point_sum / credit_sum;
-
-        String gpa_string = "GPA: " + gpa;
+        String gpa_string = "GPA: " + Grade.GPA;
         gpa_display_view.setText(gpa_string);
 
 //        grade_debug_display.setText("");
