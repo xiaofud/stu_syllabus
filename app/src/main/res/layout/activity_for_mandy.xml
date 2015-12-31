@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/for_mandy_root"
-    android:background="@drawable/christmas_tree"
+    android:background="@drawable/new_year"
     tools:context="com.hjsmallfly.syllabus.activities.ForMandyActivity">
 
     <ImageView
@@ -33,7 +33,7 @@
 
     <ImageView
         android:layout_marginTop="50dp"
-        android:src="@drawable/christmas"
+        android:src="@drawable/new_year_title"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     <LinearLayout
@@ -42,6 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
+            android:background="#50ffffff"
             android:textColor="#fc02f9c8"
             android:textSize="32sp"
             android:textStyle="bold"

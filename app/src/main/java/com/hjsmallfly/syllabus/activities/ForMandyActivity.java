@@ -94,7 +94,7 @@ public class ForMandyActivity extends AppCompatActivity {
                 if (msg.what == 0x1233) {
 
                     //创建雪花
-                    if(Math.random()<0.15)
+                    if(Math.random()<0.05)
                     {
                         Snowflake snowflake = new Snowflake(ForMandyActivity.this);
                         snowflake.currentX = (float) (Math.random() * metrics.widthPixels);
