@@ -1,4 +1,5 @@
 package com.hjsmallfly.syllabus.activities;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 import com.hjsmallfly.syllabus.helpers.LessonPullTask;
 import com.hjsmallfly.syllabus.helpers.StringDataHelper;
 import com.hjsmallfly.syllabus.helpers.UpdateHelper;
@@ -34,7 +36,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 
-public class MainActivity extends AppCompatActivity implements  View.OnClickListener, UpdateHandler, LessonHandler, TokenGetter, Spinner.OnItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, UpdateHandler, LessonHandler, TokenGetter, Spinner.OnItemSelectedListener {
     public static Object[] weekdays_syllabus_data;     // 用于向显示课表的activity传递数据
     public static ArrayList<Lesson> weekends_syllabus_data;
     public static String info_about_syllabus;
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 
     // 控件及常量
     public static final String TAG = "POSTTEST";
-    public static  String[] YEARS;// = {"2012-2013", "2013-2014", "2014-2015", "2015-2016", "2016-2017", "2017-2018"};
+    public static String[] YEARS;// = {"2012-2013", "2013-2014", "2014-2015", "2015-2016", "2016-2017", "2017-2018"};
     public static final String[] SEMESTER = new String[]{"SPRING", "SUMMER", "AUTUMN"};
 
     public static final String[] SEMESTER_CHINESE = new String[]{"春季学期", "夏季学期", "秋季学期"};
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 //    private int semester;    // 用于决定保存的文件名
 
 
-//    private EditText address_edit;  // 服务器地址
+    //    private EditText address_edit;  // 服务器地址
     private EditText username_edit;
     private EditText password_edit;
 //    private ListView syllabus_list_view;    // 用于显示所有课表的list_view
@@ -101,10 +103,12 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         Calendar calendar = Calendar.getInstance();
 
 //        int year = calendar.get(Calendar.YEAR);
-        int month =  calendar.get(Calendar.MONTH);  // start from zero
+        int month = calendar.get(Calendar.MONTH);  // start from zero
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        if (month == 11 && (day ==24 || day == 25 ))
+//        if (month == 11 && (day ==24 || day == 25 ))
+//            need_to_show_special_girl = true;
+        if ((month == 11 && day == 31) || (month == 0 && day < 4))
             need_to_show_special_girl = true;
 //        Toast.makeText(MainActivity.this, "Today: " + year + "-" + month + "-" + day, Toast.LENGTH_SHORT).show();
 
@@ -120,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         // 检查更新
         if (!has_checked_update)
             check_update();
-        if (!has_showed_default && !is_this_special_girl || ( is_this_special_girl && has_show_special_girl  ))
+        if (!has_showed_default && !is_this_special_girl || (is_this_special_girl && has_show_special_girl))
             load_default_syllabus();
 
     }
@@ -138,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         MobclickAgent.onPause(this);
     }
 
-    private void getAllViews(){
+    private void getAllViews() {
 //        address_edit = (EditText) findViewById(R.id.address_edit);
         username_edit = (EditText) findViewById(R.id.username_edit);
         password_edit = (EditText) findViewById(R.id.passwd_edit);
@@ -151,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         debug_ip_edit = (EditText) findViewById(R.id.debug_ip_edit);
     }
 
-    private void setupViews(){
+    private void setupViews() {
 //        YearSemesterChooseParser list_adapter = new YearSemesterChooseParser(this);
 //        syllabus_list_view.setAdapter(list_adapter);
 
@@ -160,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 
         // 读取用户
         String[] user = FileOperation.load_user(this, USERNAME_FILE, PASSWORD_FILE);
-        if (user != null){
+        if (user != null) {
             username_edit.setText(user[0]);
             password_edit.setText(user[1]);
             cur_password = user[1];
@@ -169,17 +173,15 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 //            if (user[0].equals("14xfdeng"))
                 is_this_special_girl = true;
 
-            if (user[0].equals("14xfdeng")){
+            if (user[0].equals("14xfdeng")) {
                 // 开启debug模式
                 debug_ip_edit.setVisibility(View.VISIBLE);
 
-            }else{
+            } else {
                 debug_ip_edit.setVisibility(View.GONE);
             }
-        }else
+        } else
             debug_ip_edit.setVisibility(View.GONE);
-
-
 
 
         // 选项卡
@@ -189,7 +191,6 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 
         semester_spinner.setOnItemSelectedListener(this);
     }
-
 
 
     @Override
@@ -203,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.check_update_action){
+        if (id == R.id.check_update_action) {
             // 友盟
             MobclickAgent.onEvent(this, "Check_Update");
             Intent update_activity = new Intent(this, UpdateActivity.class);
@@ -211,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             return true;
         }
 
-        if (id == R.id.delete_default_syllabus){
+        if (id == R.id.delete_default_syllabus) {
             if (delete_default_syllabus())
                 Toast.makeText(MainActivity.this, "清除了默认课表的设置", Toast.LENGTH_SHORT).show();
             else
@@ -219,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             return true;
         }
 
-        if (id == R.id.about_us_action){
+        if (id == R.id.about_us_action) {
             // 友盟
             MobclickAgent.onEvent(this, "Setting_Aboutus");
             Intent intent = new Intent(this, AboutActivity.class);
@@ -227,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             return true;
         }
 
-        if (id == R.id.help_action){
+        if (id == R.id.help_action) {
             Intent intent = new Intent(this, HelpActivity.class);
             startActivity(intent);
             return true;
@@ -237,19 +238,19 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
     }
 
 
-    private boolean delete_default_syllabus(){
+    private boolean delete_default_syllabus() {
         if (FileOperation.hasFile(this, SyllabusActivity.DEFAULT_SYLLABUS_FILE))
             return FileOperation.delete_file(this, SyllabusActivity.DEFAULT_SYLLABUS_FILE);
         return true;
     }
 
-    private void load_default_syllabus(){
+    private void load_default_syllabus() {
         String default_file_name = FileOperation.read_from_file(this, SyllabusActivity.DEFAULT_SYLLABUS_FILE);
-        if (default_file_name != null){
-            if (FileOperation.hasFile(this, default_file_name)){
+        if (default_file_name != null) {
+            if (FileOperation.hasFile(this, default_file_name)) {
 //                Toast.makeText(MainActivity.this, "存在文件: " + default_file_name, Toast.LENGTH_SHORT).show();
                 String json_data = FileOperation.read_from_file(this, default_file_name);
-                if (json_data != null){
+                if (json_data != null) {
                     // 设置一些相关信息
                     String[] info = default_file_name.split("_");
                     cur_username = info[0];
@@ -260,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
                     cur_semester = StringDataHelper.semester_to_int(info[2]);
                     // 把选项也弄成当前学期的
                     semester_spinner.setSelection(StringDataHelper.semester_to_selection_index(cur_semester));
-                    for(int i = 0 ; i < YEARS.length ; ++i)
+                    for (int i = 0; i < YEARS.length; ++i)
                         if (cur_year_string.equals(YEARS[i]))
                             position = i;
                     info_about_syllabus = cur_username + " " + cur_year_string + " " + info[2];
@@ -272,8 +273,8 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         }
     }
 
-    private void set_cur_semester_with_spinner(int selection_id){
-        switch (selection_id){
+    private void set_cur_semester_with_spinner(int selection_id) {
+        switch (selection_id) {
             case 0:
 //                semester = 2;
                 cur_semester = 2;
@@ -293,11 +294,10 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
     }
 
     /**
-     *
-     * @param year_index    年份下标
-     * @param semester_spinner_index    下拉菜单的选中项, 注意这个并不对应学分制所需要的学期参数
+     * @param year_index             年份下标
+     * @param semester_spinner_index 下拉菜单的选中项, 注意这个并不对应学分制所需要的学期参数
      */
-    private void submit_query_request(int year_index, int semester_spinner_index){
+    private void submit_query_request(int year_index, int semester_spinner_index) {
         this.position = year_index;
         String username = username_edit.getText().toString();
         cur_username = username;
@@ -350,7 +350,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 //        syllabusGetter.execute(postData);
     }
 
-    private void check_update(){
+    private void check_update() {
         if (updateHelper == null)
             updateHelper = new UpdateHelper(this, this);
         updateHelper.check_for_update();
@@ -360,7 +360,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 
     @Override
     public void deal_with_update(int flag, final SyllabusVersion version) {
-        if (flag == UpdateHandler.EXIST_UPDATE){
+        if (flag == UpdateHandler.EXIST_UPDATE) {
             // 存在更新的话
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("发现新版本, 是否更新?");
@@ -386,15 +386,13 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
     }
 
 
-
-
     @Override
     public void deal_with_lessons(String raw_data) {
 
         // 恢复按钮
         query_button.setEnabled(true);
 
-        if (raw_data.isEmpty()){
+        if (raw_data.isEmpty()) {
             Toast.makeText(MainActivity.this, "没能成功获取课表数据", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -406,7 +404,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         parse_and_display(raw_data, true);
     }
 
-    private void parse_and_display(String json_data, boolean update_local_token){
+    private void parse_and_display(String json_data, boolean update_local_token) {
 //        if (classParser == null)
         // 每次用新的classParser [暂时这样修复这个BUG]
         ClassParser classParser = new ClassParser(this, this);
@@ -422,17 +420,17 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 //                            + semester;
             // 保存文件 格式是: 14xfdeng_2014-2015_autumn
             String filename = StringDataHelper.generate_syllabus_file_name(username, YEARS[position], cur_semester, "_");
-            if (FileOperation.save_to_file(MainActivity.this, filename, json_data)){
+            if (FileOperation.save_to_file(MainActivity.this, filename, json_data)) {
 //                        Toast.makeText(MainActivity.this, "成功保存文件 " + filename, Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "saved file " + filename);
-            // 保存用户文件
-            FileOperation.save_user(MainActivity.this, USERNAME_FILE, PASSWORD_FILE, username, password_edit.getText().toString());
+                // 保存用户文件
+                FileOperation.save_user(MainActivity.this, USERNAME_FILE, PASSWORD_FILE, username, password_edit.getText().toString());
 
-            // 读取token
-            get_local_token();
+                // 读取token
+                get_local_token();
 
-            Intent syllabus_activity = new Intent(MainActivity.this, SyllabusActivity.class);
-            startActivity(syllabus_activity);
+                Intent syllabus_activity = new Intent(MainActivity.this, SyllabusActivity.class);
+                startActivity(syllabus_activity);
 //                    Toast.makeText(MainActivity.this, "读取课表成功哟~~~~", Toast.LENGTH_SHORT).show();
 
             }
@@ -443,7 +441,7 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.query_syllabus_button:
                 query_syllabus();
                 break;
@@ -452,20 +450,19 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         }
     }
 
-    private void query_syllabus(){
+    private void query_syllabus() {
         int year_index = year_spinner.getSelectedItemPosition();
         int semester_index = semester_spinner.getSelectedItemPosition();
         submit_query_request(year_index, semester_index);
     }
 
 
-
     @Override
     public void get_token(String token) {
         MainActivity.token = token;
         boolean saved =
-            FileOperation.save_to_file(this, StringDataHelper.generate_token_file_name(cur_username), token);
-        if (!saved){
+                FileOperation.save_to_file(this, StringDataHelper.generate_token_file_name(cur_username), token);
+        if (!saved) {
             Toast.makeText(MainActivity.this, "保存Token文件失败", Toast.LENGTH_SHORT).show();
         }
     }
@@ -473,22 +470,22 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
     /**
      * 获取本地存储的token
      */
-    public void get_local_token(){
+    public void get_local_token() {
         String filename = StringDataHelper.generate_token_file_name(cur_username);
-        if (FileOperation.hasFile(this, filename)){
+        if (FileOperation.hasFile(this, filename)) {
             MainActivity.token = FileOperation.read_from_file(this, filename);
 //            Toast.makeText(MainActivity.this, "成功读取Token " + token, Toast.LENGTH_SHORT).show();
-        }else
+        } else
             MainActivity.token = "";
 
     }
 
-    public static void set_local_token(Context use_for_file_context){
+    public static void set_local_token(Context use_for_file_context) {
         String filename = StringDataHelper.generate_token_file_name(cur_username);
-        if (FileOperation.hasFile(use_for_file_context, filename)){
+        if (FileOperation.hasFile(use_for_file_context, filename)) {
             MainActivity.token = FileOperation.read_from_file(use_for_file_context, filename);
 //            Toast.makeText(MainActivity.this, "成功读取Token " + token, Toast.LENGTH_SHORT).show();
-        }else
+        } else
             MainActivity.token = "";
 
     }
@@ -524,6 +521,6 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-        
+
     }
 }
