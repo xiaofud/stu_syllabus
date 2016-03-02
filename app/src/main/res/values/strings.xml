@@ -5,8 +5,8 @@
     <string name="about_message">xiaofud: 14xfdeng@stu.edu.cn(Android)\nyujieL: 13yjli3@stu.edu.cn(Android)\njhwang: 14jhwang@stu.edu.cn(IOS)</string>
     <string name="github_app_address">本项目开源:https://github.com/Hjsmallfly/stu_syllabus</string>
     <string name="syllabus_get_api">/syllabus</string>
-    <string name="server_ip">http://hjsmallfly.wicp.net</string>
-    <!--<string name="server_ip">http://10.28.31.32</string>-->
+    <!--<string name="server_ip">http://hjsmallfly.wicp.net</string>-->
+    <string name="server_ip">http://121.42.175.83:8084</string>
     <string name="server_ip_debug">192.168.1.100</string>
     <string name="debug_port">5000</string>
     <string name="get_home_work_api">/api/course_info/0</string>
@@ -45,7 +45,7 @@
     <string name="username_hint">校园网账号</string>
     <string name="password_hint">校园网密码</string>
 
-    <string name="query_syllabus_button">查询课表</string>
+    <string name="query_syllabus_button">登\t\t录</string>
 
     <string name="query_grade_button">更新成绩</string>
     <string name="gpa_display_hint">这里显示GPA</string>

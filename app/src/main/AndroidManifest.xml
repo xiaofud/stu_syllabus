@@ -77,7 +77,6 @@
         <activity android:name="com.hjsmallfly.syllabus.activities.HelpActivity" />
         <activity android:name="com.hjsmallfly.syllabus.activities.ChooseLessonActivity"
             android:label="长按模拟添加/删除课程"/>
-        <activity android:name="com.hjsmallfly.syllabus.activities.ForMandyActivity"/>
         <activity android:name="com.hjsmallfly.syllabus.activities.ShowClassInfoActivity"/>
     </application>
 

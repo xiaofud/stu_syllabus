@@ -43,11 +43,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String USERNAME_FILE = "username.txt";
     public static final String PASSWORD_FILE = "password.txt";
 
-    // 呆呆杰的女神
-    public static boolean is_this_special_girl = false;
-    public static boolean has_show_special_girl = false;
-    public static boolean need_to_show_special_girl = false;
-
     // 用户的token数据
     public static String token = "";
 
@@ -98,33 +93,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 设置web service 的默认地址
         WebApi.set_server_address(getString(R.string.server_ip));
 
-
-        // 检查日期
-        Calendar calendar = Calendar.getInstance();
-
-//        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);  // start from zero
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-//        if (month == 11 && (day ==24 || day == 25 ))
-//            need_to_show_special_girl = true;
-        if ((month == 11 && day == 31) || (month == 0 && day < 4))
-            need_to_show_special_girl = true;
-//        Toast.makeText(MainActivity.this, "Today: " + year + "-" + month + "-" + day, Toast.LENGTH_SHORT).show();
-
-        // special girl
-        if (is_this_special_girl && need_to_show_special_girl && !has_show_special_girl) {
-            Intent special_intent = new Intent(this, ForMandyActivity.class);
-            startActivity(special_intent);
-            // 通过那个activity来设定这个布尔值
-//            has_show_special_girl = true;
-        }
-
-
         // 检查更新
         if (!has_checked_update)
             check_update();
-        if (!has_showed_default && !is_this_special_girl || (is_this_special_girl && has_show_special_girl))
+        if (!has_showed_default)
             load_default_syllabus();
 
     }
@@ -168,10 +140,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             username_edit.setText(user[0]);
             password_edit.setText(user[1]);
             cur_password = user[1];
-            // special girl for daidaijie
-            if (user[0].equals("15mtzhong"))
-//            if (user[0].equals("14xfdeng"))
-                is_this_special_girl = true;
 
             if (user[0].equals("14xfdeng")) {
                 // 开启debug模式
