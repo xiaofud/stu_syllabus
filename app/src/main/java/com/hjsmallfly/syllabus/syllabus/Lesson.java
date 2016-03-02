@@ -70,4 +70,13 @@ public class Lesson {
             result += " 周日" + sun;
         return result + "]";
     }
+
+    public int[] get_duration(){
+        String[] week_strs = duration.split("-");
+        int[] range = new int[2];
+        for(int i = 0 ; i < 2 ; ++i){
+            range[i] = Integer.parseInt(week_strs[i].trim());
+        }
+        return range;
+    }
 }

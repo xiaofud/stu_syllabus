@@ -184,5 +184,9 @@ public class FileOperation {
 
     }
 
+    public static String generate_week_file(String username, String year_string, String semester_str){
+        return username + "_" + year_string + "_" + semester_str + "_week_info.txt";
+    }
+
 
 }

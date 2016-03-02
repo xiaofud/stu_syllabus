@@ -27,6 +27,8 @@ import java.util.Set;
 public class ClassParser {
 
     private ArrayList<Lesson> all_classes;
+    // 当前的周数
+//    private int week;
 
     public static final String EMPTY_CLASS_STRING = "";
     //    public static final String[] LABELS = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
@@ -84,6 +86,7 @@ public class ClassParser {
     private TokenGetter tokenGetter;
 
     public ClassParser(Context context, TokenGetter tokenGetter) {
+//        this.week = this_week;
         weekdays_syllabus_data = new Object[ROWS * (COLUMNS + 1)];
         all_classes = new ArrayList<>();
 //        weekend_classes = new ArrayList<>();
@@ -186,6 +189,8 @@ public class ClassParser {
 
                 all_classes.add(cls);
             }
+            // 记录最新的json_data到MainActivity那里
+            MainActivity.json_data = json_data;
             return true;
         } catch (JSONException e) {
             Log.d(MainActivity.TAG, e.toString());
@@ -283,6 +288,47 @@ public class ClassParser {
         for (int i = 0; i < all_classes.size(); ++i) {
             // 遍历每一堂课
             Lesson lesson = all_classes.get(i);
+
+            // ------------这里可以踢掉已经上完了的课程-------------
+            // -------------判断是否课程已经上完了-------------
+
+            Calendar calendar = Calendar.getInstance();
+            // 年月日
+            String[] date = MainActivity.initial_date.split("/");
+            int [] fields = new int[3];
+            for (int loop = 0 ; loop < fields.length ; ++loop)
+                fields[loop] = Integer.parseInt(date[loop]);
+//                    Toast.makeText(SyllabusActivity.this, Arrays.toString(fields), Toast.LENGTH_SHORT).show();
+
+            // 月份是从0开始切记
+            calendar.set(fields[0], fields[1], fields[2]);
+//                    calendar.set(fields[0], 1, 15);
+            // day of week 是按照 周日为第一天，所以周三就是第四天，但是是星期三
+            int day_of_week = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+//                    Toast.makeText(SyllabusActivity.this, "今天是" + day_of_week, Toast.LENGTH_SHORT).show();
+            // 计算出星期一的日期
+            calendar.add(Calendar.DAY_OF_MONTH, - (day_of_week - 1 ));
+//            int month = calendar.get(Calendar.MONTH) + 1;
+//            int day = calendar.get(Calendar.DAY_OF_MONTH);
+//                    Toast.makeText(SyllabusActivity.this, "这周星期一是" + month + "/" + day , Toast.LENGTH_SHORT).show();
+            Calendar today = Calendar.getInstance();
+            long diff_day = ( today.getTime().getTime() - calendar.getTime().getTime() ) / (60 * 60 * 24 * 1000);
+//                    Toast.makeText(SyllabusActivity.this, "日期相差了" + diff, Toast.LENGTH_SHORT).show();
+            int this_week = (int) diff_day / 7 + MainActivity.initial_week;
+//                    Toast.makeText(SyllabusActivity.this, "这周是" + this_week, Toast.LENGTH_SHORT).show();
+            int[] range = lesson.get_duration();
+//                    Toast.makeText(SyllabusActivity.this, Arrays.toString(range), Toast.LENGTH_SHORT).show();
+            if (this_week < range[0] || this_week > range[1]) {
+                continue;
+//                do_not_show = true;
+//                Log.d("pick", lesson.name);
+//                need_to_test_single_or_double = false;
+            }
+
+            // -------------判断是否课程已经上完了-------------
+
+            // ------------这里可以踢掉已经上完了的课程-------------
+
             // 遍历key set, 所以应该上相同课程的格子，实际上添加的是同一个 Lesson 对象
             for (String key : lesson.days.keySet()) {
                 // key 的值是  w1 w2 这种格式
@@ -321,8 +367,12 @@ public class ClassParser {
                                 row = 13;
                                 break;
                             case '单':   // 跳过这个字符
+//                                if (this_week % 2 == 0)
+//                                    continue;
                             case '双':
 //                                lesson.comment = c + "";
+//                                if (this_week % 2 == 1)
+//                                    continue;
                                 hasBeenAdded = false;
                                 break;
                             default:
@@ -333,6 +383,46 @@ public class ClassParser {
                             continue;
 
                         int index = row * COLUMNS + offset;
+
+                        boolean really_to_add = true;
+
+                        // 这里需要判断单双周
+                        // -------------判断是否有单双周的情况-------------
+                        // 额外判断周数
+                        // 单双周显示
+                        int w = -1;
+//                    int day = -1;
+                        String has_single_or_double = null;
+                        for (String day_obj : lesson.days.keySet()) {
+                            String time_str = lesson.days.get(day_obj);
+                            if (time_str.contains("单")) {
+                                has_single_or_double = "单";
+                                w = Integer.parseInt(day_obj.substring(1));
+                            } else if (time_str.contains("双")) {
+                                has_single_or_double = "双";
+                                w = Integer.parseInt(day_obj.substring(1));
+                            }
+                        }
+
+                        if (has_single_or_double != null) {
+                            if (w == offset) {
+//                            lesson_str = "[" + has_single_or_double + "]" + lesson_str;
+                                int week = MainActivity.initial_week;
+                                if (week % 2 == 0 && has_single_or_double.equals("单")){
+//                                    do_not_show = true;
+                                    really_to_add = false;
+                                }else if (week % 2 == 1 && has_single_or_double.equals("双")){
+//                                    do_not_show = true;
+                                    really_to_add = false;
+                                }
+                            }
+                        }
+
+                        // -------------判断是否有单双周的情况-------------
+
+                        if (!really_to_add)
+                            continue;
+
                         Log.v("index", index + " ");
                         if (!hasBeenAdded) {     // 一节课添加一次即可
                             weekdays_syllabus_data[index] = lesson;   // 将这节课添加到合适的位置

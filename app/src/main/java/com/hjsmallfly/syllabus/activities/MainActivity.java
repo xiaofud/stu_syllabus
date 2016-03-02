@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -43,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String USERNAME_FILE = "username.txt";
     public static final String PASSWORD_FILE = "password.txt";
 
+    public static String json_data;
+
     // 用户的token数据
     public static String token = "";
 
@@ -51,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static int cur_semester;
     public static String cur_username;
     public static String cur_password;
+    public static int initial_week = -1;
+    public static String initial_date = null;
 
     // 控件及常量
     public static final String TAG = "POSTTEST";
@@ -219,6 +224,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                Toast.makeText(MainActivity.this, "存在文件: " + default_file_name, Toast.LENGTH_SHORT).show();
                 String json_data = FileOperation.read_from_file(this, default_file_name);
                 if (json_data != null) {
+
                     // 设置一些相关信息
                     String[] info = default_file_name.split("_");
                     cur_username = info[0];
@@ -234,8 +240,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             position = i;
                     info_about_syllabus = cur_username + " " + cur_year_string + " " + info[2];
                     has_showed_default = true;
-                    // 本地课表文件里面存的token可能是过期的.
-                    parse_and_display(json_data, false);
+
+                    String[] week_info = get_week_info();
+                    if (week_info == null){
+                        set_week_info(json_data, false);
+                    }else{
+                        MainActivity.initial_date = week_info[0];
+                        MainActivity.initial_week = Integer.parseInt(week_info[1]);
+                        // 本地课表文件里面存的token可能是过期的.
+                        parse_and_display(json_data, false);
+                    }
                 }
             }
         }
@@ -259,6 +273,62 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d(TAG, "maybe there is a typo  in submit(int, int)");
                 break;
         }
+    }
+
+    private boolean set_week_info(final String json_data, final boolean update_local_token){
+        AlertDialog.Builder builder =
+        new AlertDialog.Builder(this);
+        builder.setTitle("输入当前周数");
+
+        final NumberPicker numberPicker = new NumberPicker(this);
+        numberPicker.setMaxValue(16);
+        numberPicker.setMinValue(1);
+        numberPicker.setValue(1);
+        builder.setView(numberPicker);
+
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                int week = numberPicker.getValue();
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);   // 0-11
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                String date_string = year + "/" + month + "/" + day;
+                String content = date_string + "," + week;
+
+                String filename = FileOperation.generate_week_file(cur_username, cur_year_string, cur_semester + "");
+                if (FileOperation.save_to_file(MainActivity.this, filename, content)){
+                    Toast.makeText(MainActivity.this, "设定当前周数为 " + week, Toast.LENGTH_SHORT).show();
+                    MainActivity.initial_week = week;
+                    MainActivity.initial_date = date_string;
+                }else{
+                    Toast.makeText(MainActivity.this, "设置周数出错", Toast.LENGTH_SHORT).show();
+                }
+                parse_and_display(json_data, update_local_token);
+                dialog.dismiss();
+            }
+        });
+
+        builder.setCancelable(false);
+        builder.create().show();
+        return true;
+    }
+
+    /**
+     *
+     * @return 字符串数组，[0] - date; [1] - 周数 或者 null
+     */
+    private String[] get_week_info(){
+        String week_filename = FileOperation.generate_week_file(cur_username, cur_year_string, cur_semester + "");
+        if (FileOperation.hasFile(this, week_filename)){
+            String content = FileOperation.read_from_file(this, week_filename);
+            if (content != null) {
+                return content.split(",");
+            }
+            return null;
+        }
+        return null;
     }
 
     /**
@@ -290,8 +360,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String filename = StringDataHelper.generate_syllabus_file_name(username, years, cur_semester, "_");
         String json_data = FileOperation.read_from_file(MainActivity.this, filename);
         if (json_data != null) {
-            // 本地的文件里面的token可能是过期的
-            parse_and_display(json_data, false);
+            // 检查有没有设置周数
+            String[] week_info = get_week_info();
+            if (week_info == null){
+                // 提示用户设定周数
+                set_week_info(json_data, false);
+
+            }else{
+                // 本地的文件里面的token可能是过期的
+                initial_date = week_info[0];
+                initial_week = Integer.parseInt(week_info[1]);
+                parse_and_display(json_data, false);
+            }
             return;
         }
 
@@ -368,8 +448,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         MobclickAgent.onProfileSignIn(MainActivity.cur_username);
 
         // 从网络拉过来的数据中 token 肯定是新的, 所以需要更新本地的token
+        String[] week_info = get_week_info();
+        if (week_info == null && !raw_data.contains("ERROR")){
+            set_week_info(raw_data, true);
+        }else{
+            if (week_info != null) {
+                MainActivity.initial_date = week_info[0];
+                MainActivity.initial_week = Integer.parseInt(week_info[1]);
+            }
+            parse_and_display(raw_data, true);
+        }
 
-        parse_and_display(raw_data, true);
     }
 
     private void parse_and_display(String json_data, boolean update_local_token) {

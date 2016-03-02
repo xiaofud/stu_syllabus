@@ -73,6 +73,11 @@
         <!--app:showAsAction="never"/>-->
 
     <item
+        android:id="@+id/set_week"
+        android:title="设置当前周数"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/pick_wallpaper"
         android:title="从相册中选择壁纸"
         app:showAsAction="never"/>
