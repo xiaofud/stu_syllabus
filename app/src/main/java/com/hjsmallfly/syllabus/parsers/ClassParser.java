@@ -2,7 +2,6 @@ package com.hjsmallfly.syllabus.parsers;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -11,7 +10,6 @@ import com.hjsmallfly.syllabus.adapters.SyllabusAdapter;
 import com.hjsmallfly.syllabus.helpers.StringDataHelper;
 import com.hjsmallfly.syllabus.interfaces.TokenGetter;
 import com.hjsmallfly.syllabus.syllabus.Lesson;
-import com.hjsmallfly.syllabus.syllabus.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -198,68 +196,6 @@ public class ClassParser {
         }
     }
 
-    private void init() {
-//        Log.d(MainActivity.TAG, "start init()");
-
-        for (int i = 0; i < weekdays_syllabus_data.length; ++i)
-            weekdays_syllabus_data[i] = EMPTY_CLASS_STRING;   // 初始化数据
-
-        // 处理非课程的数据
-        for (int i = 0; i < weekdays_syllabus_data.length; ++i) {
-            // 处理星期几这些日期
-            if (i <= 7) {    // 一个空白格子，外加 周一到周五
-                if (i == 0)
-                    weekdays_syllabus_data[i] = "";   // 空白的一个格子
-                else {
-                    weekdays_syllabus_data[i] = LABELS[i - 1];    // 转化为英文表示的星期数
-                }
-
-            } else if (i % COLUMNS == 0) {
-                // 处理第一列的 课的节数
-                // 表明目前第i个元素位于 i / COLUMNS 行的第一个位置
-                if (i / COLUMNS <= 9) {   // 这里还是用数字表示
-                    int num = i / COLUMNS;
-                    weekdays_syllabus_data[i] = num + "";  // i.e. 123..ABC
-                } else {
-                    // 用ABC代替
-                    String label = "";
-                    switch (i / COLUMNS) {
-                        case 10:
-                            label = "0";
-                            break;
-                        case 11:
-                            label = "A";
-                            break;
-                        case 12:
-                            label = "B";
-                            break;
-                        case 13:
-                            label = "C";
-                            break;
-                        default:
-                            break;
-                    }
-                    weekdays_syllabus_data[i] = label;
-                }
-            }//else{
-//                weekdays_syllabus_data[i] = EMPTY_CLASS_STRING; // 置为空
-//            }
-        }
-//        Log.d(MainActivity.TAG, "end init()");
-        // 为星期几添加日期
-        Calendar day_helper = Calendar.getInstance();
-        // 第一天是周日 1 第七天是 周日 7
-        int today_in_week = day_helper.get(Calendar.DAY_OF_WEEK);
-        // 先算出周一(2)的日期
-        day_helper.add(Calendar.DAY_OF_WEEK, -(today_in_week - 2));
-        // 只显示周一到周五
-        for (int i = 0; i < 6; ++i) {
-            int month = day_helper.get(Calendar.MONTH) + 1;
-            int day = day_helper.get(Calendar.DAY_OF_MONTH);
-            weekdays_syllabus_data[i] = month + "-" + day + "\n" + weekdays_syllabus_data[i].toString();
-            day_helper.add(Calendar.DAY_OF_MONTH, 1);
-        }
-    }
 
     public static int change_into_number(char c) {
         int num;
@@ -279,6 +215,31 @@ public class ClassParser {
         return num;
     }
 
+    public static int calculate_week(Calendar target_calendar){
+        Calendar calendar = Calendar.getInstance();
+        // 年月日
+        String[] date = MainActivity.initial_date.split("/");
+        int [] fields = new int[3];
+        for (int loop = 0 ; loop < fields.length ; ++loop)
+            fields[loop] = Integer.parseInt(date[loop]);
+        // 月份是从0开始切记
+        calendar.set(fields[0], fields[1], fields[2]);
+        // day of week 是按照 周日为第一天，所以周三就是第四天，但是是星期三
+        int day_of_week = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+//                    Toast.makeText(SyllabusActivity.this, "今天是" + day_of_week, Toast.LENGTH_SHORT).show();
+        // 计算出星期一的日期
+        calendar.add(Calendar.DAY_OF_MONTH, - (day_of_week - 1 ));
+//            int month = calendar.get(Calendar.MONTH) + 1;
+//            int day = calendar.get(Calendar.DAY_OF_MONTH);
+//                    Toast.makeText(SyllabusActivity.this, "这周星期一是" + month + "/" + day , Toast.LENGTH_SHORT).show();
+//        Calendar today = Calendar.getInstance();
+        long diff_day = ( target_calendar.getTime().getTime() - calendar.getTime().getTime() ) / (60 * 60 * 24 * 1000);
+//                    Toast.makeText(SyllabusActivity.this, "日期相差了" + diff, Toast.LENGTH_SHORT).show();
+        //            Log.d("this_week",  "初始周数是 " + MainActivity.initial_week +  " 现在的周数是" + this_week);
+        return (int) diff_day / 7 + MainActivity.initial_week;
+    }
+
+
     /**
      * 用解析得到的课程填充 weekdays_syllabus_data
      */
@@ -292,29 +253,8 @@ public class ClassParser {
             // ------------这里可以踢掉已经上完了的课程-------------
             // -------------判断是否课程已经上完了-------------
 
-            Calendar calendar = Calendar.getInstance();
-            // 年月日
-            String[] date = MainActivity.initial_date.split("/");
-            int [] fields = new int[3];
-            for (int loop = 0 ; loop < fields.length ; ++loop)
-                fields[loop] = Integer.parseInt(date[loop]);
-//                    Toast.makeText(SyllabusActivity.this, Arrays.toString(fields), Toast.LENGTH_SHORT).show();
-
-            // 月份是从0开始切记
-            calendar.set(fields[0], fields[1], fields[2]);
-//                    calendar.set(fields[0], 1, 15);
-            // day of week 是按照 周日为第一天，所以周三就是第四天，但是是星期三
-            int day_of_week = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-//                    Toast.makeText(SyllabusActivity.this, "今天是" + day_of_week, Toast.LENGTH_SHORT).show();
-            // 计算出星期一的日期
-            calendar.add(Calendar.DAY_OF_MONTH, - (day_of_week - 1 ));
-//            int month = calendar.get(Calendar.MONTH) + 1;
-//            int day = calendar.get(Calendar.DAY_OF_MONTH);
-//                    Toast.makeText(SyllabusActivity.this, "这周星期一是" + month + "/" + day , Toast.LENGTH_SHORT).show();
-            Calendar today = Calendar.getInstance();
-            long diff_day = ( today.getTime().getTime() - calendar.getTime().getTime() ) / (60 * 60 * 24 * 1000);
-//                    Toast.makeText(SyllabusActivity.this, "日期相差了" + diff, Toast.LENGTH_SHORT).show();
-            int this_week = (int) diff_day / 7 + MainActivity.initial_week;
+            int this_week = calculate_week(Calendar.getInstance());
+//            Log.d("this_week",  "初始周数是 " + MainActivity.initial_week +  " 现在的周数是" + this_week);
 //                    Toast.makeText(SyllabusActivity.this, "这周是" + this_week, Toast.LENGTH_SHORT).show();
             int[] range = lesson.get_duration();
 //                    Toast.makeText(SyllabusActivity.this, Arrays.toString(range), Toast.LENGTH_SHORT).show();
@@ -347,7 +287,7 @@ public class ClassParser {
 ////                        continue;11111
 //                    }
 //                    ++offset;
-                    Log.v("offset", offset + " ");
+//                    Log.v("offset", offset + " ");
                     boolean hasBeenAdded = false;
                     for (int count = 0; count < class_time.length(); ++count) {
 
@@ -391,7 +331,6 @@ public class ClassParser {
                         // 额外判断周数
                         // 单双周显示
                         int w = -1;
-//                    int day = -1;
                         String has_single_or_double = null;
                         for (String day_obj : lesson.days.keySet()) {
                             String time_str = lesson.days.get(day_obj);
@@ -407,11 +346,11 @@ public class ClassParser {
                         if (has_single_or_double != null) {
                             if (w == offset) {
 //                            lesson_str = "[" + has_single_or_double + "]" + lesson_str;
-                                int week = MainActivity.initial_week;
-                                if (week % 2 == 0 && has_single_or_double.equals("单")){
+//                                int week = MainActivity.initial_week;
+                                if (this_week % 2 == 0 && has_single_or_double.equals("单")){
 //                                    do_not_show = true;
                                     really_to_add = false;
-                                }else if (week % 2 == 1 && has_single_or_double.equals("双")){
+                                }else if (this_week % 2 == 1 && has_single_or_double.equals("双")){
 //                                    do_not_show = true;
                                     really_to_add = false;
                                 }

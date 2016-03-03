@@ -117,6 +117,10 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 
 
     public void showSyllabus() {
+        ClassParser parser = new ClassParser(this, this);
+        parser.parseJSON(MainActivity.json_data, false);
+        parser.inflateTable();
+        MainActivity.weekdays_syllabus_data = parser.weekdays_syllabus_data;
         Object[] weekdays_syllabus_data = MainActivity.weekdays_syllabus_data;
         myClassTable.removeAllViews();
 
@@ -139,82 +143,8 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 } else {
                     lesson = (Lesson) weekdays_syllabus_data[index];
 
-//                    Log.d("debug", lesson.name);
                     do_not_show = false;
 
-
-//                    boolean need_to_test_single_or_double = true;
-
-                    // -------------判断是否课程已经上完了-------------
-//                    Calendar calendar = Calendar.getInstance();
-//                    // 年月日
-//                    String[] date = MainActivity.initial_date.split("/");
-//                    int [] fields = new int[3];
-//                    for (int loop = 0 ; loop < fields.length ; ++loop)
-//                        fields[loop] = Integer.parseInt(date[loop]);
-////                    Toast.makeText(SyllabusActivity.this, Arrays.toString(fields), Toast.LENGTH_SHORT).show();
-//
-//                    // 月份是从0开始切记
-//                    calendar.set(fields[0], fields[1], fields[2]);
-////                    calendar.set(fields[0], 1, 15);
-//                    // day of week 是按照 周日为第一天，所以周三就是第四天，但是是星期三
-//                    int day_of_week = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-////                    Toast.makeText(SyllabusActivity.this, "今天是" + day_of_week, Toast.LENGTH_SHORT).show();
-//                    // 计算出星期一的日期
-//                    calendar.add(Calendar.DAY_OF_MONTH, - (day_of_week - 1 ));
-//                    int month = calendar.get(Calendar.MONTH) + 1;
-//                    int day = calendar.get(Calendar.DAY_OF_MONTH);
-////                    Toast.makeText(SyllabusActivity.this, "这周星期一是" + month + "/" + day , Toast.LENGTH_SHORT).show();
-//                    Calendar today = Calendar.getInstance();
-//                    long diff = ( today.getTime().getTime() - calendar.getTime().getTime() ) / (60 * 60 * 24 * 1000);
-////                    Toast.makeText(SyllabusActivity.this, "日期相差了" + diff, Toast.LENGTH_SHORT).show();
-//                    int this_week = (int) diff / 7 + MainActivity.initial_week;
-////                    Toast.makeText(SyllabusActivity.this, "这周是" + this_week, Toast.LENGTH_SHORT).show();
-//                    int[] range = lesson.get_duration();
-////                    Toast.makeText(SyllabusActivity.this, Arrays.toString(range), Toast.LENGTH_SHORT).show();
-//                    if (this_week < range[0] || this_week > range[1]) {
-//                        do_not_show = true;
-//                        Log.d("pick", lesson.name);
-//                        need_to_test_single_or_double = false;
-//                    }
-//
-//                    // -------------判断是否课程已经上完了-------------
-
-//                    if (need_to_test_single_or_double) {
-//                        // -------------判断是否有单双周的情况-------------
-//                        // 额外判断周数
-//                        // 单双周显示
-//                        int w = -1;
-////                    int day = -1;
-//                        String has_single_or_double = null;
-//                        for (String day_obj : lesson.days.keySet()) {
-//                            String time_str = lesson.days.get(day_obj);
-//                            if (time_str.contains("单")) {
-//                                has_single_or_double = "单";
-//                                w = Integer.parseInt(day_obj.substring(1));
-//                            } else if (time_str.contains("双")) {
-//                                has_single_or_double = "双";
-//                                w = Integer.parseInt(day_obj.substring(1));
-//                            }
-//                        }
-//
-//                        if (has_single_or_double != null) {
-//                            if (w == i) {
-////                            lesson_str = "[" + has_single_or_double + "]" + lesson_str;
-//                                int week = MainActivity.initial_week;
-//                                if (week % 2 == 0 && has_single_or_double.equals("单")){
-//                                    do_not_show = true;
-//                                }else if (week % 2 == 1 && has_single_or_double.equals("双")){
-//                                    do_not_show = true;
-//                                }
-//                            }
-//                        }
-//
-//                        // -------------判断是否有单双周的情况-------------
-//                    }
-
-
-//                    if (!do_not_show) {
                         if (prevClassID != null && prevClassID.equals(lesson.id)) {
                             continue;
                         }
@@ -239,27 +169,6 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 if (!do_not_show) {
 
                     String lesson_str = lesson.toString();
-
-//                    // 单双周显示
-//                    int w = -1;
-////                    int day = -1;
-//                    String has_single_or_double = null;
-//                    for (String day_obj : lesson.days.keySet()) {
-//                        String time_str = lesson.days.get(day_obj);
-//                        if (time_str.contains("单")) {
-//                            has_single_or_double = "单";
-//                            w = Integer.parseInt(day_obj.substring(1));
-//                        } else if (time_str.contains("双")) {
-//                            has_single_or_double = "双";
-//                            w = Integer.parseInt(day_obj.substring(1));
-//                        }
-//                    }
-//
-//                    if (has_single_or_double != null) {
-//                        if (w == i) {
-//                            lesson_str = "[" + has_single_or_double + "]" + lesson_str;
-//                        }
-//                    }
 
                     textView.setText(lesson_str /* + "@" + lesson.room */);
                     textView.setGravity(Gravity.CENTER);
@@ -341,7 +250,8 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_syllabus);
         setupViews();
-        setActionBarTitle("第" + MainActivity.initial_week + "周");
+        int this_week = ClassParser.calculate_week(Calendar.getInstance());
+        setActionBarTitle("第" + this_week + "周");
 //        Toast.makeText(SyllabusActivity.this, "当前周数是" + MainActivity.initial_week, Toast.LENGTH_SHORT).show();
 
 
@@ -351,6 +261,9 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
     @Override
     protected void onResume() {
         super.onResume();
+        setupViews();
+        int this_week = ClassParser.calculate_week(Calendar.getInstance());
+        setActionBarTitle("第" + this_week + "周");
         MobclickAgent.onResume(this);
     }
 
@@ -447,15 +360,16 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
     private boolean set_week_info(){
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(this);
-        builder.setTitle("输入当前周数");
+        builder.setTitle("选择周数");
 
         final NumberPicker numberPicker = new NumberPicker(this);
         numberPicker.setMaxValue(16);
         numberPicker.setMinValue(1);
-        numberPicker.setValue(MainActivity.initial_week);
+        int this_week = ClassParser.calculate_week(Calendar.getInstance());
+        numberPicker.setValue(this_week);
         builder.setView(numberPicker);
 
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("设定周数", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 int week = numberPicker.getValue();
@@ -469,7 +383,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 String filename = FileOperation.generate_week_file(MainActivity.cur_username
                         , MainActivity.cur_year_string,
                         MainActivity.cur_semester + "");
-                if (FileOperation.save_to_file(SyllabusActivity.this, filename, content)){
+                if (FileOperation.save_to_file(SyllabusActivity.this, filename, content)) {
                     Toast.makeText(SyllabusActivity.this, "设定当前周数为 " + week, Toast.LENGTH_SHORT).show();
                     MainActivity.initial_week = week;
                     MainActivity.initial_date = date_string;
@@ -477,8 +391,8 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                     parser.parseJSON(MainActivity.json_data, false);
                     parser.inflateTable();     // 用数据填充课表
                     MainActivity.weekdays_syllabus_data = parser.weekdays_syllabus_data;
-                    setActionBarTitle("第" + MainActivity.initial_week + "周");
-                }else{
+                    setActionBarTitle("第" + week + "周");
+                } else {
                     Toast.makeText(SyllabusActivity.this, "设置周数出错", Toast.LENGTH_SHORT).show();
                 }
 
@@ -487,7 +401,28 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
             }
         });
 
-        builder.setCancelable(false);
+        builder.setNegativeButton("仅查看", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                int week = numberPicker.getValue();
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);   // 0-11
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                String date_string = year + "/" + month + "/" + day;
+                Toast.makeText(SyllabusActivity.this, "查看第 " + week + " 周的课表", Toast.LENGTH_SHORT).show();
+                MainActivity.initial_week = week;
+                MainActivity.initial_date = date_string;
+                ClassParser parser = new ClassParser(SyllabusActivity.this, SyllabusActivity.this);
+                parser.parseJSON(MainActivity.json_data, false);
+                parser.inflateTable();     // 用数据填充课表
+                MainActivity.weekdays_syllabus_data = parser.weekdays_syllabus_data;
+                setActionBarTitle("第" + week + "周");
+                showSyllabus();
+                dialog.dismiss();
+            }
+        });
+
         builder.create().show();
         return true;
     }

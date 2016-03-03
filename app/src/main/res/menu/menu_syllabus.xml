@@ -74,7 +74,7 @@
 
     <item
         android:id="@+id/set_week"
-        android:title="设置当前周数"
+        android:title="查看或者设定周数"
         app:showAsAction="never" />
 
     <item

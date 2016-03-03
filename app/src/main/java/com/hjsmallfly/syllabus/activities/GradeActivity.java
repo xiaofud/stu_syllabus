@@ -79,7 +79,7 @@ public class GradeActivity extends AppCompatActivity implements View.OnClickList
 
 
 
-        String gpa_string = "GPA: " + Grade.GPA;
+        String gpa_string = "GPA(仅供参考): " + Grade.GPA;
         gpa_display_view.setText(gpa_string);
 
 //        grade_debug_display.setText("");
