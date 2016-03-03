@@ -410,6 +410,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void deal_with_update(int flag, final SyllabusVersion version) {
         if (flag == UpdateHandler.EXIST_UPDATE) {
             // 存在更新的话
+            Toast.makeText(MainActivity.this, "发现新版本,请在主界面进行更新~", Toast.LENGTH_SHORT).show();
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("发现新版本, 是否更新?");
             builder.setMessage("描述:\n" + version.description);

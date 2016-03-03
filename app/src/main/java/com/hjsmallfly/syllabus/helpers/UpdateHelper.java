@@ -1,6 +1,8 @@
 package com.hjsmallfly.syllabus.helpers;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -124,12 +126,52 @@ public class UpdateHelper {
     /**
      * 下载文件
      */
-    class Download extends AsyncTask<SyllabusVersion, Void, File>{
+    class Download extends AsyncTask<SyllabusVersion, Integer, File>{
 
         private String address;
+        private ProgressDialog progressDialog;
+
+        private boolean progress_first_time = true;
+        private boolean cancel_download = false;
 
         public Download(String address){
             this.address = address;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            progressDialog = new ProgressDialog(UpdateHelper.this.context);
+            progressDialog.setMessage("下载完成的apk将保存在sd卡的download目录下");
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            // 不能有setIndeterminate(true), 不然进度条不会走
+//            progressDialog.setIndeterminate(true);
+//            progress.setMax(100);
+            progressDialog.setProgress(0);
+            progressDialog.setButton(ProgressDialog.BUTTON_NEGATIVE, "取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    cancel_download = true;
+                    Toast.makeText(UpdateHelper.this.context, "下载被取消", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                }
+            });
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+            Log.d("debug", "after progress.show()");
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            if (progress_first_time) {
+                // 最大值
+                progressDialog.setMax(values[1]);
+                progress_first_time = false;
+            }
+            progressDialog.setProgress(values[0]);
+            Log.d("progress_", "" + values[0]);
         }
 
         @Override
@@ -158,12 +200,24 @@ public class UpdateHelper {
                     FileOutputStream fos = new FileOutputStream(apk_file);
 
                     byte[] buf = new byte[1024 * 4];
+                    // 记录已经下载的字节数
                     int count = 0;
                     // 写入到文件中
                     int numread;
                     Log.d("download", "开始下载文件");
+                    int delay = 0;
                     while ((numread = is.read(buf)) > 0){
+                        if (cancel_download){
+                            fos.close();
+                            is.close();
+                            return null;
+                        }
                         fos.write(buf, 0, numread);
+                        ++delay;
+                        count += numread;
+                        // 不需要每下载一点数据就重新更新进度条,这样会影响效率
+                        if (delay % 10 == 0 || count == length)
+                            publishProgress(count / 1024, length / 1024);
                     }
                     // 下载完成
                     fos.close();
@@ -191,6 +245,7 @@ public class UpdateHelper {
             }
 
             if (file.exists()){
+                progressDialog.dismiss();
                 Toast.makeText(context, "成功下载文件: " + file.toString(), Toast.LENGTH_SHORT).show();
                 downloaded_apk_file = file;
                 installAPK();

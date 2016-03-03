@@ -1,7 +1,9 @@
 package com.hjsmallfly.syllabus.activities;
 
+import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -166,6 +168,7 @@ public class UpdateActivity extends AppCompatActivity implements UpdateHandler, 
                     check_update();
                 }
                 break;
+
             case R.id.copy_download_address_button:
 
                 if (remote_version == null)
