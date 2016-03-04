@@ -37,10 +37,10 @@ public class HttpCommunication {
     /**
      * 访问远程网站，获取信息
      * @param host_address 远程地址
-     * @param timeout 秒
+     * @param delay_ms 毫秒
      * @return "" 或者具体的内容
      */
-    public static String perform_get_call(String host_address, int timeout){
+    public static String perform_get_call(String host_address, int delay_ms){
         URL url;
         String response = "";
         THE_INTERNET_FLOW_IS_USED_UP = false;

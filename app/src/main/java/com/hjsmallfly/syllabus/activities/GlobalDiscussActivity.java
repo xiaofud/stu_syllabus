@@ -15,24 +15,30 @@ import android.widget.Toast;
 
 
 import com.hjsmallfly.syllabus.adapters.DiscussionAdapter;
+import com.hjsmallfly.syllabus.helpers.BannerGetter;
 import com.hjsmallfly.syllabus.helpers.ClipBoardHelper;
 import com.hjsmallfly.syllabus.helpers.DeleteTask;
 import com.hjsmallfly.syllabus.helpers.InfoPullTask;
 import com.hjsmallfly.syllabus.helpers.InsertTask;
 import com.hjsmallfly.syllabus.helpers.JSONHelper;
 import com.hjsmallfly.syllabus.helpers.StringDataHelper;
+import com.hjsmallfly.syllabus.helpers.WebApi;
 import com.hjsmallfly.syllabus.interfaces.AfterDeleteHandler;
+import com.hjsmallfly.syllabus.interfaces.BannerHandler;
 import com.hjsmallfly.syllabus.interfaces.DiscussionHandler;
 import com.hjsmallfly.syllabus.interfaces.InsertHandler;
+import com.hjsmallfly.syllabus.syllabus.Banner;
 import com.hjsmallfly.syllabus.syllabus.Discussion;
 import com.hjsmallfly.syllabus.syllabus.R;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public class GlobalDiscussActivity extends AppCompatActivity implements DiscussionHandler, InsertHandler, View.OnClickListener, AfterDeleteHandler {
+public class GlobalDiscussActivity extends AppCompatActivity implements DiscussionHandler, InsertHandler, View.OnClickListener, AfterDeleteHandler, BannerHandler {
 
     private ListView global_list_view;
     private EditText global_discuss_edit;
@@ -40,8 +46,10 @@ public class GlobalDiscussActivity extends AppCompatActivity implements Discussi
 
     private List<Discussion> global_discussions;
     private DiscussionAdapter discussionAdapter;
+    private List<Banner> banners;
 
-    private int display_count = 400;
+    private final int DISPLAY_COUNT = 400;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +61,7 @@ public class GlobalDiscussActivity extends AppCompatActivity implements Discussi
 
         // 拉取数据
         get_latest_global_discussions();
+        get_banners();
     }
 
     // 友盟的统计功能
@@ -93,7 +102,12 @@ public class GlobalDiscussActivity extends AppCompatActivity implements Discussi
     private void get_latest_global_discussions(){
         InfoPullTask global_discussion_getter = new InfoPullTask(this, InfoPullTask.PULL_DISCUSSION);
         global_discussion_getter.setDiscussionHandler(this);
-        global_discussion_getter.get_information(display_count, "0", 0, 0, 0);
+        global_discussion_getter.get_information(DISPLAY_COUNT, "0", 0, 0, 0);
+    }
+
+    private void get_banners(){
+        BannerGetter bannerGetter = new BannerGetter(this);
+        bannerGetter.execute(WebApi.get_server_address() + this.getString(R.string.get_banner_api));
     }
 
     @Override
@@ -286,5 +300,22 @@ public class GlobalDiscussActivity extends AppCompatActivity implements Discussi
         discussionAdapter.remove(discussion);
         discussionAdapter.notifyDataSetChanged();
         Toast.makeText(this, "成功删除消息" /*+ discussion.content*/, Toast.LENGTH_SHORT).show();
+    }
+
+    private void set_banners(){
+        Toast.makeText(GlobalDiscussActivity.this, "正在设置banners", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void handle_get_response(String result) {
+        if (result.isEmpty()){
+            Toast.makeText(GlobalDiscussActivity.this, "未能成功获取图片", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        this.banners = Banner.parse(result);
+        if (banners != null && banners.size() > 0)
+            set_banners();
+        else
+            Toast.makeText(GlobalDiscussActivity.this, "服务器没有资源,或者解析失败", Toast.LENGTH_SHORT).show();
     }
 }

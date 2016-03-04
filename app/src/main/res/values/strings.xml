@@ -9,6 +9,7 @@
     <string name="server_ip">http://121.42.175.83:8084</string>
     <string name="server_ip_debug">192.168.1.100</string>
     <string name="debug_port">5000</string>
+
     <string name="get_home_work_api">/api/course_info/0</string>
     <string name="get_discussion_api">/api/course_info/1</string>
     <string name="insert_class_api">/api/course</string>
@@ -16,6 +17,7 @@
     <string name="insert_home_work_api">/api/homework</string>
     <string name="insert_discussion_api">/api/discuss</string>
     <string name="insert_discussion_api_v1">/api/v1.0/discuss</string>
+    <string name="get_banner_api">/api/v1.0/notification</string>
     <string name="version_control_address">/api/version</string>
     <string name="get_user_information_api">/api/user/</string>
     <string name="change_user_information_api">/api/v1.0/modify_user</string>
