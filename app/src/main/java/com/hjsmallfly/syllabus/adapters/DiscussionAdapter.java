@@ -83,7 +83,7 @@ public class DiscussionAdapter extends ArrayAdapter<Discussion> {
 //            params.gravity = Gravity.RIGHT;
         }
 
-        view.setBackgroundResource(res_id);
+//        view.setBackgroundResource(res_id);
         // 这个貌似在很多机器会导致程序闪退。。。注意
 //        view.setLayoutParams(params);
 

@@ -37,8 +37,8 @@
     <string name="summer">夏季\n学期</string>
 
     <string name="version_code">1</string>
-    <string name="version_name">v1.1.0</string>
-    <string name="publisher">呆呆杰 和 smallfly</string>
+    <string name="version_name">v1.1.1</string>
+    <string name="publisher">呆呆杰(13yjli3) 晓拂(14xfdeng)</string>
 
     <string name="username">账号</string>
     <string name="password">密码</string>
@@ -66,7 +66,7 @@
     <string name="title_activity_update">fir.im/syllabus</string>
     <!--<string name="title_activity_main2">Main2Activity</string>-->
     <string name="title_activity_grade">查看成绩</string>
-    <string name="title_activity_global_discuss">全球吹水</string>
+    <string name="title_activity_global_discuss">校园动态</string>
     <string name="title_activity_exam">考试信息</string>
     <string name="title_activity_personal_info">用户个人信息</string>
 
