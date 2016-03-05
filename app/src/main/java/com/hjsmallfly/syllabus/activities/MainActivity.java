@@ -4,12 +4,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -18,28 +20,40 @@ import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.hjsmallfly.syllabus.adapters.BannerPagerAdapter;
+import com.hjsmallfly.syllabus.customviews.WrapContentHeightViewPager;
+import com.hjsmallfly.syllabus.helpers.BannerGetter;
+import com.hjsmallfly.syllabus.helpers.DownloadTask;
 import com.hjsmallfly.syllabus.helpers.LessonPullTask;
 import com.hjsmallfly.syllabus.helpers.StringDataHelper;
 import com.hjsmallfly.syllabus.helpers.UpdateHelper;
 import com.hjsmallfly.syllabus.helpers.WebApi;
+import com.hjsmallfly.syllabus.interfaces.BannerHandler;
+import com.hjsmallfly.syllabus.interfaces.FileDownloadedHandle;
 import com.hjsmallfly.syllabus.interfaces.LessonHandler;
 import com.hjsmallfly.syllabus.interfaces.TokenGetter;
 import com.hjsmallfly.syllabus.interfaces.UpdateHandler;
 import com.hjsmallfly.syllabus.parsers.ClassParser;
 import com.hjsmallfly.syllabus.helpers.FileOperation;
+import com.hjsmallfly.syllabus.syllabus.Banner;
 import com.hjsmallfly.syllabus.syllabus.Lesson;
 import com.hjsmallfly.syllabus.syllabus.R;
 import com.hjsmallfly.syllabus.syllabus.SyllabusVersion;
+import com.hjsmallfly.syllabus.widget.FixedSpeedScroller;
 import com.umeng.analytics.MobclickAgent;
 
+import java.io.File;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, UpdateHandler, LessonHandler, TokenGetter, Spinner.OnItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, UpdateHandler, LessonHandler, TokenGetter, Spinner.OnItemSelectedListener, BannerHandler, FileDownloadedHandle {
     public static Object[] weekdays_syllabus_data;     // 用于向显示课表的activity传递数据
-    public static ArrayList<Lesson> weekends_syllabus_data;
     public static String info_about_syllabus;
     public static final String USERNAME_FILE = "username.txt";
     public static final String PASSWORD_FILE = "password.txt";
@@ -68,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int position = -1;  // 用于决定保存的文件名
 //    private int semester;    // 用于决定保存的文件名
 
+    private WrapContentHeightViewPager viewPager;
 
     //    private EditText address_edit;  // 服务器地址
     private EditText username_edit;
@@ -86,6 +101,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private UpdateHelper updateHelper;
 
+    private List<Banner> bannerList;
+    private List<File> fileList;
+    private BannerPagerAdapter bannerPagerAdapter;
+
+    private boolean autoScroll = true;
+    private int banner_index;   // 循环播放的图片的下标
+
     // 创建主界面
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +119,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // 设置web service 的默认地址
         WebApi.set_server_address(getString(R.string.server_ip));
+
+        // 加载图片
+        getBanners();
 
         // 检查更新
         if (!has_checked_update)
@@ -120,9 +145,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void getAllViews() {
+
+        viewPager = (WrapContentHeightViewPager) findViewById(R.id.bannerViewPager);
+
+        try {
+            Field field = ViewPager.class.getDeclaredField("mScroller");
+            field.setAccessible(true);
+            FixedSpeedScroller scroller = new FixedSpeedScroller(viewPager.getContext(),
+                    new AccelerateInterpolator());
+            field.set(viewPager, scroller);
+            scroller.setmDuration(400);
+        } catch (Exception e) {
+            Log.e(TAG, "", e);
+        }
+
 //        address_edit = (EditText) findViewById(R.id.address_edit);
         username_edit = (EditText) findViewById(R.id.username_edit);
-        password_edit = (EditText) findViewById(R.id.passwd_edit);
+        password_edit = (EditText) findViewById(R.id.password_edit);
 //        syllabus_list_view = (ListView) findViewById(R.id.syllabus_list_view);
 
         year_spinner = (Spinner) findViewById(R.id.year_spinner);
@@ -509,6 +548,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void query_syllabus() {
+        if (username_edit.getText().toString().trim().isEmpty() ||
+                password_edit.getText().toString().trim().isEmpty()){
+            Toast.makeText(MainActivity.this, "请输入账号和密码", Toast.LENGTH_SHORT).show();
+            return;
+        }
         int year_index = year_spinner.getSelectedItemPosition();
         int semester_index = semester_spinner.getSelectedItemPosition();
         submit_query_request(year_index, semester_index);
@@ -548,29 +592,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-//    private void delete_cached_file(){
-//        String username = username_edit.getText().toString();
-//        int year_index = year_spinner.getSelectedItemPosition();
-////        String semester_name = semester_spinner.getSelectedItem().toString();
-//        String semester_name = StringDataHelper.semester_to_string(cur_semester);
-//        // 错误的值
-//        if (semester_name == null)
-//            return;
-//        String filename = StringDataHelper.generate_syllabus_file_name(username, YEARS[year_index], semester_name, "_");
-//        //        Toast.makeText(MainActivity.this, "filename: " + filename, Toast.LENGTH_SHORT).show();
-//        delete_cache_file(this, filename);
-//    }
-
-//    private void delete_cache_file(Context context, String file_name) {
-//        if (FileOperation.hasFile(context, file_name)) {
-//            if (FileOperation.delete_file(context, file_name))
-//                Toast.makeText(context, "成功删除缓存文件", Toast.LENGTH_SHORT).show();
-//            else
-//                Toast.makeText(context, "删除缓存文件失败", Toast.LENGTH_SHORT).show();
-//        } else
-//            Toast.makeText(context, "不存在该缓存文件", Toast.LENGTH_SHORT).show();
-//    }
-
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         set_cur_semester_with_spinner(position);
@@ -581,4 +602,94 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+    /**
+     * 循环播放图片
+     */
+    private void auto_scroll(){
+        Thread scroll_thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(autoScroll){
+                    try {
+                        Thread.sleep(2500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            int count = bannerPagerAdapter.getCount();
+                            int next = (viewPager.getCurrentItem() + 1) % count;
+                            viewPager.setCurrentItem(next, true);
+                        }
+                    });
+                }
+            }
+        });
+        scroll_thread.start();
+    }
+
+    private void getBanners(){
+        BannerGetter bannerGetter = new BannerGetter(this);
+        bannerGetter.execute(WebApi.get_server_address() + getString(R.string.get_banner_api));
+    }
+
+    @Override
+    public void handle_downloaded_file(List<File> files) {
+        if (files != null){
+            if (fileList == null)
+                fileList = new ArrayList<>();
+            fileList.addAll(files);
+
+            if (bannerPagerAdapter == null){
+                bannerPagerAdapter = new BannerPagerAdapter(this, fileList);
+                if (viewPager.getAdapter() == null)
+                    viewPager.setAdapter(bannerPagerAdapter);
+                else
+                    bannerPagerAdapter.notifyDataSetChanged();
+            }else{
+                bannerPagerAdapter.notifyDataSetChanged();
+            }
+            // 开启循环播放图片
+            auto_scroll();
+//            Toast.makeText(MainActivity.this, files.toString(), Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(MainActivity.this, "文件下载失败,请查看日志", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void set_banners() {
+        // 下载图片
+        Log.d("banner", "setting_banners");
+        List<String> urls = new ArrayList<>();
+        List<String> filenames = new ArrayList<>();
+        for(int i = 0 ; i < bannerList.size() ; ++i){
+            Banner banner = this.bannerList.get(i);
+            urls.add(banner.getUrl());
+            Log.d("banner", banner.getUrl());
+            String name = banner.getName();
+            Log.d("banner", banner.getName());
+            filenames.add(name);
+        }
+        DownloadTask downloadTask = new DownloadTask(urls, "Syllabus", filenames, this, 4000);
+        downloadTask.execute();
+    }
+
+    @Override
+    public void handle_get_response(String result) {
+        if (result.isEmpty()){
+            Toast.makeText(MainActivity.this, "未能成功获取图片", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        this.bannerList = Banner.parse(result);
+        if (bannerList != null && bannerList.size() > 0) {
+//            Toast.makeText(MainActivity.this, bannerList.get(0).getUrl(), Toast.LENGTH_SHORT).show();
+            set_banners();
+        }
+        else
+            Toast.makeText(MainActivity.this, "服务器没有资源,或者解析失败", Toast.LENGTH_SHORT).show();
+
+    }
+
 }

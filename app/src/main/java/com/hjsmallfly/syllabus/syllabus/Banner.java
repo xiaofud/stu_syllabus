@@ -82,6 +82,14 @@ public class Banner {
         }
     }
 
+    public String getName(){
+        int index = url.lastIndexOf("/");
+        if (index != -1)
+            return url.substring(index);
+        else
+            return null;
+    }
+
     // -----------getters and setters-------------
     public long getTimestamp() {
         return timestamp;

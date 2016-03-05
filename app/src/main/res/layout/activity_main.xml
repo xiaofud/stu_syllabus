@@ -3,21 +3,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_background">
+    android:background="#f5f5f5"
+    >
+    <!--android:background="@drawable/login_background"-->
 
-    <ImageView
-        android:layout_margin="10dp"
-        android:layout_above="@+id/input_area"
-        android:src="@drawable/logo_w"
+    <!--<ImageView-->
+        <!--android:layout_margin="10dp"-->
+        <!--android:layout_above="@+id/input_area"-->
+        <!--android:src="@drawable/logo_w"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content" />-->
+
+    <com.hjsmallfly.syllabus.customviews.WrapContentHeightViewPager
+        android:id="@+id/bannerViewPager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/bannerViewPager"
         android:orientation="vertical"
         android:id="@+id/input_area"
         tools:context=".MainActivity">
@@ -28,21 +36,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!--<ImageView-->
-                <!--android:layout_gravity="center_vertical"-->
-                <!--android:layout_marginRight="4dp"-->
-                <!--android:id="@+id/logo_view"-->
-                <!--android:src="@drawable/logo"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content" />-->
 
+            <!--android:background="#46ffffff"-->
             <LinearLayout
-                android:background="#46ffffff"
+
                 android:orientation="vertical"
                 android:layout_width="match_parent"
+                android:padding="@dimen/activity_horizontal_margin"
                 android:layout_height="wrap_content">
 
                 <LinearLayout
+                    android:background="@android:color/white"
                     android:focusableInTouchMode="true"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
@@ -50,15 +54,17 @@
                     android:layout_height="wrap_content">
 
 
-                    <TextView
+                    <!--<TextView-->
 
-                        android:text="@string/username"
-                        android:gravity="center"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="2dp"
-                        android:layout_width="0dp"
+                        <!--android:text="@string/username"-->
+                        <!--android:gravity="center"-->
+                        <!--android:layout_weight="1"-->
+                        <!--android:layout_marginLeft="2dp"-->
+                        <!--android:layout_width="0dp"-->
 
-                        android:layout_height="wrap_content" />
+                        <!--android:layout_height="wrap_content" />-->
+
+                    <!--android:background="@drawable/text_shape"-->
                     <EditText
                         android:id="@+id/username_edit"
                         android:hint="@string/username_hint"
@@ -71,20 +77,22 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:background="@android:color/white"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <TextView
-                        android:gravity="center"
-                        android:text="@string/password"
-                        android:layout_weight="1"
+                    <!--<TextView-->
+                        <!--android:gravity="center"-->
+                        <!--android:text="@string/password"-->
+                        <!--android:layout_weight="1"-->
 
-                        android:layout_marginLeft="2dp"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content" />
+                        <!--android:layout_marginLeft="2dp"-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="wrap_content" />-->
+
                     <EditText
-                        android:id="@+id/passwd_edit"
+                        android:id="@+id/password_edit"
 
                         android:layout_weight="6"
                         android:hint="@string/password_hint"
@@ -100,62 +108,23 @@
         </LinearLayout>
 
 
-
-        <!--<TextView-->
-        <!--android:id="@+id/help_message"-->
-        <!--android:gravity="center"-->
-        <!--android:layout_margin="5dp"-->
-        <!--android:textColor="#f0757f"-->
-        <!--android:textSize="15sp"-->
-        <!--android:text="@string/help_message"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content" />-->
-
         <EditText
             android:id="@+id/debug_ip_edit"
             android:text="@string/server_ip"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <!--android:background="@drawable/button_shape2"-->
         <Button
+            android:layout_margin="@dimen/activity_horizontal_margin"
             android:layout_marginTop="30dp"
             android:textSize="22sp"
-            android:background="@drawable/button_shape2"
+            android:background="@android:color/holo_blue_light"
             android:id="@+id/query_syllabus_button"
             android:textColor="#ffffff"
             android:text="@string/query_syllabus_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
-
-
-        <!--<ListView-->
-        <!--android:id="@+id/syllabus_list_view"-->
-        <!--android:layout_weight="1"-->
-        <!--android:divider="@android:color/transparent"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="0dp">-->
-        <!--</ListView>-->
-
-
-
-        <!--<LinearLayout-->
-        <!--android:orientation="vertical"-->
-        <!--android:layout_marginTop="8dp"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content">-->
-        <!--<TextView-->
-        <!--android:textColor="#fdfdfe"-->
-        <!--android:id="@+id/about_text_box"-->
-        <!--android:background="@drawable/input_box"-->
-        <!--android:gravity="center"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:text="@string/about_message"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content" />-->
-        <!--</LinearLayout>-->
-
-
 
     </LinearLayout>
 
@@ -166,7 +135,7 @@
         android:gravity="right"
         android:layout_marginRight="10dp"
         android:text="@string/help_message"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/holo_red_light"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

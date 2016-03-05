@@ -29,6 +29,7 @@ public class Discussion {
     public String calculate_diff_time(){
         Calendar now = Calendar.getInstance();
         Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(pub_time * 1000);
         long current_time =  now.getTimeInMillis() / 1000;
         long seconds = current_time - pub_time;
         long minutes = seconds / 60 ;
