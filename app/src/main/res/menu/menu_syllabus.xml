@@ -73,6 +73,11 @@
         <!--app:showAsAction="never"/>-->
 
     <item
+        android:id="@+id/save_syllabus"
+        android:title="保存课表到图库"
+        app:showAsAction="never" />
+
+   <item
         android:id="@+id/set_week"
         android:title="查看或者设定周数"
         app:showAsAction="never" />

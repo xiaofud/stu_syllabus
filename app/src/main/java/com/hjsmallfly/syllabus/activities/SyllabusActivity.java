@@ -5,7 +5,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -30,6 +32,7 @@ import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
+import android.widget.Scroller;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -78,6 +81,9 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 
     private Bitmap wall_paper;
 
+    //syllabus
+    LinearLayout dayLinearLayout;
+    LinearLayout timeLinearLayout;
 
     //课表显示滚动的那四个滚动条
     SyncHorizontalScrollView gridScrollView;
@@ -91,6 +97,9 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 
 
     private void setupViews() {
+
+        dayLinearLayout = (LinearLayout) findViewById(R.id.dayLinearLayout);
+        timeLinearLayout = (LinearLayout) findViewById(R.id.timeLinearLayout);
 
         //设置同步滚动
         gridScrollView = (SyncHorizontalScrollView) findViewById(R.id.gridScrollView);
@@ -145,9 +154,9 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 
                     do_not_show = false;
 
-                        if (prevClassID != null && prevClassID.equals(lesson.id)) {
-                            continue;
-                        }
+                    if (prevClassID != null && prevClassID.equals(lesson.id)) {
+                        continue;
+                    }
 //                    }
                 }
 
@@ -198,7 +207,9 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                     //textView.setBackground(new ColorDrawable(lesson.colorID));
 
                     float roundR = 15.0f;
-                    float[] outerR = new float[] { roundR, roundR, roundR, roundR,roundR, roundR, roundR, roundR  };
+                    float[] outerR = new float[]{roundR, roundR, roundR, roundR, roundR, roundR, roundR, roundR};
+
+
                     Shape shape = new
                             RoundRectShape(outerR, null, null);
 
@@ -238,9 +249,9 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 
     }
 
-    private void setActionBarTitle(String title){
+    private void setActionBarTitle(String title) {
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null){
+        if (actionBar != null) {
             actionBar.setTitle(title);
         }
     }
@@ -350,6 +361,10 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 set_week_info();
                 break;
 
+            case R.id.save_syllabus:
+                saveSyllabus();
+                break;
+
             default:
                 break;
         }
@@ -357,7 +372,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 
     }
 
-    private boolean set_week_info(){
+    private boolean set_week_info() {
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(this);
         builder.setTitle("选择周数");
@@ -587,4 +602,49 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         FileOperation.save_to_file(this, StringDataHelper.generate_token_file_name(MainActivity.cur_username), token);
         MainActivity.token = token;
     }
+
+
+    public void saveSyllabus() {
+
+        Bitmap dayBitmap = getViewBitmap(dayLinearLayout);
+        Bitmap timeBitmap = getViewBitmap(timeLinearLayout);
+        Bitmap syllabusBitmap = getViewBitmap(myClassTable);
+
+        Matrix matrix = new Matrix();
+
+        float scale = (dayBitmap.getHeight() + syllabusBitmap.getHeight())*1.0f / wall_paper.getHeight();
+
+        Log.d("Scale", dayBitmap.getHeight() + "");
+        Log.d("Scale", syllabusBitmap.getHeight() + "");
+        Log.d("Scale", wall_paper.getHeight() + "");
+
+        matrix.postScale(scale, scale);
+
+        Bitmap resizeBmp = Bitmap.createBitmap(wall_paper, 0, 0, wall_paper.getWidth(), wall_paper.getHeight(), matrix, true);
+
+
+        Bitmap result = Bitmap.createBitmap(timeBitmap.getWidth() + syllabusBitmap.getWidth(),
+                Math.max(syllabusBitmap.getHeight() + dayBitmap.getHeight(), resizeBmp.getHeight()),
+                Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(result);
+        canvas.drawBitmap(resizeBmp, 0, 0, null);
+        canvas.drawBitmap(dayBitmap, 0, 0, null);
+        canvas.drawBitmap(timeBitmap, 0, dayBitmap.getHeight(), null);
+        canvas.drawBitmap(syllabusBitmap, timeBitmap.getWidth(), dayBitmap.getHeight(), null);
+
+
+        MediaStore.Images.Media.insertImage(getContentResolver(), result, "syllabus", "description");
+
+        Toast.makeText(SyllabusActivity.this,"已保存到图库",Toast.LENGTH_SHORT).show();
+
+    }
+
+    public Bitmap getViewBitmap(View v) {
+        Bitmap bitmap = Bitmap.createBitmap(v.getWidth(), v.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        v.draw(canvas);
+        return bitmap;
+    }
+
 }
