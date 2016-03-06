@@ -143,7 +143,7 @@ public class UpdateHelper {
             super.onPreExecute();
 
             progressDialog = new ProgressDialog(UpdateHelper.this.context);
-            progressDialog.setMessage("下载完成的apk将保存在sd卡的download目录下");
+            progressDialog.setMessage("下载完成的apk将保存在sd卡的download目录下(进度条单位是KB)");
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             // 不能有setIndeterminate(true), 不然进度条不会走
 //            progressDialog.setIndeterminate(true);
@@ -171,6 +171,7 @@ public class UpdateHelper {
                 progress_first_time = false;
             }
             progressDialog.setProgress(values[0]);
+//            progressDialog.setMessage("数值的单位是KB");
             Log.d("progress_", "" + values[0]);
         }
 
