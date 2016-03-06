@@ -845,7 +845,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (FileOperation.hasFile(this, getString(R.string.BANNER_CACHED_FILE))) {
             // 如果已经有缓存文件了,说明已经显示了本地缓存的文件了
             long latestTimestamp = bannerList.get(0).getTimestamp();
-            long local_timestamp = Banner.getTimestap(this.banner_json_data);
+            Log.d("banner", "最新的时间戳是: " + latestTimestamp + "");
+            String local_banner_json_data = FileOperation.read_from_file(this, getString(R.string.BANNER_CACHED_FILE));
+            long local_timestamp = Banner.getTimestap(local_banner_json_data);
+            Log.d("banner", "缓存的时间戳是: " + local_timestamp + "");
             if (local_timestamp == latestTimestamp) {
                 use_cached_files = true;
             }
