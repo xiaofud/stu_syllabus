@@ -701,8 +701,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         @Override
                         public void run() {
                             int count = bannerPagerAdapter.getCount();
-                            int next = (viewPager.getCurrentItem() + 1) % count;
-                            viewPager.setCurrentItem(next, true);
+                            if (count != 0){
+                                int next = (viewPager.getCurrentItem() + 1) % count;
+                                viewPager.setCurrentItem(next, true);
+                            }
+
                         }
                     });
                 }
@@ -729,10 +732,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 List<Banner> banners = Banner.parse(banner_json);
                 List<String> filenames = Banner.toFilenames(banners);
                 List<File> files = loadCachedBannerFile("Syllabus", filenames);
-                display_banners(files);
+                if (files.size() > 0){
+                    Log.d("banner", "使用缓存文件");
+                    display_banners(files);
+                }else{  // 本地有缓存记录,但是图片被用户删除了
+                    Log.d("banner", "缓存文件被删除了");
+                    // 删除记录缓存的文件, 让app从服务器重新下载图片
+                    FileOperation.delete_file(this, getString(R.string.BANNER_CACHED_FILE));
+                }
             }
         }
         BannerGetter bannerGetter = new BannerGetter(this);
+        Log.d("banner", "从服务器拉取新的banner信息");
         bannerGetter.execute(WebApi.get_server_address() + getString(R.string.get_banner_api));
     }
 
@@ -769,6 +780,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void handle_downloaded_file(List<File> files) {
         // 清空一些数据
         if (fileList != null) {
+            Log.d("banner", "清空已经显示的图片");
             files.clear();
         }
         display_banners(files);
@@ -802,6 +814,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 去读缓存的情况已经在之前处理过了
         if (!use_cached_files){
             // 从网络上下载新的图片
+            Log.d("banner", "没有缓存图片, 需要重新下载新的图片");
             DownloadTask downloadTask = new DownloadTask(urls, "Syllabus", filenames, this, 4000);
             downloadTask.execute();
         }
