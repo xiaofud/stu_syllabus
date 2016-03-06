@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hjsmallfly.syllabus.syllabus"
-
     android:versionCode="32"
     android:versionName="@string/version_name">
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -75,9 +75,11 @@
             android:name="com.hjsmallfly.syllabus.activities.OAWebViewActivity"
             android:label="@string/oa_web_view_label" />
         <activity android:name="com.hjsmallfly.syllabus.activities.HelpActivity" />
-        <activity android:name="com.hjsmallfly.syllabus.activities.ChooseLessonActivity"
-            android:label="长按模拟添加/删除课程"/>
-        <activity android:name="com.hjsmallfly.syllabus.activities.ShowClassInfoActivity"/>
+        <activity
+            android:name="com.hjsmallfly.syllabus.activities.ChooseLessonActivity"
+            android:label="长按模拟添加/删除课程" />
+        <activity android:name="com.hjsmallfly.syllabus.activities.ShowClassInfoActivity" />
+        <activity android:name="com.hjsmallfly.syllabus.activities.LoginActivity"></activity>
     </application>
 
 </manifest>
