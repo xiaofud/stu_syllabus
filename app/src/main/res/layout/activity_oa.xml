@@ -31,6 +31,8 @@
             android:layout_height="wrap_content" />
 
         <Button
+            android:textColor="@android:color/white"
+            android:background="@android:color/holo_blue_light"
             android:id="@+id/oa_go_to_page_button"
             android:text="去"
             android:layout_width="wrap_content"
@@ -43,6 +45,8 @@
         android:layout_height="wrap_content">
 
         <Button
+            android:textColor="@android:color/white"
+            android:background="@android:color/holo_blue_light"
             android:id="@+id/oa_pre_page_button"
             android:text="上一页"
             android:layout_margin="2dp"
@@ -53,6 +57,8 @@
 
 
         <Button
+            android:textColor="@android:color/white"
+            android:background="@android:color/holo_blue_light"
             android:id="@+id/oa_next_page_button"
             android:text="下一页"
             android:layout_weight="1"

@@ -86,8 +86,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private WrapContentHeightViewPager viewPager;
 
     //    private EditText address_edit;  // 服务器地址
-    private EditText username_edit;
-    private EditText password_edit;
+//    private EditText username_edit;
+//    private EditText password_edit;
 //    private ListView syllabus_list_view;    // 用于显示所有课表的list_view
 
     private Spinner year_spinner;
@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button login_wifi_button;
     private Button oa_button;
     private Button school_activity_button;
+    private Button logout_button;
     private TextView grade_text_view_as_button;
     private TextView exam_text_view_as_button;
     // ----------功能区域-----------
@@ -141,6 +142,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);  // 加载主布局
+
+        // 检查是否有登录
+        if (!has_saved_user()) {
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivity(loginIntent);
+        }
+
+        // 第一次强行显示那个界面
+        if ( has_saved_user() && !FileOperation.hasFile(this, LoginActivity.VERIFY_FILE_NAME) ){
+            String[] user_info = FileOperation.load_user(this, USERNAME_FILE, PASSWORD_FILE);
+            if (user_info != null){
+                LoginActivity.setted_username = user_info[0];
+                LoginActivity.setted_password = user_info[1];
+                Intent loginIntent = new Intent(this, LoginActivity.class);
+                startActivity(loginIntent);
+            }
+
+        }
 
         // 强制显示菜单
         getOverflowMenu();
@@ -192,8 +211,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
 //        address_edit = (EditText) findViewById(R.id.address_edit);
-        username_edit = (EditText) findViewById(R.id.username_edit);
-        password_edit = (EditText) findViewById(R.id.password_edit);
+//        username_edit = (EditText) findViewById(R.id.username_edit);
+//        password_edit = (EditText) findViewById(R.id.password_edit);
 //        syllabus_list_view = (ListView) findViewById(R.id.syllabus_list_view);
 
         year_spinner = (Spinner) findViewById(R.id.year_spinner);
@@ -206,10 +225,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         school_activity_button = (Button) findViewById(R.id.school_activity_button);
         grade_text_view_as_button = (TextView) findViewById(R.id.query_grade_text_view);
         exam_text_view_as_button = (TextView) findViewById(R.id.query_exam_text_view);
+        logout_button = (Button) findViewById(R.id.back_to_login_button);
         // ----------功能区域-----------
 
 
         debug_ip_edit = (EditText) findViewById(R.id.debug_ip_edit);
+    }
+
+    private String[] load_saved_user(){
+        return FileOperation.load_user(this, USERNAME_FILE, PASSWORD_FILE);
+    }
+
+    private boolean has_saved_user(){
+        return FileOperation.hasFile(this, USERNAME_FILE);
     }
 
     private void setupViews() {
@@ -220,10 +248,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         semester_spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, SEMESTER_CHINESE));
 
         // 读取用户
-        final String[] user = FileOperation.load_user(this, USERNAME_FILE, PASSWORD_FILE);
+        final String[] user = load_saved_user();
         if (user != null) {
-            username_edit.setText(user[0]);
-            password_edit.setText(user[1]);
+//            username_edit.setText(user[0]);
+//            password_edit.setText(user[1]);
+            // 用这个变量来记录登录了的账号密码
+            cur_username = user[0];
             cur_password = user[1];
 
             if (user[0].equals("14xfdeng")) {
@@ -245,13 +275,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         login_wifi_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = username_edit.getText().toString().trim();
-                String password = password_edit.getText().toString().trim();
-                if (username.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(MainActivity.this, "请输入账号和密码", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                InternetLogin.login_to_internet(MainActivity.this, username, password);
+//                String username = username_edit.getText().toString().trim();
+//                String password = password_edit.getText().toString().trim();
+//                if (username.isEmpty() || password.isEmpty()) {
+//                    Toast.makeText(MainActivity.this, "请输入账号和密码", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+                InternetLogin.login_to_internet(MainActivity.this,cur_username,cur_password);
             }
         });
 
@@ -259,6 +289,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         school_activity_button.setOnClickListener(this);
         grade_text_view_as_button.setOnClickListener(this);
         exam_text_view_as_button.setOnClickListener(this);
+        logout_button.setOnClickListener(this);
 
         semester_spinner.setOnItemSelectedListener(this);
     }
@@ -326,9 +357,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     // 设置一些相关信息
                     String[] info = default_file_name.split("_");
                     cur_username = info[0];
-                    if (!cur_username.equals(username_edit.getText().toString()))
+//                    if (!cur_username.equals(username_edit.getText().toString()))
                         // 说明用户已经登录了其他账号
-                        return;
+//                        return;
                     cur_year_string = info[1];
                     cur_semester = StringDataHelper.semester_to_int(info[2]);
 //                    Log.d("default", cur_year_string);
@@ -441,14 +472,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void submit_query_request(int year_index, int semester_spinner_index) {
         this.position = year_index;
-        String username = username_edit.getText().toString();
-        cur_username = username;
+//        String username = username_edit.getText().toString();
+//        cur_username = username;
 
         String years = YEARS[year_index];  // 点击到列表的哪一项
         cur_year_string = years;    // 用于共享目的
 
-        String password = password_edit.getText().toString();
-        cur_password = password;
+//        String password = password_edit.getText().toString();
+//        cur_password = password;
 
         // 更新一下 服务器的地址
         WebApi.set_server_address(debug_ip_edit.getText().toString());
@@ -458,10 +489,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         set_cur_semester_with_spinner(semester_spinner_index);
 
-        info_about_syllabus = username + " " + years + " " + StringDataHelper.semester_to_string(cur_semester);
+        info_about_syllabus = cur_username + " " + years + " " + StringDataHelper.semester_to_string(cur_semester);
         // 先判断有无之前保存的文件
 //        String filename = username + "_" + years + "_" + semester;
-        String filename = StringDataHelper.generate_syllabus_file_name(username, years, cur_semester, "_");
+        String filename = StringDataHelper.generate_syllabus_file_name(cur_username, years, cur_semester, "_");
         String json_data = FileOperation.read_from_file(MainActivity.this, filename);
         if (json_data != null) {
             // 检查有没有设置周数
@@ -488,8 +519,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //            {"SPRING", "SUMMER", "AUTUMN"}
 
         HashMap<String, String> postData = new HashMap<>();
-        postData.put("username", username);
-        postData.put("password", password);
+        postData.put("username", cur_username);
+        postData.put("password", cur_password);
         postData.put("submit", "query");
         postData.put("years", years);
         postData.put("semester", cur_semester + "");
@@ -514,7 +545,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void deal_with_update(int flag, final SyllabusVersion version) {
         if (flag == UpdateHandler.EXIST_UPDATE) {
             // 存在更新的话
-            Toast.makeText(MainActivity.this, "发现新版本,请在主界面进行更新~", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "有新版本啦", Toast.LENGTH_SHORT).show();
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("发现新版本, 是否更新?");
             builder.setMessage("描述:\n" + version.description);
@@ -552,6 +583,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 统计用户登陆
         MobclickAgent.onProfileSignIn(MainActivity.cur_username);
 
+        FileOperation.save_user(this, USERNAME_FILE, PASSWORD_FILE, cur_username, cur_password);
+
         // 从网络拉过来的数据中 token 肯定是新的, 所以需要更新本地的token
         String[] week_info = get_week_info();
         if (week_info == null && !raw_data.contains("ERROR")){
@@ -577,16 +610,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                    Log.d(TAG, "established adapter");
 
             // 保存文件 命名格式: name_years_semester
-            String username = ((EditText) MainActivity.this.findViewById(R.id.username_edit)).getText().toString();
+//            String username = ((EditText) MainActivity.this.findViewById(R.id.username_edit)).getText().toString();
 //                    String filename = username + "_" + YEARS[position] + "_"
 //                            + semester;
             // 保存文件 格式是: 14xfdeng_2014-2015_autumn
-            String filename = StringDataHelper.generate_syllabus_file_name(username, YEARS[position], cur_semester, "_");
+            String filename = StringDataHelper.generate_syllabus_file_name(cur_username, YEARS[position], cur_semester, "_");
             if (FileOperation.save_to_file(MainActivity.this, filename, json_data)) {
 //                        Toast.makeText(MainActivity.this, "成功保存文件 " + filename, Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "saved file " + filename);
                 // 保存用户文件
-                FileOperation.save_user(MainActivity.this, USERNAME_FILE, PASSWORD_FILE, username, password_edit.getText().toString());
+                FileOperation.save_user(MainActivity.this, USERNAME_FILE, PASSWORD_FILE, cur_username, cur_password);
 
                 // 读取token
                 get_local_token();
@@ -620,8 +653,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(grade_intent);
                 break;
             case R.id.query_exam_text_view:
+                // 设定一些参数
+                cur_year_string = YEARS[year_spinner.getSelectedItemPosition()];
+                set_cur_semester_with_spinner(semester_spinner.getSelectedItemPosition());
                 Intent exam_intent = new Intent(this, ExamActivity.class);
                 startActivity(exam_intent);
+                break;
+            case R.id.back_to_login_button:
+                if (cur_username != null && cur_password != null){
+                    LoginActivity.setted_username = cur_username;
+                    LoginActivity.setted_password = cur_password;
+                    Intent login_intent = new Intent(this, LoginActivity.class);
+                    startActivity(login_intent);
+                }
                 break;
             default:
                 break;
@@ -629,11 +673,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void query_syllabus() {
-        if (username_edit.getText().toString().trim().isEmpty() ||
-                password_edit.getText().toString().trim().isEmpty()){
-            Toast.makeText(MainActivity.this, "请输入账号和密码", Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        if (username_edit.getText().toString().trim().isEmpty() ||
+//                password_edit.getText().toString().trim().isEmpty()){
+//            Toast.makeText(MainActivity.this, "请输入账号和密码", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
         int year_index = year_spinner.getSelectedItemPosition();
         int semester_index = semester_spinner.getSelectedItemPosition();
         submit_query_request(year_index, semester_index);
@@ -856,8 +900,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //            Toast.makeText(MainActivity.this, bannerList.get(0).getUrl(), Toast.LENGTH_SHORT).show();
             set_banners();
         }
-        else
-            Toast.makeText(MainActivity.this, "服务器没有资源,或者解析失败", Toast.LENGTH_SHORT).show();
+        else {
+//            Toast.makeText(MainActivity.this, "服务器没有资源,或者解析失败", Toast.LENGTH_SHORT).show();
+            Log.d("banner", "服务器没有资源,或者解析失败");
+        }
+
 
     }
 

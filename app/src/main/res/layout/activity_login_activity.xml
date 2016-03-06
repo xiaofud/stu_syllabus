@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -22,7 +21,7 @@
         <LinearLayout
             android:layout_marginLeft="35dp"
             android:layout_marginRight="35dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -34,7 +33,7 @@
                 android:src="@drawable/syllabus_logo" />
 
             <TextView
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:gravity="center"
                 android:textSize="30sp"
                 android:textColor="@android:color/white"
@@ -45,21 +44,22 @@
                 android:gravity="center"
                 android:textSize="15sp"
                 android:textColor="@android:color/white"
-                android:text="女生节特版"
+                android:text="女生节特版 对她好一点^_^"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp">
+                android:layout_marginTop="20dp">
 
+                <!--android:drawableLeft="@drawable/account"-->
                 <EditText
+                    android:id="@+id/login_user"
+                    android:hint="校园网账号"
                     android:singleLine="true"
-                    android:textSize="25sp"
                     android:background="@drawable/input_edit_shape"
                     android:padding="10dp"
-                    android:drawableLeft="@drawable/account"
                     android:paddingBottom="15dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -69,14 +69,15 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="10dp">
 
+                <!--android:drawableLeft="@drawable/lock"-->
                 <EditText
+                    android:id="@+id/login_password"
+                    android:hint="校园网密码"
                     android:singleLine="true"
-                    android:textSize="25sp"
                     android:background="@drawable/input_edit_shape"
                     android:padding="10dp"
-                    android:drawableLeft="@drawable/lock"
                     android:focusable="true"
                     android:password="true"
                     android:paddingBottom="15dp"
@@ -86,8 +87,9 @@
             </FrameLayout>
 
             <Button
+                android:id="@+id/login_button_for_girl"
                 android:padding="8dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginRight="25dp"
                 android:layout_marginLeft="25dp"
                 android:layout_gravity="center"

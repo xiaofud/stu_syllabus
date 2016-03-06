@@ -13,8 +13,7 @@
 
     <TextView
         android:gravity="center"
-        android:textColor="@android:color/white"
-        android:background="@drawable/input_box"
+        android:textColor="@android:color/black"
         android:text="@string/about_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

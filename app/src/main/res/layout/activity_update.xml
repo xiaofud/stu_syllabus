@@ -26,6 +26,8 @@
 
     <Button
         android:layout_margin="4dp"
+        android:textColor="@android:color/white"
+        android:background="@android:color/holo_blue_light"
         android:id="@+id/copy_download_address_button"
         android:text="复制下载链接"
         android:visibility="gone"
@@ -33,6 +35,8 @@
         android:layout_height="wrap_content" />
 
     <Button
+        android:textColor="@android:color/white"
+        android:background="@android:color/holo_blue_light"
         android:id="@+id/update_button"
         android:text="@string/updated_text"
         android:layout_width="match_parent"

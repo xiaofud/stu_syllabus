@@ -2,7 +2,7 @@
     <string name="app_name">汕大课程表</string>
     <string name="title_activity_syllabus">课程表</string>
     <string name="help_message">在课表界面的菜单里可以设置默认学期</string>
-    <string name="about_message">xiaofud: 14xfdeng@stu.edu.cn(Android)\nyujieL: 13yjli3@stu.edu.cn(Android)\njhwang: 14jhwang@stu.edu.cn(IOS)</string>
+    <string name="about_message">xiaofud: 14xfdeng@stu.edu.cn(Android)\ndaidaijie: 13yjli3@stu.edu.cn(Android)\njhwang: 14jhwang@stu.edu.cn(iOS)</string>
     <string name="github_app_address">本项目开源:https://github.com/Hjsmallfly/stu_syllabus</string>
     <string name="syllabus_get_api">/syllabus</string>
     <!--<string name="server_ip">http://hjsmallfly.wicp.net</string>-->
@@ -39,8 +39,8 @@
     <string name="summer">夏季\n学期</string>
 
     <string name="version_code">1</string>
-    <string name="version_name">v1.1.1</string>
-    <string name="publisher">呆呆杰(13yjli3) 晓拂(14xfdeng)</string>
+    <string name="version_name">v1.2.0</string>
+    <string name="publisher">晓拂(14xfdeng) 呆呆杰(13yjli3)</string>
 
     <string name="username">账号</string>
     <string name="password">密码</string>
@@ -68,6 +68,8 @@
     <string name="whatsup_in_school_button_string">校园动态</string>
     <string name="grade_button_string">成绩</string>
     <string name="exam_button_string">考试</string>
+    <string name="back_to_login_string">注销</string>
+    <!-- mainActivity 里面的功能按钮系列-->
 
     <string name="about_information">
         哈哈，你竟然点进这里来了!
@@ -87,9 +89,9 @@
         输入开课班号即可模拟添加课程到课程表中以作为参考.\n
     1.设置默认课程表(在课表的界面的菜单上),设置以后便不用每次都重新登录了\n
     2.查看办公自动化 成绩 考试安排 一键连网等功能都在课表界面的菜单里面\n
-    3.使用一键接入外网功能请注意有可能需要多次连接(因为学校服务器并不是很稳定)\n
-    4.关于更新,由于apk的服务器在外网所以下载可能需要10多秒的时间(安装包很小请放心)\n
-    5.如果觉得该app好用请推荐给朋友\n
+    3.使用登陆学校wifi,是用当前账号登入流量验证页面.请注意有可能需要多次连接(因为学校服务器并不是很稳定)\n
+    4.好困啊,写不下去啦 哈哈哈\n
+    5.如果觉得该app好用请推荐给朋友, 一定要推荐给朋友!!!\n
     6.目前的地址是 fir.im/syllabus\n</string>
 
 </resources>

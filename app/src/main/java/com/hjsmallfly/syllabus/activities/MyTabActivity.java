@@ -375,13 +375,13 @@ public class MyTabActivity extends AppCompatActivity implements View.OnClickList
 
         String content = homework_content_edit.getText().toString().trim();
         if (content.isEmpty()){
-            Toast.makeText(MyTabActivity.this, "不能发送空作业哟", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MyTabActivity.this, "不能发送空作业", Toast.LENGTH_SHORT).show();
             return;
         }
 
         String hand_in_time = homework_time_edit.getText().toString().trim();
         if (hand_in_time.isEmpty()){
-            Toast.makeText(MyTabActivity.this, "要填上上交的时间哟~~~", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MyTabActivity.this, "要填上上交的时间", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -416,7 +416,7 @@ public class MyTabActivity extends AppCompatActivity implements View.OnClickList
 
         String content = discussion_content_edit.getText().toString().trim();
         if (content.isEmpty()){
-            Toast.makeText(MyTabActivity.this, "不能发空吐槽哟~~~", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MyTabActivity.this, "不能发空吐槽", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -529,7 +529,7 @@ public class MyTabActivity extends AppCompatActivity implements View.OnClickList
             if (error.equals(DeleteTask.ERROR_WRONG_TOKEN))
                 Toast.makeText(MyTabActivity.this, StringDataHelper.ERROR_TOKEN, Toast.LENGTH_SHORT).show();
             else if (error.equals(DeleteTask.ERROR_NO_AUTHORIZED)){
-                Toast.makeText(MyTabActivity.this, "只能删除自己的信息哟", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MyTabActivity.this, "只能删除自己的信息", Toast.LENGTH_SHORT).show();
             }
             return;
 
@@ -586,7 +586,7 @@ public class MyTabActivity extends AppCompatActivity implements View.OnClickList
                     // 再试一次 应该就ok了
                     add_homework_to_database();
                 }else{
-                    Toast.makeText(MyTabActivity.this, "信息分享成功哟~~~~", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MyTabActivity.this, "信息分享成功", Toast.LENGTH_SHORT).show();
                     homework_content_edit.setText("");
                     homework_time_edit.setText("");
                     get_latest_homework(1);

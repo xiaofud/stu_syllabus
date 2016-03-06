@@ -24,6 +24,8 @@
     </WebView>
 
     <Button
+        android:textColor="@android:color/white"
+        android:background="@android:color/holo_blue_light"
         android:id="@+id/copy_the_url_button"
         android:text="复制当前链接"
         android:layout_width="match_parent"

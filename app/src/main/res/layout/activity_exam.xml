@@ -24,6 +24,8 @@
     </ListView>
 
     <Button
+        android:textColor="@android:color/white"
+        android:background="@android:color/holo_blue_light"
         android:id="@+id/update_exam_button"
         android:text="更新考试信息"
         android:layout_width="match_parent"
