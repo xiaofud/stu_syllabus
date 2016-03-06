@@ -188,7 +188,7 @@ public class ClassParser {
                 all_classes.add(cls);
             }
             // 记录最新的json_data到MainActivity那里
-            MainActivity.json_data = json_data;
+            MainActivity.syllabus_json_data = json_data;
             return true;
         } catch (JSONException e) {
             Log.d(MainActivity.TAG, e.toString());

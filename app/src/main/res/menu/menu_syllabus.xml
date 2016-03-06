@@ -22,26 +22,26 @@
         app:showAsAction="ifRoom" />
 
 
-    <item
-        android:id="@+id/query_exam_action"
-        android:title="考试安排"
-        app:showAsAction="never"/>
+    <!--<item-->
+        <!--android:id="@+id/query_exam_action"-->
+        <!--android:title="考试安排"-->
+        <!--app:showAsAction="never"/>-->
 
 
-    <item
-        android:id="@+id/query_grade_action"
-        android:title="查看成绩"
-        android:icon="@drawable/query_grade"
-        app:showAsAction="ifRoom"/>
+    <!--<item-->
+        <!--android:id="@+id/query_grade_action"-->
+        <!--android:title="查看成绩"-->
+        <!--android:icon="@drawable/query_grade"-->
+        <!--app:showAsAction="ifRoom"/>-->
 
     <!--<item-->
         <!--android:id="@+id/blue_text"-->
         <!--android:title="蓝色字"-->
         <!--app:showAsAction="never"/>-->
 
-    <item
-        android:id="@+id/show_oa_action"
-        android:title="查看办公自动化" />
+    <!--<item-->
+        <!--android:id="@+id/show_oa_action"-->
+        <!--android:title="查看办公自动化" />-->
 
     <item
         android:id="@+id/login_to_internet"

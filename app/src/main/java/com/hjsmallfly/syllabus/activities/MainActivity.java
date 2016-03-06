@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hjsmallfly.syllabus.adapters.BannerPagerAdapter;
@@ -39,7 +40,6 @@ import com.hjsmallfly.syllabus.interfaces.UpdateHandler;
 import com.hjsmallfly.syllabus.parsers.ClassParser;
 import com.hjsmallfly.syllabus.helpers.FileOperation;
 import com.hjsmallfly.syllabus.syllabus.Banner;
-import com.hjsmallfly.syllabus.syllabus.Lesson;
 import com.hjsmallfly.syllabus.syllabus.R;
 import com.hjsmallfly.syllabus.syllabus.SyllabusVersion;
 import com.hjsmallfly.syllabus.widget.FixedSpeedScroller;
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String USERNAME_FILE = "username.txt";
     public static final String PASSWORD_FILE = "password.txt";
 
-    public static String json_data;
+    public static String syllabus_json_data;
 
     // 用户的token数据
     public static String token = "";
@@ -92,8 +92,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Spinner year_spinner;
     private Spinner semester_spinner;
+
+    // ----------功能区域-----------
     private Button query_button;
     private Button login_wifi_button;
+    private Button oa_button;
+    private Button school_activity_button;
+    private TextView grade_text_view_as_button;
+    private TextView exam_text_view_as_button;
+    // ----------功能区域-----------
 
     private EditText debug_ip_edit;
 
@@ -103,13 +110,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private UpdateHelper updateHelper;
 
+    private String banner_json_data;
     private List<Banner> bannerList;
     private List<File> fileList;
     private BannerPagerAdapter bannerPagerAdapter;
 
-    private boolean autoScroll = true;
-    private int banner_index;   // 循环播放的图片的下标
 
+    private boolean autoScroll = true;
+//    private int banner_index;   // 循环播放的图片的下标
+
+    /**
+     * 强制显示菜单
+     */
     private void getOverflowMenu() {
         try {
             ViewConfiguration config = ViewConfiguration.get(this);
@@ -133,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 强制显示菜单
         getOverflowMenu();
 
-        YEARS = StringDataHelper.generate_years(4);  // 生成5年的选项
+        YEARS = StringDataHelper.generate_years(4);  // 生成4年的选项
         getAllViews();
         setupViews();
 
@@ -141,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         WebApi.set_server_address(getString(R.string.server_ip));
 
         // 加载图片
-        getBanners();
+        getLatestBannerInfo();
 
         // 检查更新
         if (!has_checked_update)
@@ -186,8 +198,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         year_spinner = (Spinner) findViewById(R.id.year_spinner);
         semester_spinner = (Spinner) findViewById(R.id.semester_spinner);
+
+        // ----------功能区域-----------
         query_button = (Button) findViewById(R.id.query_syllabus_button);
         login_wifi_button = (Button) findViewById(R.id.login_wifi_button);
+        oa_button = (Button) findViewById(R.id.query_oa_button);
+        school_activity_button = (Button) findViewById(R.id.school_activity_button);
+        grade_text_view_as_button = (TextView) findViewById(R.id.query_grade_text_view);
+        exam_text_view_as_button = (TextView) findViewById(R.id.query_exam_text_view);
+        // ----------功能区域-----------
+
 
         debug_ip_edit = (EditText) findViewById(R.id.debug_ip_edit);
     }
@@ -234,6 +254,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 InternetLogin.login_to_internet(MainActivity.this, username, password);
             }
         });
+
+        oa_button.setOnClickListener(this);
+        school_activity_button.setOnClickListener(this);
+        grade_text_view_as_button.setOnClickListener(this);
+        exam_text_view_as_button.setOnClickListener(this);
 
         semester_spinner.setOnItemSelectedListener(this);
     }
@@ -306,23 +331,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         return;
                     cur_year_string = info[1];
                     cur_semester = StringDataHelper.semester_to_int(info[2]);
-                    // 把选项也弄成当前学期的
+//                    Log.d("default", cur_year_string);
+
+                    // 将年份和学期的选项设置为默认状态
                     semester_spinner.setSelection(StringDataHelper.semester_to_selection_index(cur_semester));
                     for (int i = 0; i < YEARS.length; ++i)
-                        if (cur_year_string.equals(YEARS[i]))
+                        if (cur_year_string.equals(YEARS[i])){
+                            year_spinner.setSelection(i);
                             position = i;
+                        }
+
                     info_about_syllabus = cur_username + " " + cur_year_string + " " + info[2];
+
                     has_showed_default = true;
 
-                    String[] week_info = get_week_info();
-                    if (week_info == null){
-                        set_week_info(json_data, false);
-                    }else{
-                        MainActivity.initial_date = week_info[0];
-                        MainActivity.initial_week = Integer.parseInt(week_info[1]);
-                        // 本地课表文件里面存的token可能是过期的.
-                        parse_and_display(json_data, false);
-                    }
+//                    String[] week_info = get_week_info();
+//                    if (week_info == null){
+//                        set_week_info(syllabus_json_data, false);
+//                    }else{
+//                        MainActivity.initial_date = week_info[0];
+//                        MainActivity.initial_week = Integer.parseInt(week_info[1]);
+//                        // 本地课表文件里面存的token可能是过期的.
+//                        parse_and_display(syllabus_json_data, false);
+//                    }
                 }
             }
         }
@@ -576,6 +607,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.query_syllabus_button:
                 query_syllabus();
                 break;
+            case R.id.query_oa_button:
+                Intent intent = new Intent(this, OAActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.school_activity_button:
+                Intent global_discuss_intent = new Intent(this, GlobalDiscussActivity.class);
+                startActivity(global_discuss_intent);
+                break;
+            case R.id.query_grade_text_view:
+                Intent grade_intent = new Intent(this, GradeActivity.class);
+                startActivity(grade_intent);
+                break;
+            case R.id.query_exam_text_view:
+                Intent exam_intent = new Intent(this, ExamActivity.class);
+                startActivity(exam_intent);
+                break;
             default:
                 break;
         }
@@ -664,14 +711,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         scroll_thread.start();
     }
 
-    private void getBanners(){
+    private boolean isBannersCached(){
+        return FileOperation.hasFile(this, getString(R.string.BANNER_CACHED_FILE));
+    }
+
+    /**
+     * 从服务器请求最新的banner信息(json)
+     */
+    private void getLatestBannerInfo(){
+        if (isBannersCached()){
+//             先读取缓存文件
+            Log.d("banner", "优先读取缓存好了的文件");
+            String banner_json = FileOperation.read_from_file(this, getString(R.string.BANNER_CACHED_FILE));
+            if (banner_json != null){
+                // 设置类成员 banner_json_data
+                this.banner_json_data = banner_json;
+                List<Banner> banners = Banner.parse(banner_json);
+                List<String> filenames = Banner.toFilenames(banners);
+                List<File> files = loadCachedBannerFile("Syllabus", filenames);
+                display_banners(files);
+            }
+        }
         BannerGetter bannerGetter = new BannerGetter(this);
         bannerGetter.execute(WebApi.get_server_address() + getString(R.string.get_banner_api));
     }
 
-
-    @Override
-    public void handle_downloaded_file(List<File> files) {
+    private void display_banners(List<File> files){
         if (files != null){
             if (fileList == null)
                 fileList = new ArrayList<>();
@@ -686,11 +751,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }else{
                 bannerPagerAdapter.notifyDataSetChanged();
             }
-            // 更新本地banner的timestamp
-            if (FileOperation.save_to_file(this, getString(R.string.BANNER_TIMESTAMP_FILE), bannerList.get(0).getTimestamp() + "")){
-                Log.d("banner", "成功缓存banner的时间戳");
+            // 更新本地的banner缓存文件
+            if (FileOperation.save_to_file(this, getString(R.string.BANNER_CACHED_FILE), this.banner_json_data)){
+                Log.d("banner", "成功缓存banner文件");
             }else{
-                Log.d("banner", "失败缓存banner的时间戳");
+                Log.d("banner", "失败缓存banner文件");
             }
             // 开启循环播放图片
             auto_scroll();
@@ -700,9 +765,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    public void handle_downloaded_file(List<File> files) {
+        // 清空一些数据
+        if (fileList != null) {
+            files.clear();
+        }
+        display_banners(files);
+    }
+
+
     private void set_banners() {
         Log.d("banner", "setting_banners");
-        if (bannerList.size() == 0){
+        if (bannerList.size() == 0) {
             Log.d("banner", "bannerList 的 size 为0");
             return;
         }
@@ -711,37 +786,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         boolean use_cached_files = false;
 
         // 决定使用本地缓存的图片或者从网络上下载
-        if (FileOperation.hasFile(this, getString(R.string.BANNER_TIMESTAMP_FILE))){
-            long timestamp = bannerList.get(0).getTimestamp();
-            String timestamp_string = FileOperation.read_from_file(this, getString(R.string.BANNER_TIMESTAMP_FILE));
-            if (timestamp_string != null){
-                long local_timestamp = Long.parseLong(timestamp_string);
-                if (local_timestamp == timestamp){
-                    use_cached_files = true;
-                }
+        if (FileOperation.hasFile(this, getString(R.string.BANNER_CACHED_FILE))) {
+            // 如果已经有缓存文件了,说明已经显示了本地缓存的文件了
+            long latestTimestamp = bannerList.get(0).getTimestamp();
+            long local_timestamp = Banner.getTimestap(this.banner_json_data);
+            if (local_timestamp == latestTimestamp) {
+                use_cached_files = true;
             }
         }
 
         // 转换banner数据
-        List<String> urls = new ArrayList<>();
-        List<String> filenames = new ArrayList<>();
-        for(int i = 0 ; i < bannerList.size() ; ++i){
-            Banner banner = this.bannerList.get(i);
-            Log.d("banner", banner.getTimestamp() + "");
-            urls.add(banner.getUrl());
-            Log.d("banner", banner.getUrl());
-            String name = banner.getName();
-            Log.d("banner", banner.getName());
-            filenames.add(name);
-        }
+        List<String> urls = Banner.toUrls(this.bannerList);
+        List<String> filenames = Banner.toFilenames(this.bannerList);
 
+        // 去读缓存的情况已经在之前处理过了
         if (!use_cached_files){
             // 从网络上下载新的图片
             DownloadTask downloadTask = new DownloadTask(urls, "Syllabus", filenames, this, 4000);
             downloadTask.execute();
-        }else{
-            List<File> files = loadCachedBannerFile("Syllabus", filenames);
-            handle_downloaded_file(files);
         }
 
     }
@@ -771,9 +833,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void handle_get_response(String result) {
         if (result.isEmpty()){
-            Toast.makeText(MainActivity.this, "未能成功获取图片", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity.this, "未能成功获取图片", Toast.LENGTH_SHORT).show();
+            Log.d("banner", "未能成功获取图片");
             return;
         }
+        this.banner_json_data = result;
         this.bannerList = Banner.parse(result);
         if (bannerList != null && bannerList.size() > 0) {
 //            Toast.makeText(MainActivity.this, bannerList.get(0).getUrl(), Toast.LENGTH_SHORT).show();

@@ -61,7 +61,7 @@ public class GlobalDiscussActivity extends AppCompatActivity implements Discussi
 
         // 拉取数据
         get_latest_global_discussions();
-        get_banners();
+//        get_banners();
     }
 
     // 友盟的统计功能

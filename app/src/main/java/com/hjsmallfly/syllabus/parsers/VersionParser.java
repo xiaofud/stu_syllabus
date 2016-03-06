@@ -24,11 +24,11 @@ public class VersionParser {
 
 
     public  SyllabusVersion parse_version(String json_data){
-//        if(json_data.isEmpty()) {
+//        if(syllabus_json_data.isEmpty()) {
 //            Toast.makeText(context, "读取的信息是空的", Toast.LENGTH_SHORT).show();
 //            return null;
 //        }
-//        Log.d("UPDATE", json_data);
+//        Log.d("UPDATE", syllabus_json_data);
         if (json_data.contains("流量")){
             // 坑爹，如果流量已经用完的话 用外网连接 就会发生这个问题
             Toast.makeText(context, "检查更新的时候发现: 校内流量已经用完-_-!", Toast.LENGTH_SHORT).show();

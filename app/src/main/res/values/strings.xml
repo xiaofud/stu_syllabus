@@ -59,7 +59,15 @@
 
     <string name="update_message">[如果安装失败需要卸载旧版本, 再手动安装]\n[下载的apk文件在sd卡的download目录下]</string>
 
-    <string name="BANNER_TIMESTAMP_FILE">banner_timestamp_file.txt</string>
+    <string name="BANNER_CACHED_FILE">banner_cached_file.txt</string>
+
+    <!-- mainActivity 里面的功能按钮系列-->
+    <string name="login_wifi_button_string">登录学校WIFI</string>
+    <string name="query_syllabus_button_string">课程表</string>
+    <string name="query_os_system_button_string">办公自动化</string>
+    <string name="whatsup_in_school_button_string">校园动态</string>
+    <string name="grade_button_string">成绩</string>
+    <string name="exam_button_string">考试</string>
 
     <string name="about_information">
         哈哈，你竟然点进这里来了!

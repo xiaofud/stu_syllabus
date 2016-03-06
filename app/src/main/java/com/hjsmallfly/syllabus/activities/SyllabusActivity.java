@@ -9,9 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.graphics.drawable.shapes.Shape;
 import android.net.Uri;
@@ -20,8 +18,6 @@ import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -29,15 +25,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
-import android.widget.Scroller;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hjsmallfly.syllabus.helpers.ColorHelper;
 import com.hjsmallfly.syllabus.helpers.DisplayUtil;
 import com.hjsmallfly.syllabus.helpers.FileOperation;
 import com.hjsmallfly.syllabus.helpers.InternetLogin;
@@ -56,11 +49,8 @@ import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Objects;
 
 
 public class SyllabusActivity extends AppCompatActivity implements LessonHandler, TokenGetter {
@@ -129,7 +119,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 
     public void showSyllabus() {
         ClassParser parser = new ClassParser(this, this);
-        parser.parseJSON(MainActivity.json_data, false);
+        parser.parseJSON(MainActivity.syllabus_json_data, false);
         parser.inflateTable();
         MainActivity.weekdays_syllabus_data = parser.weekdays_syllabus_data;
         Object[] weekdays_syllabus_data = MainActivity.weekdays_syllabus_data;
@@ -332,27 +322,27 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 pick_photo();
                 break;
 
-            case R.id.query_grade_action:
-
-                // 友盟
-                MobclickAgent.onEvent(this, "More_Grade");
-
-                // 查看成绩
-                Intent grade_intent = new Intent(this, GradeActivity.class);
-                startActivity(grade_intent);
-                break;
+//            case R.id.query_grade_action:
+//
+//                // 友盟
+//                MobclickAgent.onEvent(this, "More_Grade");
+//
+//                // 查看成绩
+//                Intent grade_intent = new Intent(this, GradeActivity.class);
+//                startActivity(grade_intent);
+//                break;
 
             case R.id.global_discuss_action:
                 Intent global_discuss_intent = new Intent(this, GlobalDiscussActivity.class);
                 startActivity(global_discuss_intent);
                 break;
 
-            case R.id.query_exam_action:
-                // 友盟
-                MobclickAgent.onEvent(this, "More_Exam");
-                Intent exam_intent = new Intent(this, ExamActivity.class);
-                startActivity(exam_intent);
-                break;
+//            case R.id.query_exam_action:
+//                // 友盟
+//                MobclickAgent.onEvent(this, "More_Exam");
+//                Intent exam_intent = new Intent(this, ExamActivity.class);
+//                startActivity(exam_intent);
+//                break;
 
             case R.id.sync_syllabus_action:
                 // 更新课表
@@ -360,10 +350,10 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 MobclickAgent.onEvent(this, "More_Sync");
                 sync_syllabus();
                 break;
-            case R.id.show_oa_action:
-                Intent intent = new Intent(this, OAActivity.class);
-                startActivity(intent);
-                break;
+//            case R.id.show_oa_action:
+//                Intent intent = new Intent(this, OAActivity.class);
+//                startActivity(intent);
+//                break;
 
             case R.id.choose_class_action:
                 Intent choose_activity = new Intent(this, ChooseLessonActivity.class);
@@ -420,7 +410,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                     MainActivity.initial_week = week;
                     MainActivity.initial_date = date_string;
                     ClassParser parser = new ClassParser(SyllabusActivity.this, SyllabusActivity.this);
-                    parser.parseJSON(MainActivity.json_data, false);
+                    parser.parseJSON(MainActivity.syllabus_json_data, false);
                     parser.inflateTable();     // 用数据填充课表
                     MainActivity.weekdays_syllabus_data = parser.weekdays_syllabus_data;
                     setActionBarTitle("第" + week + "周");
@@ -446,7 +436,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 MainActivity.initial_week = week;
                 MainActivity.initial_date = date_string;
                 ClassParser parser = new ClassParser(SyllabusActivity.this, SyllabusActivity.this);
-                parser.parseJSON(MainActivity.json_data, false);
+                parser.parseJSON(MainActivity.syllabus_json_data, false);
                 parser.inflateTable();     // 用数据填充课表
                 MainActivity.weekdays_syllabus_data = parser.weekdays_syllabus_data;
                 setActionBarTitle("第" + week + "周");

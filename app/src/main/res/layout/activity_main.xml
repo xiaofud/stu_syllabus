@@ -128,14 +128,16 @@
             <!-- 各类功能按钮 -->
 
             <LinearLayout
+                style="?android:buttonBarButtonStyle"
                 android:layout_margin="2dp"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <Button
+                    style="?android:buttonBarButtonStyle"
                     android:layout_margin="2dp"
-                    android:text="课程表"
+                    android:text="@string/query_syllabus_button_string"
                     android:id="@+id/query_syllabus_button"
                     android:textColor="@android:color/white"
                     android:textSize="17sp"
@@ -145,7 +147,8 @@
                     android:layout_height="wrap_content" />
 
                 <Button
-                    android:text="登录学校WIFI"
+                    style="?android:buttonBarButtonStyle"
+                    android:text="@string/login_wifi_button_string"
                     android:id="@+id/login_wifi_button"
                     android:layout_margin="2dp"
                     android:textColor="@android:color/white"
@@ -158,13 +161,16 @@
             </LinearLayout>
 
             <LinearLayout
+                style="?android:buttonBarButtonStyle"
                 android:layout_margin="2dp"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <Button
-                    android:text="办公自动化"
+                    android:id="@+id/query_oa_button"
+                    style="?android:buttonBarButtonStyle"
+                    android:text="@string/query_os_system_button_string"
                     android:layout_margin="2dp"
                     android:textColor="@android:color/white"
                     android:textSize="17sp"
@@ -174,7 +180,9 @@
                     android:layout_height="wrap_content" />
 
                 <Button
-                    android:text="校园动态"
+                    android:id="@+id/school_activity_button"
+                    style="?android:buttonBarButtonStyle"
+                    android:text="@string/whatsup_in_school_button_string"
                     android:layout_margin="2dp"
                     android:textColor="@android:color/white"
                     android:textSize="17sp"
@@ -186,6 +194,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:baselineAligned="false"
                 android:layout_margin="2dp"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -200,6 +209,7 @@
                     android:layout_height="wrap_content" >
 
                     <TextView
+                        android:id="@+id/query_grade_text_view"
                         android:background="@null"
                         android:textColor="@android:color/white"
                         style="?android:attr/buttonStyle"
@@ -213,7 +223,7 @@
                         android:gravity="center"
                         android:minHeight="0dp"
                         android:minWidth="0dp"
-                        android:text=" 成绩" />
+                        android:text="@string/grade_button_string" />
                 </FrameLayout>
 
                 <!--<Button-->
@@ -236,6 +246,7 @@
 
                     <!--android:drawableLeft="@android:drawable/ic_menu_edit"-->
                     <TextView
+                        android:id="@+id/query_exam_text_view"
                         android:textColor="@android:color/white"
                         android:background="@null"
                         style="?android:attr/buttonStyle"
@@ -248,7 +259,7 @@
                         android:gravity="center"
                         android:minHeight="0dp"
                         android:minWidth="0dp"
-                        android:text=" 考试" />
+                        android:text="@string/exam_button_string" />
                 </FrameLayout>
 
             </LinearLayout>

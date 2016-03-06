@@ -90,6 +90,40 @@ public class Banner {
             return null;
     }
 
+    public static List<String> toFilenames(List<Banner> banners){
+        List<String> filenames = new ArrayList<>();
+        for(int i = 0 ; i < banners.size() ; ++i){
+            Banner banner = banners.get(i);
+            String name = banner.getName();
+            Log.d("banner", banner.getName());
+            filenames.add(name);
+        }
+        return filenames;
+    }
+
+    public static List<String> toUrls(List<Banner> banners){
+        List<String> urls = new ArrayList<>();
+        for(int i = 0 ; i < banners.size() ; ++i){
+            Banner banner = banners.get(i);
+            urls.add(banner.getUrl());
+            Log.d("banner", banner.getUrl());
+        }
+        return urls;
+    }
+
+    public static long getTimestap(String banner_json){
+        JSONTokener jsonTokener = new JSONTokener(banner_json);
+        try {
+            JSONObject banner_obj = (JSONObject) jsonTokener.nextValue();
+            JSONObject latest = banner_obj.getJSONObject("latest");
+            return latest.getLong("timestamp");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d("Banner", e.getMessage());
+            return -1;
+        }
+    }
+
     // -----------getters and setters-------------
     public long getTimestamp() {
         return timestamp;
