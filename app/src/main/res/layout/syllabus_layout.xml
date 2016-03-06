@@ -10,13 +10,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="40dp"
-            android:layout_height="35dp"
-            android:background="@drawable/orange_border"
-            android:textColor="#212121"
-            android:gravity="center"
-            android:text="" />
 
         <com.hjsmallfly.syllabus.otherViews.SyncHorizontalScrollView
             android:id="@+id/dayScrollView"
@@ -24,9 +17,16 @@
             android:layout_height="35dp">
 
             <LinearLayout
+                android:id="@+id/dayLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="35dp">
-
+                <TextView
+                    android:layout_width="40dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/orange_border"
+                    android:textColor="#212121"
+                    android:gravity="center"
+                    android:text="" />
 
                 <TextView
                     android:layout_width="50dp"
@@ -100,6 +100,7 @@
             android:layout_height="match_parent">
 
             <LinearLayout
+                android:id="@+id/timeLinearLayout"
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
