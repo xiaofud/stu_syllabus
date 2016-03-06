@@ -55,13 +55,13 @@ public class InternetLogin {
         protected void onPostExecute(String s) {
 //            Log.d("inet", "response: " + s);
             if (s.isEmpty()){
-                Toast.makeText(InternetLogin.this.context, "请确保接入校园网", Toast.LENGTH_SHORT).show();
+                Toast.makeText(InternetLogin.this.context, "请确保接入校园网以及密码和账号的匹配", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (s.toLowerCase().contains("used bytes")){
 //                Log.d("inet", "已接入外网");
-                Toast.makeText(InternetLogin.this.context, "已接入外网!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(InternetLogin.this.context, "已接入外网", Toast.LENGTH_SHORT).show();
 
                 return;
             }

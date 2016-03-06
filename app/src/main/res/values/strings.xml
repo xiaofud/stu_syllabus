@@ -59,6 +59,8 @@
 
     <string name="update_message">[如果安装失败需要卸载旧版本, 再手动安装]\n[下载的apk文件在sd卡的download目录下]</string>
 
+    <string name="BANNER_TIMESTAMP_FILE">banner_timestamp_file.txt</string>
+
     <string name="about_information">
         哈哈，你竟然点进这里来了!
         本来打算写点什么的，但是真到了要写的时候却不知道写什么了。

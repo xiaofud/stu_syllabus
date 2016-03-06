@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Environment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import com.hjsmallfly.syllabus.adapters.BannerPagerAdapter;
 import com.hjsmallfly.syllabus.customviews.WrapContentHeightViewPager;
 import com.hjsmallfly.syllabus.helpers.BannerGetter;
 import com.hjsmallfly.syllabus.helpers.DownloadTask;
+import com.hjsmallfly.syllabus.helpers.InternetLogin;
 import com.hjsmallfly.syllabus.helpers.LessonPullTask;
 import com.hjsmallfly.syllabus.helpers.StringDataHelper;
 import com.hjsmallfly.syllabus.helpers.UpdateHelper;
@@ -45,9 +47,7 @@ import com.umeng.analytics.MobclickAgent;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Spinner year_spinner;
     private Spinner semester_spinner;
     private Button query_button;
+    private Button login_wifi_button;
 
     private EditText debug_ip_edit;
 
@@ -167,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         year_spinner = (Spinner) findViewById(R.id.year_spinner);
         semester_spinner = (Spinner) findViewById(R.id.semester_spinner);
         query_button = (Button) findViewById(R.id.query_syllabus_button);
+        login_wifi_button = (Button) findViewById(R.id.login_wifi_button);
 
         debug_ip_edit = (EditText) findViewById(R.id.debug_ip_edit);
     }
@@ -179,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         semester_spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, SEMESTER_CHINESE));
 
         // 读取用户
-        String[] user = FileOperation.load_user(this, USERNAME_FILE, PASSWORD_FILE);
+        final String[] user = FileOperation.load_user(this, USERNAME_FILE, PASSWORD_FILE);
         if (user != null) {
             username_edit.setText(user[0]);
             password_edit.setText(user[1]);
@@ -200,6 +202,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // listener
         query_button.setOnClickListener(this);
+
+        login_wifi_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String username = username_edit.getText().toString().trim();
+                String password = password_edit.getText().toString().trim();
+                if (username.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "请输入账号和密码", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                InternetLogin.login_to_internet(MainActivity.this, username, password);
+            }
+        });
 
         semester_spinner.setOnItemSelectedListener(this);
     }
@@ -635,6 +650,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bannerGetter.execute(WebApi.get_server_address() + getString(R.string.get_banner_api));
     }
 
+
     @Override
     public void handle_downloaded_file(List<File> files) {
         if (files != null){
@@ -651,6 +667,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }else{
                 bannerPagerAdapter.notifyDataSetChanged();
             }
+            // 更新本地banner的timestamp
+            if (FileOperation.save_to_file(this, getString(R.string.BANNER_TIMESTAMP_FILE), bannerList.get(0).getTimestamp() + "")){
+                Log.d("banner", "成功缓存banner的时间戳");
+            }else{
+                Log.d("banner", "失败缓存banner的时间戳");
+            }
             // 开启循环播放图片
             auto_scroll();
 //            Toast.makeText(MainActivity.this, files.toString(), Toast.LENGTH_SHORT).show();
@@ -660,20 +682,71 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void set_banners() {
-        // 下载图片
         Log.d("banner", "setting_banners");
+        if (bannerList.size() == 0){
+            Log.d("banner", "bannerList 的 size 为0");
+            return;
+        }
+
+        // 是否使用之前缓存过的图片
+        boolean use_cached_files = false;
+
+        // 决定使用本地缓存的图片或者从网络上下载
+        if (FileOperation.hasFile(this, getString(R.string.BANNER_TIMESTAMP_FILE))){
+            long timestamp = bannerList.get(0).getTimestamp();
+            String timestamp_string = FileOperation.read_from_file(this, getString(R.string.BANNER_TIMESTAMP_FILE));
+            if (timestamp_string != null){
+                long local_timestamp = Long.parseLong(timestamp_string);
+                if (local_timestamp == timestamp){
+                    use_cached_files = true;
+                }
+            }
+        }
+
+        // 转换banner数据
         List<String> urls = new ArrayList<>();
         List<String> filenames = new ArrayList<>();
         for(int i = 0 ; i < bannerList.size() ; ++i){
             Banner banner = this.bannerList.get(i);
+            Log.d("banner", banner.getTimestamp() + "");
             urls.add(banner.getUrl());
             Log.d("banner", banner.getUrl());
             String name = banner.getName();
             Log.d("banner", banner.getName());
             filenames.add(name);
         }
-        DownloadTask downloadTask = new DownloadTask(urls, "Syllabus", filenames, this, 4000);
-        downloadTask.execute();
+
+        if (!use_cached_files){
+            // 从网络上下载新的图片
+            DownloadTask downloadTask = new DownloadTask(urls, "Syllabus", filenames, this, 4000);
+            downloadTask.execute();
+        }else{
+            List<File> files = loadCachedBannerFile("Syllabus", filenames);
+            handle_downloaded_file(files);
+        }
+
+    }
+
+    private List<File> loadCachedBannerFile(String directory, List<String> filenames){
+        List<File> files = new ArrayList<>();
+        if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+            Log.d("banner", "sdcard not mounted");
+            return files;
+        }
+        // sd 卡根目录
+        String sdCardRoot = Environment.getExternalStorageDirectory() + File.separator;
+        Log.d("banner", "sdCardRoot is: " + sdCardRoot);
+        // 文件存储目录
+        String file_save_path = sdCardRoot + directory;
+        Log.d("banner", "file_save_path is: " + file_save_path);
+
+        for(int i = 0 ; i < filenames.size() ; ++i){
+            File file = new File(file_save_path, filenames.get(i));
+            if (file.exists())
+                files.add(file);
+        }
+
+        return files;
     }
 
     @Override

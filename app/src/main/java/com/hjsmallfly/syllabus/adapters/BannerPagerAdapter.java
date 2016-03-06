@@ -23,24 +23,57 @@ import java.util.List;
  */
 public class BannerPagerAdapter extends PagerAdapter {
 
-    private List<File> banners;
+    // -----------以文件读取图片的方式------------
+    private List<File> bannerFileList;
+    // -----------以文件读取图片的方式------------
+
+    // -----------以 resource id 的形式-----------------
+    private int[] resource_ids;
+    // -----------以 resource id 的形式-----------------
+
     private Context context;
 
-    public BannerPagerAdapter(Context context, List<File> banners){
+    /**
+     * 以文件形式读取图片
+     * @param context
+     * @param bannerFileList   List<File>
+     */
+    public BannerPagerAdapter(Context context, List<File> bannerFileList){
         this.context = context;
-        this.banners = banners;
+        this.bannerFileList = bannerFileList;
+    }
+
+    public BannerPagerAdapter(Context context, int[] resource_ids){
+        this.context = context;
+        this.resource_ids = resource_ids;
     }
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        File banner = banners.get(position);
+
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         ViewGroup viewGroup = (ViewGroup) layoutInflater.inflate(R.layout.banner_layout, container, false);
         ImageView imageView = (ImageView) viewGroup.findViewById(R.id.banner_image_view);
-        Log.d("bannerPagerAdapter", banner.toString());
 
+        // 有两种形式
+        int resource_id = -1;
+        File banner = null;
+
+        if (bannerFileList != null){
+            banner = bannerFileList.get(position);
+            Log.d("bannerPagerAdapter", banner.toString());
+        }else{
+            resource_id = resource_ids[position];
+            Log.d("bannerPagerAdapter", "resource id: " + resource_id);
+        }
+
+        Bitmap bitmap;
         // 读取图片文件
-        Bitmap bitmap = BitmapFactory.decodeFile(banner.toString());
+        if (banner != null)
+            bitmap = BitmapFactory.decodeFile(banner.toString());
+        else
+            bitmap = BitmapFactory.decodeResource(context.getResources(), resource_id);
+
         // -----获取屏幕信息------
         DisplayMetrics displaymetrics = new DisplayMetrics();
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -61,9 +94,14 @@ public class BannerPagerAdapter extends PagerAdapter {
         return viewGroup;
     }
 
+
     @Override
     public int getCount() {
-        return banners.size();
+        // 因为有两种不同的设定资源的方式
+        if (bannerFileList != null)
+            return bannerFileList.size();
+        else
+            return resource_ids.length;
     }
 
     @Override
