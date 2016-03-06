@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Set;
@@ -219,13 +220,20 @@ public class ClassParser {
         Calendar calendar = Calendar.getInstance();
         // 年月日
         String[] date = MainActivity.initial_date.split("/");
+        Log.d("week", Arrays.toString(date));
         int [] fields = new int[3];
         for (int loop = 0 ; loop < fields.length ; ++loop)
             fields[loop] = Integer.parseInt(date[loop]);
         // 月份是从0开始切记
+        // [2016, 2, 6]
         calendar.set(fields[0], fields[1], fields[2]);
-        // day of week 是按照 周日为第一天，所以周三就是第四天，但是是星期三
+        // day of week 是按照 周日为第一天(返回的结果是0)，所以周三就是第四天，但是是星期三
         int day_of_week = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+//        Log.d("week", "" + day_of_week);
+        if (day_of_week == 0){
+            // 说明是周日
+            day_of_week = 7;
+        }
 //                    Toast.makeText(SyllabusActivity.this, "今天是" + day_of_week, Toast.LENGTH_SHORT).show();
         // 计算出星期一的日期
         calendar.add(Calendar.DAY_OF_MONTH, - (day_of_week - 1 ));
@@ -236,6 +244,15 @@ public class ClassParser {
         long diff_day = ( target_calendar.getTime().getTime() - calendar.getTime().getTime() ) / (60 * 60 * 24 * 1000);
 //                    Toast.makeText(SyllabusActivity.this, "日期相差了" + diff, Toast.LENGTH_SHORT).show();
         //            Log.d("this_week",  "初始周数是 " + MainActivity.initial_week +  " 现在的周数是" + this_week);
+        Log.d("week", "记录中的日期是: "
+                        + calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH) + 1 )
+                + "-" + calendar.get(Calendar.DAY_OF_MONTH)
+        );
+        Log.d("week", "现在的日期是: "
+                        + target_calendar.get(target_calendar.YEAR) + "-" + (target_calendar.get(target_calendar.MONTH) + 1 )
+                        + "-" + target_calendar.get(target_calendar.DAY_OF_MONTH)
+        );
+        Log.d("week", "计算得出的差是: " + diff_day);
         return (int) diff_day / 7 + MainActivity.initial_week;
     }
 
@@ -246,6 +263,7 @@ public class ClassParser {
     public void inflateTable() {
 //        Log.d(MainActivity.TAG, "before inflate class_table");
         // 填充课表数据
+        int this_week = calculate_week(Calendar.getInstance());
         for (int i = 0; i < all_classes.size(); ++i) {
             // 遍历每一堂课
             Lesson lesson = all_classes.get(i);
@@ -253,7 +271,7 @@ public class ClassParser {
             // ------------这里可以踢掉已经上完了的课程-------------
             // -------------判断是否课程已经上完了-------------
 
-            int this_week = calculate_week(Calendar.getInstance());
+
 //            Log.d("this_week",  "初始周数是 " + MainActivity.initial_week +  " 现在的周数是" + this_week);
 //                    Toast.makeText(SyllabusActivity.this, "这周是" + this_week, Toast.LENGTH_SHORT).show();
             int[] range = lesson.get_duration();
