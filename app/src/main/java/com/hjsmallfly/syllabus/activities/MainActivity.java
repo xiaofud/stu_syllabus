@@ -174,6 +174,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 加载图片
         getLatestBannerInfo();
 
+        // 设置本地缓存的token
+        get_local_token();
+
         // 检查更新
         if (!has_checked_update)
             check_update();
