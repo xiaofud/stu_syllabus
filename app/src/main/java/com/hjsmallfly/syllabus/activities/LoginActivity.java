@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
                 String username = username_box.getText().toString().trim();
                 String password = password_box.getText().toString().trim();
                 if (username.isEmpty() || password.isEmpty()){
-                    Toast.makeText(LoginActivity.this, "虽然是女生节,还是需要账号密码的", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "尼玛, 你怎么不输入账号密码呢!!!", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 MainActivity.cur_username = username;

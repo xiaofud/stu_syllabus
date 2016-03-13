@@ -55,7 +55,8 @@ public class OAActivity extends AppCompatActivity  implements PostDataGetter, Vi
 
     private void setup_views(){
         // 一定要记得设置初始值
-        page_number_edit.setText(current_page + "");
+        String current_page_string = current_page + "";
+        page_number_edit.setText(current_page_string);
 
         // 监听器
         go_to_page_button.setOnClickListener(this);
@@ -95,7 +96,7 @@ public class OAActivity extends AppCompatActivity  implements PostDataGetter, Vi
 
     private void set_page_edit_index(int index){
         String num_str = index + "";
-        page_number_edit.setText(index + "");
+        page_number_edit.setText(num_str);
         page_number_edit.setSelection(num_str.length());
     }
 
@@ -111,6 +112,9 @@ public class OAActivity extends AppCompatActivity  implements PostDataGetter, Vi
             Toast.makeText(OAActivity.this, "页码要大于0", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        // 将当前页换掉
+        current_page = page_index;
         send_oa_request(page_index);
     }
 

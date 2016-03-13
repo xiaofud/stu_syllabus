@@ -382,7 +382,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
     private boolean set_week_info() {
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(this);
-        builder.setTitle("选择周数");
+        builder.setTitle("选择周数(目前周一作为第一天)");
 
         final NumberPicker numberPicker = new NumberPicker(this);
         numberPicker.setMaxValue(16);

@@ -418,7 +418,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean set_week_info(final String json_data, final boolean update_local_token){
         AlertDialog.Builder builder =
         new AlertDialog.Builder(this);
-        builder.setTitle("输入当前周数");
+        builder.setTitle("设定当前周数(目前按照周一作为第一天)");
 
         final NumberPicker numberPicker = new NumberPicker(this);
         numberPicker.setMaxValue(16);
