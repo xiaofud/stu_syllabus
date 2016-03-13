@@ -117,6 +117,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private BannerPagerAdapter bannerPagerAdapter;
 
 
+    private boolean hasDisplayed = false;
+
     private boolean autoScroll = true;
 //    private int banner_index;   // 循环播放的图片的下标
 
@@ -738,6 +740,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Thread scroll_thread = new Thread(new Runnable() {
             @Override
             public void run() {
+                Log.d("switch", "thread started!");
                 while(autoScroll){
                     try {
                         Thread.sleep(2500);
@@ -756,6 +759,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                     });
                 }
+                Log.d("switch", "thread quited");
             }
         });
         scroll_thread.start();
@@ -816,7 +820,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d("banner", "失败缓存banner文件");
             }
             // 开启循环播放图片
-            auto_scroll();
+            if (!hasDisplayed)
+                auto_scroll();
 //            Toast.makeText(MainActivity.this, files.toString(), Toast.LENGTH_SHORT).show();
         }else{
             Toast.makeText(MainActivity.this, "文件下载失败,请查看日志", Toast.LENGTH_SHORT).show();
@@ -828,6 +833,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 清空一些数据
         if (fileList != null) {
             Log.d("banner", "清空已经显示的图片");
+            Log.d("switch", "重新下载了图片文件");
+//            viewPager.requestLayout();
             files.clear();
         }
         display_banners(files);

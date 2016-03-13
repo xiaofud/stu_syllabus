@@ -10,7 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.hjsmallfly.syllabus.helpers.FileOperation;
 import com.hjsmallfly.syllabus.syllabus.R;
 
 import java.io.File;
@@ -74,24 +76,40 @@ public class BannerPagerAdapter extends PagerAdapter {
         else
             bitmap = BitmapFactory.decodeResource(context.getResources(), resource_id);
 
-        // -----获取屏幕信息------
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        windowManager.getDefaultDisplay().getMetrics(displaymetrics);
+        // 如果图片不完整或者不是图片文件, 可能会出现null
+
+        if (bitmap != null) {
+            // -----获取屏幕信息------
+            DisplayMetrics displaymetrics = new DisplayMetrics();
+            WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            windowManager.getDefaultDisplay().getMetrics(displaymetrics);
 //        int height = displaymetrics.heightPixels;
-        int width = displaymetrics.widthPixels;
-        // -----获取屏幕信息------
-        // 计算图片原先的比例
-        float photo_ratio = (float) bitmap.getWidth() / bitmap.getHeight();
-        // 以屏幕的宽度作为图片的新宽度
-        int new_width = width;
-        // 根据比例计算出相应的高度
-        int new_height = (int) (width / photo_ratio);
-        // 生成新的图片
-        bitmap = Bitmap.createScaledBitmap(bitmap, new_width, new_height, true);
-        imageView.setImageBitmap(bitmap);
-        container.addView(viewGroup);
-        return viewGroup;
+            int width = displaymetrics.widthPixels;
+            // -----获取屏幕信息------
+            // 计算图片原先的比例
+            float photo_ratio = (float) bitmap.getWidth() / bitmap.getHeight();
+            // 以屏幕的宽度作为图片的新宽度
+            int new_width = width;
+            // 根据比例计算出相应的高度
+            int new_height = (int) (width / photo_ratio);
+            // 生成新的图片
+            bitmap = Bitmap.createScaledBitmap(bitmap, new_width, new_height, true);
+            imageView.setImageBitmap(bitmap);
+            container.addView(viewGroup);
+            return viewGroup;
+        }else{
+
+            // 会运行到这里说明很可能数据出了问题, 删除之前缓存的banner信息
+            FileOperation.delete_file(context, context.getString(R.string.BANNER_CACHED_FILE));
+
+            // 设置默认图片
+//            imageView.setImageResource(R.drawable.logo);
+            Bitmap bitmap1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.logo_w);
+//            Toast.makeText(BannerPagerAdapter.this.context, "运行到这行啦!", Toast.LENGTH_SHORT).show();
+            imageView.setImageBitmap(bitmap1);
+            container.addView(viewGroup);
+            return viewGroup;
+        }
     }
 
 
