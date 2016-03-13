@@ -619,23 +619,28 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 
         Matrix matrix = new Matrix();
 
-        float scale = (dayBitmap.getHeight() + syllabusBitmap.getHeight())*1.0f / wall_paper.getHeight();
+        float scale = 1.0f;
+        if (wall_paper != null) {
+            scale = (dayBitmap.getHeight() + syllabusBitmap.getHeight()) * 1.0f / wall_paper.getHeight();
 
-        Log.d("Scale", dayBitmap.getHeight() + "");
-        Log.d("Scale", syllabusBitmap.getHeight() + "");
-        Log.d("Scale", wall_paper.getHeight() + "");
+            Log.d("Scale", dayBitmap.getHeight() + "");
+            Log.d("Scale", syllabusBitmap.getHeight() + "");
+            //Log.d("Scale", wall_paper.getHeight() + "");
 
-        matrix.postScale(scale, scale);
-
-        Bitmap resizeBmp = Bitmap.createBitmap(wall_paper, 0, 0, wall_paper.getWidth(), wall_paper.getHeight(), matrix, true);
-
+            matrix.postScale(scale, scale);
+        }
 
         Bitmap result = Bitmap.createBitmap(timeBitmap.getWidth() + syllabusBitmap.getWidth(),
-                Math.max(syllabusBitmap.getHeight() + dayBitmap.getHeight(), resizeBmp.getHeight()),
+                syllabusBitmap.getHeight() + dayBitmap.getHeight(),
                 Bitmap.Config.ARGB_8888);
 
         Canvas canvas = new Canvas(result);
-        canvas.drawBitmap(resizeBmp, 0, 0, null);
+        if (wall_paper != null) {
+            Bitmap resizeBmp = Bitmap.createBitmap(wall_paper, 0, 0, wall_paper.getWidth(), wall_paper.getHeight(), matrix, true);
+            canvas.drawBitmap(resizeBmp, 0, 0, null);
+        }else {
+            canvas.drawARGB(255,255,255,255);
+        }
         canvas.drawBitmap(dayBitmap, 0, 0, null);
         canvas.drawBitmap(timeBitmap, 0, dayBitmap.getHeight(), null);
         canvas.drawBitmap(syllabusBitmap, timeBitmap.getWidth(), dayBitmap.getHeight(), null);
@@ -643,7 +648,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 
         MediaStore.Images.Media.insertImage(getContentResolver(), result, "syllabus", "description");
 
-        Toast.makeText(SyllabusActivity.this,"已保存到图库",Toast.LENGTH_SHORT).show();
+        Toast.makeText(SyllabusActivity.this, "已保存到图库", Toast.LENGTH_SHORT).show();
 
     }
 
