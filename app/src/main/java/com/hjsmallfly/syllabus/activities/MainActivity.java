@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -795,7 +796,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         BannerGetter bannerGetter = new BannerGetter(this);
         Log.d("banner", "从服务器拉取新的banner信息");
-        bannerGetter.execute(WebApi.get_server_address() + getString(R.string.get_banner_api));
+        bannerGetter.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, WebApi.get_server_address() + getString(R.string.get_banner_api));
     }
 
     private void display_banners(List<File> files){

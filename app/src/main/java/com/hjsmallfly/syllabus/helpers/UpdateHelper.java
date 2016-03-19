@@ -74,7 +74,7 @@ public class UpdateHelper {
 
     public void check_for_update(){
         CheckUpdate task = new CheckUpdate(WebApi.get_server_address() + context.getString(R.string.version_control_address));
-        task.execute();
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public void download(String address, SyllabusVersion version){
