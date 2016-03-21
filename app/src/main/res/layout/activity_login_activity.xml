@@ -62,7 +62,7 @@
                 android:layout_marginRight="13dp"
                 card_view:cardBackgroundColor="#58ffffff"
                 card_view:cardCornerRadius="2dp"
-                card_view:cardElevation="3dp">
+                card_view:cardElevation="0dp">
 
                 <!--android:drawableLeft="@drawable/account"-->
                 <EditText

@@ -1,82 +1,78 @@
-<LinearLayout
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f1eaea"
-    >
+    android:orientation="vertical">
     <!--android:background="@drawable/login_background"-->
 
     <com.hjsmallfly.syllabus.customviews.WrapContentHeightViewPager
         android:id="@+id/bannerViewPager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="wrap_content" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/input_area"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:orientation="vertical"
-        android:id="@+id/input_area"
         tools:context=".MainActivity">
 
 
-
-            <!--android:background="#46ffffff"-->
+        <!--android:background="#46ffffff"-->
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:orientation="vertical">
             <!--android:background="@android:color/white"-->
             <!--<LinearLayout-->
 
-                <!--android:focusableInTouchMode="true"-->
-                <!--android:orientation="horizontal"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_marginTop="4dp"-->
-                <!--android:layout_height="wrap_content">-->
+            <!--android:focusableInTouchMode="true"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_marginTop="4dp"-->
+            <!--android:layout_height="wrap_content">-->
 
 
-                <!--&lt;!&ndash;android:background="@drawable/text_shape"&ndash;&gt;-->
-                <!--<EditText-->
-                    <!--android:id="@+id/username_edit"-->
-                    <!--android:hint="@string/username_hint"-->
-                    <!--android:singleLine="true"-->
-                    <!--android:layout_margin="1dp"-->
-                    <!--android:layout_weight="3"-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="wrap_content" />-->
+            <!--&lt;!&ndash;android:background="@drawable/text_shape"&ndash;&gt;-->
+            <!--<EditText-->
+            <!--android:id="@+id/username_edit"-->
+            <!--android:hint="@string/username_hint"-->
+            <!--android:singleLine="true"-->
+            <!--android:layout_margin="1dp"-->
+            <!--android:layout_weight="3"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content" />-->
 
 
             <!--</LinearLayout>-->
 
             <!--<LinearLayout-->
-                <!--android:orientation="horizontal"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content">-->
+            <!--android:orientation="horizontal"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
 
-                <!--<EditText-->
-                    <!--android:id="@+id/password_edit"-->
+            <!--<EditText-->
+            <!--android:id="@+id/password_edit"-->
 
-                    <!--android:layout_weight="3"-->
-                    <!--android:hint="@string/password_hint"-->
-                    <!--android:singleLine="true"-->
-                    <!--android:layout_margin="1dp"-->
-                    <!--android:inputType="textPassword"-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="wrap_content" />-->
+            <!--android:layout_weight="3"-->
+            <!--android:hint="@string/password_hint"-->
+            <!--android:singleLine="true"-->
+            <!--android:layout_margin="1dp"-->
+            <!--android:inputType="textPassword"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content" />-->
 
-                <!--&lt;!&ndash;<Spinner&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:gravity="center"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:id="@+id/semester_spinner"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_weight="3"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_width="0dp"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_height="wrap_content"/>&ndash;&gt;-->
+            <!--&lt;!&ndash;<Spinner&ndash;&gt;-->
+            <!--&lt;!&ndash;android:gravity="center"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:id="@+id/semester_spinner"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_weight="3"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="0dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="wrap_content"/>&ndash;&gt;-->
 
 
             <!--</LinearLayout>-->
@@ -85,202 +81,289 @@
 
 
         <LinearLayout
-            android:visibility="gone"
             android:id="@+id/login_button"
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <EditText
-                android:visibility="gone"
                 android:id="@+id/debug_ip_edit"
-                android:text="@string/server_ip"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="@string/server_ip"
+                android:visibility="gone" />
 
             <!--android:background="@drawable/button_shape2"-->
             <!--<Button-->
-                <!--android:textSize="22sp"-->
-                <!--android:background="@android:color/holo_blue_light"-->
-                <!--android:id="@+id/query_syllabus_button"-->
-                <!--android:textColor="#ffffff"-->
-                <!--android:text="@string/query_syllabus_button"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content" />-->
+            <!--android:textSize="22sp"-->
+            <!--android:background="@android:color/holo_blue_light"-->
+            <!--android:id="@+id/query_syllabus_button"-->
+            <!--android:textColor="#ffffff"-->
+            <!--android:text="@string/query_syllabus_button"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content" />-->
 
         </LinearLayout>
 
     </LinearLayout>
 
     <ScrollView
-        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="0dp">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <LinearLayout
 
-            android:layout_marginTop="16dp"
-
-            android:orientation="vertical"
             android:id="@+id/function_area"
+
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                card_view:cardBackgroundColor="@android:color/white"
+                card_view:cardCornerRadius="6dp"
+                card_view:cardElevation="1dp">
+
+                <LinearLayout
+                    android:paddingLeft="10dp"
+                    android:id="@+id/query_syllabus_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_margin="10dp"
+                        android:src="@mipmap/syllabus_icon2" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="@string/query_syllabus_button_string"
+                        android:textColor="#2B2B2B"
+                        android:textSize="22sp" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
 
             <!-- 各类功能按钮 -->
 
+
             <LinearLayout
-                
-                android:layout_margin="2dp"
-                android:orientation="horizontal"
+
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
-                <Button
-                    
-                    android:layout_margin="2dp"
-                    android:text="@string/query_syllabus_button_string"
-                    android:id="@+id/query_syllabus_button"
-                    android:textColor="@android:color/white"
-                    android:textSize="17sp"
-                    android:layout_weight="3"
-                    android:background="@android:color/holo_blue_light"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    card_view:cardCornerRadius="6dp"
+                    card_view:cardElevation="1dp">
 
-                <Button
-                    
-                    android:text="@string/login_wifi_button_string"
-                    android:id="@+id/login_wifi_button"
-                    android:layout_margin="2dp"
-                    android:textColor="@android:color/white"
-                    android:textSize="17sp"
-                    android:layout_weight="2"
-                    android:background="@android:color/holo_green_light"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
+                    <LinearLayout
+                        android:id="@+id/login_wifi_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="5dp">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/wifi_icon" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:gravity="center"
+                            android:text="登录流量验证"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    card_view:cardCornerRadius="6dp"
+                    card_view:cardElevation="1dp">
+
+                    <LinearLayout
+                        android:id="@+id/query_oa_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="5dp">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/oa_logo" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:gravity="center"
+                            android:text="办公自动化"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    card_view:cardCornerRadius="6dp"
+                    card_view:cardElevation="1dp">
+
+                    <LinearLayout
+                        android:id="@+id/school_activity_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="5dp">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/stu_logo" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:gravity="center"
+                            android:text="校园动态"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
 
             </LinearLayout>
 
             <LinearLayout
-                
-                android:layout_margin="2dp"
-                android:orientation="horizontal"
+
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/query_oa_button"
-                    
-                    android:text="@string/query_os_system_button_string"
-                    android:layout_margin="2dp"
-                    android:textColor="@android:color/white"
-                    android:textSize="17sp"
-                    android:layout_weight="2"
-                    android:background="@android:color/holo_purple"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    card_view:cardCornerRadius="6dp"
+                    card_view:cardElevation="1dp">
 
-                <Button
-                    android:id="@+id/school_activity_button"
-                    
-                    android:text="@string/whatsup_in_school_button_string"
-                    android:layout_margin="2dp"
-                    android:textColor="@android:color/white"
-                    android:textSize="17sp"
-                    android:layout_weight="3"
-                    android:background="#E05295"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:baselineAligned="false"
-                android:layout_margin="2dp"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <FrameLayout
-                    android:layout_margin="2dp"
-                    style="?android:attr/buttonStyle"
-                    android:background="#d990dc"
-                    android:layout_weight="3"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" >
-
-                    <TextView
+                    <LinearLayout
                         android:id="@+id/query_grade_text_view"
-                        android:background="@null"
-                        android:textColor="@android:color/white"
-                        style="?android:attr/buttonStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:textSize="17sp"
-                        android:clickable="true"
-                        android:drawableLeft="@drawable/query_grade"
-                        android:focusable="false"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:gravity="center"
-                        android:minHeight="0dp"
-                        android:minWidth="0dp"
-                        android:text="@string/grade_button_string" />
-                </FrameLayout>
+                        android:orientation="vertical"
+                        android:padding="5dp">
 
-                <!--<Button-->
-                <!--android:text="考试安排"-->
-                <!--android:textColor="@android:color/white"-->
-                <!--android:textSize="17sp"-->
-                <!--android:layout_weight="2"-->
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/gpa_icon" />
 
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="wrap_content" />-->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:gravity="center"
+                            android:text="成绩单"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
 
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    card_view:cardCornerRadius="6dp"
+                    card_view:cardElevation="1dp">
 
-                <FrameLayout
-                    android:layout_margin="2dp"
-                    style="?android:attr/buttonStyle"
-                    android:background="#ff0051"
-                    android:layout_weight="2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" >
-
-                    <!--android:drawableLeft="@android:drawable/ic_menu_edit"-->
-                    <TextView
+                    <LinearLayout
                         android:id="@+id/query_exam_text_view"
-                        android:textColor="@android:color/white"
-                        android:background="@null"
-                        style="?android:attr/buttonStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:textSize="17sp"
-                        android:clickable="true"
-                        android:focusable="false"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:gravity="center"
-                        android:minHeight="0dp"
-                        android:minWidth="0dp"
-                        android:text="@string/exam_button_string" />
-                </FrameLayout>
+                        android:orientation="vertical"
+                        android:padding="5dp">
 
-            </LinearLayout>
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/grade_icon" />
 
-            <LinearLayout
-                android:layout_margin="2dp"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:gravity="center"
+                            android:text="考试"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
 
-                <Button
-                    android:id="@+id/back_to_login_button"
-                    android:text="@string/back_to_login_string"
-                    android:layout_margin="2dp"
-                    android:textColor="@android:color/white"
-                    android:textSize="17sp"
-                    android:layout_weight="2"
-                    android:background="#f11e64"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    card_view:cardCornerRadius="6dp"
+                    card_view:cardElevation="1dp">
+
+                    <LinearLayout
+                        android:id="@+id/back_to_login_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="5dp">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/logout_icon" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:gravity="center"
+                            android:text="注销"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
 
             </LinearLayout>
 
@@ -291,41 +374,41 @@
     </ScrollView>
 
     <TextView
-        android:visibility="gone"
-        android:textSize="15sp"
         android:id="@+id/help_message_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/year_semester_selection"
-        android:gravity="right"
         android:layout_marginRight="10dp"
+        android:gravity="right"
         android:text="@string/help_message"
         android:textColor="@android:color/holo_red_light"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:textSize="15sp"
+        android:visibility="gone" />
 
     <LinearLayout
+        android:elevation="1dp"
+        android:id="@+id/year_semester_selection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
-        android:id="@+id/year_semester_selection"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:orientation="horizontal">
 
         <Spinner
-            android:gravity="center"
             android:id="@+id/year_spinner"
-            android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center" />
 
         <Spinner
-            android:gravity="center"
             android:id="@+id/semester_spinner"
-            android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center" />
 
     </LinearLayout>
-
 
 
 </LinearLayout>

@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -95,13 +96,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Spinner semester_spinner;
 
     // ----------功能区域-----------
-    private Button query_button;
-    private Button login_wifi_button;
-    private Button oa_button;
-    private Button school_activity_button;
-    private Button logout_button;
-    private TextView grade_text_view_as_button;
-    private TextView exam_text_view_as_button;
+    private LinearLayout query_button_layout;
+    private LinearLayout login_wifi_button_layout;
+    private LinearLayout oa_button_layout;
+    private LinearLayout school_activity_button_layout;
+    private LinearLayout logout_button_layout;
+    private LinearLayout grade_button_layout;
+    private LinearLayout exam_button_layout;
     // ----------功能区域-----------
 
     private EditText debug_ip_edit;
@@ -225,13 +226,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         semester_spinner = (Spinner) findViewById(R.id.semester_spinner);
 
         // ----------功能区域-----------
-        query_button = (Button) findViewById(R.id.query_syllabus_button);
-        login_wifi_button = (Button) findViewById(R.id.login_wifi_button);
-        oa_button = (Button) findViewById(R.id.query_oa_button);
-        school_activity_button = (Button) findViewById(R.id.school_activity_button);
-        grade_text_view_as_button = (TextView) findViewById(R.id.query_grade_text_view);
-        exam_text_view_as_button = (TextView) findViewById(R.id.query_exam_text_view);
-        logout_button = (Button) findViewById(R.id.back_to_login_button);
+        query_button_layout = (LinearLayout) findViewById(R.id.query_syllabus_button);
+        login_wifi_button_layout = (LinearLayout) findViewById(R.id.login_wifi_button);
+        oa_button_layout = (LinearLayout) findViewById(R.id.query_oa_button);
+        school_activity_button_layout = (LinearLayout) findViewById(R.id.school_activity_button);
+        grade_button_layout = (LinearLayout) findViewById(R.id.query_grade_text_view);
+        exam_button_layout = (LinearLayout) findViewById(R.id.query_exam_text_view);
+        logout_button_layout = (LinearLayout) findViewById(R.id.back_to_login_button);
         // ----------功能区域-----------
 
 
@@ -276,9 +277,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 选项卡
 
         // listener
-        query_button.setOnClickListener(this);
+        query_button_layout.setOnClickListener(this);
 
-        login_wifi_button.setOnClickListener(new View.OnClickListener() {
+        login_wifi_button_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                String username = username_edit.getText().toString().trim();
@@ -291,11 +292,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        oa_button.setOnClickListener(this);
-        school_activity_button.setOnClickListener(this);
-        grade_text_view_as_button.setOnClickListener(this);
-        exam_text_view_as_button.setOnClickListener(this);
-        logout_button.setOnClickListener(this);
+        oa_button_layout.setOnClickListener(this);
+        school_activity_button_layout.setOnClickListener(this);
+        grade_button_layout.setOnClickListener(this);
+        exam_button_layout.setOnClickListener(this);
+        logout_button_layout.setOnClickListener(this);
 
         semester_spinner.setOnItemSelectedListener(this);
     }
@@ -520,7 +521,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         // 禁用按钮
-        query_button.setEnabled(false);
+        query_button_layout.setEnabled(false);
 
 //            {"SPRING", "SUMMER", "AUTUMN"}
 
@@ -580,7 +581,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void deal_with_lessons(String raw_data) {
 
         // 恢复按钮
-        query_button.setEnabled(true);
+        query_button_layout.setEnabled(true);
 
         if (raw_data.isEmpty()) {
             Toast.makeText(MainActivity.this, "没能成功获取课表数据", Toast.LENGTH_SHORT).show();
