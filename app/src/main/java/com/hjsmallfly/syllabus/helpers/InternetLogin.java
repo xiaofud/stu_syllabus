@@ -35,7 +35,7 @@ public class InternetLogin {
         InternetLogin login = new InternetLogin(context, username, password);
 
         LoginTask loginTask = login.new LoginTask();
-        loginTask.execute();
+        loginTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     private class LoginTask extends AsyncTask<Void, Void, String>{
