@@ -19,6 +19,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -156,10 +157,16 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 
                 LinearLayout ll = new LinearLayout(SyllabusActivity.this);
                 TextView textView = new TextView(SyllabusActivity.this);
+                CardView cardView = (CardView) ViewGroup.inflate(SyllabusActivity.this, R.layout.syllabus_card, null);
+                cardView.addView(textView, new CardView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                cardView.setAlpha(0.0f);
+
+
                 textView.setTextSize(11);
                 textView.setTextColor(Color.WHITE);
                 textView.setWidth(defaultGridWidth);
                 textView.setHeight(defaultGridHeight);
+
                 ll.setMinimumWidth(defaultLLWidth);
                 ll.setMinimumHeight(defaultLLHeight);
                 ll.setGravity(Gravity.CENTER);
@@ -202,14 +209,10 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 //                    ));
                     //textView.setBackground(new ColorDrawable(lesson.colorID));
 
-                    float roundR = 15.0f;
-                    float[] outerR = new float[]{roundR, roundR, roundR, roundR, roundR, roundR, roundR, roundR};
-
-
-                    Shape shape = new
-                            RoundRectShape(outerR, null, null);
-
-                    textView.setBackground(new LessonItemShapeDrawable(shape, lesson.colorID));
+                    cardView.setAlpha(1.0f);
+//                    textView.setAlpha(0.0f);
+                    textView.setBackgroundColor(lesson.colorID);
+//                    cardView.setPreventCornerOverlap(true);
 
                     final Lesson finalLesson = lesson;
                     ll.setOnClickListener(new View.OnClickListener() {
@@ -221,11 +224,8 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 }
 
                 //ll.setPadding(5,5,5,5);
-                ll.addView(textView);
-                LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) textView.getLayoutParams();
-                lp.height = ViewGroup.LayoutParams.MATCH_PARENT;
-                lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                textView.requestLayout();
+
+                ll.addView(cardView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
 
                 myClassTable.addView(ll, new GridLayout.LayoutParams(rowSpec, columnSpec));
@@ -642,8 +642,8 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         if (wall_paper != null) {
             Bitmap resizeBmp = Bitmap.createBitmap(wall_paper, 0, 0, wall_paper.getWidth(), wall_paper.getHeight(), matrix, true);
             canvas.drawBitmap(resizeBmp, 0, 0, null);
-        }else {
-            canvas.drawARGB(255,255,255,255);
+        } else {
+            canvas.drawARGB(255, 255, 255, 255);
         }
         canvas.drawBitmap(dayBitmap, 0, 0, null);
         canvas.drawBitmap(timeBitmap, 0, dayBitmap.getHeight(), null);
