@@ -275,7 +275,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getWindow().setEnterTransition(new Fade());
+                getWindow().setEnterTransition(new Slide().setDuration(200));
         }
 
         setContentView(R.layout.activity_syllabus);
@@ -309,7 +309,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 
         clicked_lesson = lesson;
 //        Toast.makeText(SyllabusActivity.this, lesson.days.toString(), Toast.LENGTH_SHORT).show();
-        Intent tab_intent = new Intent(this, MyTabActivity.class);
+        Intent tab_intent = new Intent(this, ShowClassInfoActivity.class);
         startActivity(tab_intent);
     }
 

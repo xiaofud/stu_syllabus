@@ -660,11 +660,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     View img =  findViewById(R.id.oa_img);
-                    View text = findViewById(R.id.oa_text);
+//                    View text = findViewById(R.id.oa_text);
                     startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(
                             MainActivity.this,
-                            Pair.create(img,"oa_logo_share"),
-                            Pair.create(text,"oa_text_share")).toBundle());
+                            Pair.create(img,"oa_logo_share")).toBundle());
                 } else {
                     startActivity(intent);
                 }

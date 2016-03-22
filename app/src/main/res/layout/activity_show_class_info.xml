@@ -22,6 +22,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:text="算法设计与分析"
                 android:id="@+id/classNameTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -29,6 +30,7 @@
                 android:textSize="25sp" />
 
             <TextView
+                android:hint="daidaijie"
                 android:id="@+id/teacherNameTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -36,6 +38,7 @@
                 android:layout_marginTop="10dp" />
 
             <TextView
+                android:hint="开课班号:84810"
                 android:id="@+id/classNoTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -54,6 +57,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:hint="1-16"
                 android:id="@+id/beginTimeTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -61,6 +65,7 @@
                 android:layout_marginTop="10dp" />
 
             <TextView
+                android:hint="E203"
                 android:id="@+id/classRoomTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -74,6 +79,12 @@
 
     </LinearLayout>
 
+    <Button
+        android:id="@+id/show_student"
+        android:text="查看同学"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="match_parent"

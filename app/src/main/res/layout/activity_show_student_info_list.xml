@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/holo_blue_light"
+            android:gravity="center"
+            android:text="共同参加"
+            android:textColor="@android:color/white"
+            android:textSize="25sp" />
+
+        <Button
+            android:textSize="20sp"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_gravity="left"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@android:color/holo_blue_light"
+            android:onClick="back"
+            android:text="&lt;"
+            android:textColor="@android:color/white" />
+
+        <ImageButton
+            android:id="@+id/showStudentQuery"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="right"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/query" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/studentQueryLinearLayout"
+        android:visibility="gone"
+        android:orientation="vertical"
+        android:background="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/studentQueryEditText"
+                android:textSize="15sp"
+                android:singleLine="true"
+                android:hint="输入你要搜索的名字/学号/专业"
+                android:layout_marginLeft="10dp"
+                android:maxEms="11"
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/studentQueryButton"
+                android:layout_margin="5dp"
+                android:text="搜索"
+                android:textSize="20sp"
+                android:textColor="@android:color/white"
+                android:layout_weight="1"
+                android:background="@drawable/button_shape"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_margin="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/findForwardButton"
+                android:layout_margin="5dp"
+                android:text="向上查找"
+                android:textSize="20sp"
+                android:textColor="@android:color/white"
+                android:layout_weight="1"
+                android:background="@drawable/button_shape"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/findNextButton"
+                android:layout_margin="5dp"
+                android:text="向下查找"
+                android:textSize="20sp"
+                android:textColor="@android:color/white"
+                android:layout_weight="1"
+                android:background="@drawable/button_shape"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ListView
+        android:background="#666"
+        android:id="@+id/studentInfoListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </ListView>
+
+</LinearLayout>

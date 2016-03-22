@@ -23,6 +23,7 @@
     <string name="get_user_information_api">/api/user/</string>
     <string name="change_user_information_api">/api/v1.0/modify_user</string>
     <string name="delete_api">/api/v1.0/delete/</string>
+    <string name="students_api">/api/v1.0/member</string>
     <string name="get_exam_list_api">/exam</string>
     <string name="get_grades_api">/grade</string>
     <string name="get_oa_list_api">/oa</string>
