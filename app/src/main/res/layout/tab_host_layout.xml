@@ -48,7 +48,7 @@
                         android:gravity="start"
                         android:inputType="textMultiLine"
                         android:minLines="20"
-                        android:background="@drawable/input_box"
+                        android:background="#fff"
                         android:hint="个人备忘录"
                         android:textColor="#ffffff"
                         android:layout_width="match_parent"
@@ -82,7 +82,7 @@
                         android:layout_height="wrap_content" />
                     <EditText
                         android:id="@+id/last_homework"
-                        android:background="@drawable/input_box"
+                        android:background="#fff"
                         android:editable="false"
                         android:hint="这里显示最新的作业信息"
                         android:textSize="12sp"

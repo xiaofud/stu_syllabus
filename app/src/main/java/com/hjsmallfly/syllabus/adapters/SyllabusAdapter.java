@@ -25,9 +25,6 @@ public class SyllabusAdapter extends RecyclerView.Adapter<SyllabusAdapter.ViewHo
 
     private int text_color = Color.WHITE;
 
-    public static final int[] class_cell_drawable = {R.drawable.blue_cell, R.drawable.brown_cell, R.drawable.deep_red_cell, R.drawable.green_cell
-        , R.drawable.input_box, R.drawable.red_cell, R.drawable.purple_cell};
-
     public static final Random rand = new Random(System.currentTimeMillis());
 
 //    public static int get_random_cell(){

@@ -74,14 +74,14 @@ public class DiscussionAdapter extends ArrayAdapter<Discussion> {
 
         int res_id;
 
-        if (!discussion.publisher.equals(MainActivity.cur_username)) {
-            res_id = R.drawable.left_msg;
-//            params.gravity = Gravity.LEFT;
-        }
-        else {
-            res_id = R.drawable.right_msg;
-//            params.gravity = Gravity.RIGHT;
-        }
+//        if (!discussion.publisher.equals(MainActivity.cur_username)) {
+//            res_id = R.drawable.left_msg;
+////            params.gravity = Gravity.LEFT;
+//        }
+//        else {
+//            res_id = R.drawable.right_msg;
+////            params.gravity = Gravity.RIGHT;
+//        }
 
 //        view.setBackgroundResource(res_id);
         // 这个貌似在很多机器会导致程序闪退。。。注意

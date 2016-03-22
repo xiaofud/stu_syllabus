@@ -132,7 +132,6 @@ public class ClassParser {
 //            Toast.makeText(context, "the token is " + token, Toast.LENGTH_SHORT).show();
 //            Log.d(MainActivity.TAG, classes.length() + " classes");
             // 得到颜色的种类数
-            int color_counts = SyllabusAdapter.class_cell_drawable.length;
             // 颜色 指针
             int color_index = -1;
             int colorIndex = 0;
@@ -161,9 +160,6 @@ public class ClassParser {
                 cls.duration = duration;
                 cls.credit = credit;
                 cls.colorID = bgColor[colorIndex++ % bgColor.length];
-                // 会重复使用之前的色彩
-                color_index = (color_index + 1) % color_counts;
-                cls.color_code = SyllabusAdapter.class_cell_drawable[color_index];
 
 //                Log.d(MainActivity.TAG, duration);
 
