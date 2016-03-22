@@ -1,42 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f5f5f5"
+    android:background="#F1DCBF"
     android:focusableInTouchMode="true"
+    android:orientation="vertical"
     tools:context="com.hjsmallfly.syllabus.activities.OAActivity">
 
-    <ListView
-        android:layout_weight="1"
-        android:id="@+id/oa_list_view"
-        android:dividerHeight="7dp"
-        android:divider="@android:color/transparent"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp" />
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/oa_logo"
+            android:transitionName="oa_logo_share" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20dp"
+            android:text="办公自动化"
+            android:textColor="#AF7842"
+            android:textSize="25sp"
+            android:transitionName="oa_text_share" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/oa_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="3dp" />
 
 
     <LinearLayout
-        android:layout_margin="4dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp">
 
         <EditText
             android:id="@+id/oa_page_index_edit"
-            android:hint="页码"
-            android:numeric="integer"
-            android:gravity="center"
-            android:layout_weight="1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:hint="页码"
+            android:inputType="number" />
+
 
         <Button
-            android:textColor="@android:color/white"
-            android:background="@android:color/holo_blue_light"
             android:id="@+id/oa_go_to_page_button"
-            android:text="去"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="@android:color/holo_blue_light"
+            android:text="GO"
+            android:textColor="@android:color/white" />
 
     </LinearLayout>
 
@@ -45,26 +70,25 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:textColor="@android:color/white"
-            android:background="@android:color/holo_blue_light"
             android:id="@+id/oa_pre_page_button"
-            android:text="上一页"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_margin="2dp"
             android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
+            android:background="@android:color/holo_blue_light"
+            android:text="上一页"
+            android:textColor="@android:color/white" />
 
 
         <Button
-            android:textColor="@android:color/white"
-            android:background="@android:color/holo_blue_light"
             android:id="@+id/oa_next_page_button"
-            android:text="下一页"
-            android:layout_weight="1"
-            android:layout_margin="2dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:background="@android:color/holo_blue_light"
+            android:text="下一页"
+            android:textColor="@android:color/white" />
 
     </LinearLayout>
 

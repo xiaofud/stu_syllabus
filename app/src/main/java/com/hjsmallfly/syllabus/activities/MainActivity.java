@@ -1,15 +1,18 @@
 package com.hjsmallfly.syllabus.activities;
 
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
@@ -154,9 +158,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         // 第一次强行显示那个界面
-        if ( has_saved_user() && !FileOperation.hasFile(this, LoginActivity.VERIFY_FILE_NAME) ){
+        if (has_saved_user() && !FileOperation.hasFile(this, LoginActivity.VERIFY_FILE_NAME)) {
             String[] user_info = FileOperation.load_user(this, USERNAME_FILE, PASSWORD_FILE);
-            if (user_info != null){
+            if (user_info != null) {
                 LoginActivity.setted_username = user_info[0];
                 LoginActivity.setted_password = user_info[1];
                 Intent loginIntent = new Intent(this, LoginActivity.class);
@@ -239,11 +243,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         debug_ip_edit = (EditText) findViewById(R.id.debug_ip_edit);
     }
 
-    private String[] load_saved_user(){
+    private String[] load_saved_user() {
         return FileOperation.load_user(this, USERNAME_FILE, PASSWORD_FILE);
     }
 
-    private boolean has_saved_user(){
+    private boolean has_saved_user() {
         return FileOperation.hasFile(this, USERNAME_FILE);
     }
 
@@ -288,7 +292,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                    Toast.makeText(MainActivity.this, "请输入账号和密码", Toast.LENGTH_SHORT).show();
 //                    return;
 //                }
-                InternetLogin.login_to_internet(MainActivity.this,cur_username,cur_password);
+                InternetLogin.login_to_internet(MainActivity.this, cur_username, cur_password);
             }
         });
 
@@ -365,7 +369,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     String[] info = default_file_name.split("_");
                     cur_username = info[0];
 //                    if (!cur_username.equals(username_edit.getText().toString()))
-                        // 说明用户已经登录了其他账号
+                    // 说明用户已经登录了其他账号
 //                        return;
                     cur_year_string = info[1];
                     cur_semester = StringDataHelper.semester_to_int(info[2]);
@@ -374,7 +378,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     // 将年份和学期的选项设置为默认状态
                     semester_spinner.setSelection(StringDataHelper.semester_to_selection_index(cur_semester));
                     for (int i = 0; i < YEARS.length; ++i)
-                        if (cur_year_string.equals(YEARS[i])){
+                        if (cur_year_string.equals(YEARS[i])) {
                             year_spinner.setSelection(i);
                             position = i;
                         }
@@ -417,9 +421,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private boolean set_week_info(final String json_data, final boolean update_local_token){
+    private boolean set_week_info(final String json_data, final boolean update_local_token) {
         AlertDialog.Builder builder =
-        new AlertDialog.Builder(this);
+                new AlertDialog.Builder(this);
         builder.setTitle("设定当前周数(目前按照周一作为第一天)");
 
         final NumberPicker numberPicker = new NumberPicker(this);
@@ -440,11 +444,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String content = date_string + "," + week;
 
                 String filename = FileOperation.generate_week_file(cur_username, cur_year_string, cur_semester + "");
-                if (FileOperation.save_to_file(MainActivity.this, filename, content)){
+                if (FileOperation.save_to_file(MainActivity.this, filename, content)) {
                     Toast.makeText(MainActivity.this, "设定当前周数为 " + week, Toast.LENGTH_SHORT).show();
                     MainActivity.initial_week = week;
                     MainActivity.initial_date = date_string;
-                }else{
+                } else {
                     Toast.makeText(MainActivity.this, "设置周数出错", Toast.LENGTH_SHORT).show();
                 }
                 parse_and_display(json_data, update_local_token);
@@ -458,12 +462,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     *
      * @return 字符串数组，[0] - date; [1] - 周数 或者 null
      */
-    private String[] get_week_info(){
+    private String[] get_week_info() {
         String week_filename = FileOperation.generate_week_file(cur_username, cur_year_string, cur_semester + "");
-        if (FileOperation.hasFile(this, week_filename)){
+        if (FileOperation.hasFile(this, week_filename)) {
             String content = FileOperation.read_from_file(this, week_filename);
             if (content != null) {
                 return content.split(",");
@@ -504,11 +507,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (json_data != null) {
             // 检查有没有设置周数
             String[] week_info = get_week_info();
-            if (week_info == null){
+            if (week_info == null) {
                 // 提示用户设定周数
                 set_week_info(json_data, false);
 
-            }else{
+            } else {
                 // 本地的文件里面的token可能是过期的
                 initial_date = week_info[0];
                 initial_week = Integer.parseInt(week_info[1]);
@@ -594,9 +597,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // 从网络拉过来的数据中 token 肯定是新的, 所以需要更新本地的token
         String[] week_info = get_week_info();
-        if (week_info == null && !raw_data.contains("ERROR")){
+        if (week_info == null && !raw_data.contains("ERROR")) {
             set_week_info(raw_data, true);
-        }else{
+        } else {
             if (week_info != null) {
                 MainActivity.initial_date = week_info[0];
                 MainActivity.initial_week = Integer.parseInt(week_info[1]);
@@ -632,7 +635,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 get_local_token();
 
                 Intent syllabus_activity = new Intent(MainActivity.this, SyllabusActivity.class);
-                startActivity(syllabus_activity);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    startActivity(syllabus_activity,
+                            ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
+                } else {
+                    startActivity(syllabus_activity);
+                }
 //                    Toast.makeText(MainActivity.this, "读取课表成功哟~~~~", Toast.LENGTH_SHORT).show();
 
             }
@@ -649,7 +657,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.query_oa_button:
                 Intent intent = new Intent(this, OAActivity.class);
-                startActivity(intent);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    View img =  findViewById(R.id.oa_img);
+                    View text = findViewById(R.id.oa_text);
+                    startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(
+                            MainActivity.this,
+                            Pair.create(img,"oa_logo_share"),
+                            Pair.create(text,"oa_text_share")).toBundle());
+                } else {
+                    startActivity(intent);
+                }
+
                 break;
             case R.id.school_activity_button:
                 Intent global_discuss_intent = new Intent(this, GlobalDiscussActivity.class);
@@ -667,7 +686,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(exam_intent);
                 break;
             case R.id.back_to_login_button:
-                if (cur_username != null && cur_password != null){
+                if (cur_username != null && cur_password != null) {
                     LoginActivity.setted_username = cur_username;
                     LoginActivity.setted_password = cur_password;
                     Intent login_intent = new Intent(this, LoginActivity.class);
@@ -738,12 +757,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * 循环播放图片
      */
-    private void auto_scroll(){
+    private void auto_scroll() {
         Thread scroll_thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 Log.d("switch", "thread started!");
-                while(autoScroll){
+                while (autoScroll) {
                     try {
                         Thread.sleep(2500);
                     } catch (InterruptedException e) {
@@ -753,7 +772,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         @Override
                         public void run() {
                             int count = bannerPagerAdapter.getCount();
-                            if (count != 0){
+                            if (count != 0) {
                                 int next = (viewPager.getCurrentItem() + 1) % count;
                                 viewPager.setCurrentItem(next, true);
                             }
@@ -767,28 +786,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         scroll_thread.start();
     }
 
-    private boolean isBannersCached(){
+    private boolean isBannersCached() {
         return FileOperation.hasFile(this, getString(R.string.BANNER_CACHED_FILE));
     }
 
     /**
      * 从服务器请求最新的banner信息(json)
      */
-    private void getLatestBannerInfo(){
-        if (isBannersCached()){
+    private void getLatestBannerInfo() {
+        if (isBannersCached()) {
 //             先读取缓存文件
             Log.d("banner", "优先读取缓存好了的文件");
             String banner_json = FileOperation.read_from_file(this, getString(R.string.BANNER_CACHED_FILE));
-            if (banner_json != null){
+            if (banner_json != null) {
                 // 设置类成员 banner_json_data
                 this.banner_json_data = banner_json;
                 List<Banner> banners = Banner.parse(banner_json);
                 List<String> filenames = Banner.toFilenames(banners);
                 List<File> files = loadCachedBannerFile("Syllabus", filenames);
-                if (files.size() > 0){
+                if (files.size() > 0) {
                     Log.d("banner", "使用缓存文件");
                     display_banners(files);
-                }else{  // 本地有缓存记录,但是图片被用户删除了
+                } else {  // 本地有缓存记录,但是图片被用户删除了
                     Log.d("banner", "缓存文件被删除了");
                     // 删除记录缓存的文件, 让app从服务器重新下载图片
                     FileOperation.delete_file(this, getString(R.string.BANNER_CACHED_FILE));
@@ -800,32 +819,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bannerGetter.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, WebApi.get_server_address() + getString(R.string.get_banner_api));
     }
 
-    private void display_banners(List<File> files){
-        if (files != null){
+    private void display_banners(List<File> files) {
+        if (files != null) {
             if (fileList == null)
                 fileList = new ArrayList<>();
             fileList.addAll(files);
 
-            if (bannerPagerAdapter == null){
+            if (bannerPagerAdapter == null) {
                 bannerPagerAdapter = new BannerPagerAdapter(this, fileList);
                 if (viewPager.getAdapter() == null)
                     viewPager.setAdapter(bannerPagerAdapter);
                 else
                     bannerPagerAdapter.notifyDataSetChanged();
-            }else{
+            } else {
                 bannerPagerAdapter.notifyDataSetChanged();
             }
             // 更新本地的banner缓存文件
-            if (FileOperation.save_to_file(this, getString(R.string.BANNER_CACHED_FILE), this.banner_json_data)){
+            if (FileOperation.save_to_file(this, getString(R.string.BANNER_CACHED_FILE), this.banner_json_data)) {
                 Log.d("banner", "成功缓存banner文件");
-            }else{
+            } else {
                 Log.d("banner", "失败缓存banner文件");
             }
             // 开启循环播放图片
             if (!hasDisplayed)
                 auto_scroll();
 //            Toast.makeText(MainActivity.this, files.toString(), Toast.LENGTH_SHORT).show();
-        }else{
+        } else {
             Toast.makeText(MainActivity.this, "文件下载失败,请查看日志", Toast.LENGTH_SHORT).show();
         }
     }
@@ -871,7 +890,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         List<String> filenames = Banner.toFilenames(this.bannerList);
 
         // 去读缓存的情况已经在之前处理过了
-        if (!use_cached_files){
+        if (!use_cached_files) {
             // 从网络上下载新的图片
             Log.d("banner", "没有缓存图片, 需要重新下载新的图片");
             DownloadTask downloadTask = new DownloadTask(urls, "Syllabus", filenames, this, 4000);
@@ -880,9 +899,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private List<File> loadCachedBannerFile(String directory, List<String> filenames){
+    private List<File> loadCachedBannerFile(String directory, List<String> filenames) {
         List<File> files = new ArrayList<>();
-        if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+        if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             Log.d("banner", "sdcard not mounted");
             return files;
         }
@@ -893,7 +912,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String file_save_path = sdCardRoot + directory;
         Log.d("banner", "file_save_path is: " + file_save_path);
 
-        for(int i = 0 ; i < filenames.size() ; ++i){
+        for (int i = 0; i < filenames.size(); ++i) {
             File file = new File(file_save_path, filenames.get(i));
             if (file.exists())
                 files.add(file);
@@ -904,7 +923,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void handle_get_response(String result) {
-        if (result.isEmpty()){
+        if (result.isEmpty()) {
 //            Toast.makeText(MainActivity.this, "未能成功获取图片", Toast.LENGTH_SHORT).show();
             Log.d("banner", "未能成功获取图片");
             return;
@@ -914,8 +933,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (bannerList != null && bannerList.size() > 0) {
 //            Toast.makeText(MainActivity.this, bannerList.get(0).getUrl(), Toast.LENGTH_SHORT).show();
             set_banners();
-        }
-        else {
+        } else {
 //            Toast.makeText(MainActivity.this, "服务器没有资源,或者解析失败", Toast.LENGTH_SHORT).show();
             Log.d("banner", "服务器没有资源,或者解析失败");
         }

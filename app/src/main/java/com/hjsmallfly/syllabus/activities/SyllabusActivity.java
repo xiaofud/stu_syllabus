@@ -20,6 +20,10 @@ import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.Slide;
+import android.transition.Visibility;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -27,6 +31,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
@@ -267,6 +272,12 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setEnterTransition(new Fade());
+        }
+
         setContentView(R.layout.activity_syllabus);
         getOverflowMenu();
         setupViews();

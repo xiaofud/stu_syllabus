@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -6,6 +6,7 @@
         <!--<item name="colorPrimary">#BE4C3C</item>-->
         <!--<item name="colorPrimaryDark">#BE4C3C</item>-->
         <item name="android:actionBarSize">45dp</item>
+        <item name="android:windowContentTransitions" tools:targetApi="lollipop">true</item>
     </style>
 
 
