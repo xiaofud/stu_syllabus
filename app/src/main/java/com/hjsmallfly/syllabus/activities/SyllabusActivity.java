@@ -13,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.graphics.drawable.shapes.Shape;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
@@ -162,6 +163,9 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 ll.setMinimumWidth(defaultLLWidth);
                 ll.setMinimumHeight(defaultLLHeight);
                 ll.setGravity(Gravity.CENTER);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ll.setElevation(5.0f);
+                }
 
                 textView.setHeight(defaultGridHeight);
                 GridLayout.Spec rowSpec = GridLayout.spec(j - 1);
