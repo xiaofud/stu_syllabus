@@ -106,6 +106,7 @@
         card_view:cardElevation="2dp">
 
         <TextView
+            android:transitionName="show_students_card"
             android:id="@+id/show_student"
             android:layout_width="match_parent"
             android:layout_height="50dp"

@@ -1,5 +1,6 @@
 package com.hjsmallfly.syllabus.activities;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -175,7 +176,16 @@ public class ShowClassInfoActivity extends AppCompatActivity {
                 studentInfoList = StudentParser.parser(raw_data);
                 Intent intent = new Intent(ShowClassInfoActivity.this, ShowStudentInfoListActivity.class);
                 intent.putExtra("studentInfoList", (Serializable) studentInfoList);
-                startActivity(intent);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(
+                            ShowClassInfoActivity.this,
+                            buttonTextView,
+                            "show_students_card").toBundle());
+                } else {
+                    startActivity(intent);
+                }
+
             } catch (JSONException e) {
                 studentInfoList = new ArrayList<>();
                 Toast.makeText(ShowClassInfoActivity.this, "查询失败,请检查网络连接", Toast.LENGTH_SHORT).show();

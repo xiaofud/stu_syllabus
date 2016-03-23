@@ -2,6 +2,7 @@ package com.hjsmallfly.syllabus.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +26,10 @@ public class ShowStudentInfoListActivity extends AppCompatActivity {
     List<StudentInfo> studentInfoList;
     ListView studentInfoListView;
 
-    ImageButton showStudentQuery;
+    FloatingActionButton showStudentQuery;
     LinearLayout studentQueryLinearLayout;
+
+    TextView students_title;
 
 
     EditText studentQueryEditText;
@@ -65,8 +68,11 @@ public class ShowStudentInfoListActivity extends AppCompatActivity {
         findForwardButton = (Button) findViewById(R.id.findForwardButton);
         findNextButton = (Button) findViewById(R.id.findNextButton);
 
+        students_title = (TextView) findViewById(R.id.students_title);
+        students_title.setBackgroundColor(SyllabusActivity.clicked_lesson.colorID);
+
         studentInfoListView = (ListView) findViewById(R.id.studentInfoListView);
-        showStudentQuery = (ImageButton) findViewById(R.id.showStudentQuery);
+        showStudentQuery = (FloatingActionButton) findViewById(R.id.showStudentQuery);
         studentQueryLinearLayout = (LinearLayout) findViewById(R.id.studentQueryLinearLayout);
 
         showStudentQuery.setOnClickListener(new View.OnClickListener() {
@@ -211,7 +217,4 @@ public class ShowStudentInfoListActivity extends AppCompatActivity {
 
     }
 
-    public void back(View view) {
-        finish();
-    }
 }
