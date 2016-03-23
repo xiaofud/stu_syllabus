@@ -1,6 +1,7 @@
 package com.hjsmallfly.syllabus.activities;
 
 import android.annotation.TargetApi;
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -94,6 +95,8 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
     GridLayout myClassTable;
     LinearLayout syllabus_bg;
 
+    LinearLayout clickTextView;
+
 
     private void setupViews() {
 
@@ -160,8 +163,8 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 }
 
 
-                LinearLayout ll = new LinearLayout(SyllabusActivity.this);
-                TextView textView = new TextView(SyllabusActivity.this);
+                final LinearLayout ll = new LinearLayout(SyllabusActivity.this);
+                final TextView textView = new TextView(SyllabusActivity.this);
                 textView.setTextSize(11);
                 textView.setTextColor(Color.WHITE);
                 textView.setWidth(defaultGridWidth);
@@ -218,6 +221,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                     ll.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            clickTextView = ll;
                             showClassInfo(finalLesson);
                         }
                     });
@@ -275,7 +279,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getWindow().setEnterTransition(new Slide().setDuration(200));
+            getWindow().setEnterTransition(new Slide().setDuration(200));
         }
 
         setContentView(R.layout.activity_syllabus);
@@ -310,7 +314,14 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         clicked_lesson = lesson;
 //        Toast.makeText(SyllabusActivity.this, lesson.days.toString(), Toast.LENGTH_SHORT).show();
         Intent tab_intent = new Intent(this, ShowClassInfoActivity.class);
-        startActivity(tab_intent);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            clickTextView.setTransitionName("lesson_grid");
+            startActivity(tab_intent,ActivityOptions.makeSceneTransitionAnimation(SyllabusActivity.this,
+                    clickTextView,"lesson_grid").toBundle());
+        }else{
+            startActivity(tab_intent);
+        }
     }
 
     @Override
@@ -651,8 +662,8 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         if (wall_paper != null) {
             Bitmap resizeBmp = Bitmap.createBitmap(wall_paper, 0, 0, wall_paper.getWidth(), wall_paper.getHeight(), matrix, true);
             canvas.drawBitmap(resizeBmp, 0, 0, null);
-        }else {
-            canvas.drawARGB(255,255,255,255);
+        } else {
+            canvas.drawARGB(255, 255, 255, 255);
         }
         canvas.drawBitmap(dayBitmap, 0, 0, null);
         canvas.drawBitmap(timeBitmap, 0, dayBitmap.getHeight(), null);

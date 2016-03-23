@@ -1,13 +1,24 @@
 package com.hjsmallfly.syllabus.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
+import android.transition.ChangeBounds;
+import android.transition.ChangeClipBounds;
+import android.transition.ChangeImageTransform;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hjsmallfly.syllabus.helpers.HttpCommunication;
 import com.hjsmallfly.syllabus.helpers.WebApi;
@@ -22,6 +33,10 @@ import org.json.JSONException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,45 +49,99 @@ public class ShowClassInfoActivity extends AppCompatActivity {
     TextView classRoomTextView;
     TextView classNoTextView;
 
+    CardView class_name_card;
+
     List<StudentInfo> studentInfoList;
 
-    Button button;
+    TextView buttonTextView;
+    CardView show_student_card;
+
+    boolean isCheckStudent;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setEnterTransition(new Explode());
+        }
+
         setContentView(R.layout.activity_show_class_info);
 
+        getSupportActionBar().hide();
         classInfo = SyllabusActivity.clicked_lesson;
         initView();
 
     }
 
     public void initView() {
-        button = (Button) findViewById(R.id.show_student);
+        buttonTextView = (TextView) findViewById(R.id.show_student);
+        show_student_card = (CardView) findViewById(R.id.show_student_card);
 
         classNameTextView = (TextView) findViewById(R.id.classNameTextView);
         classNameTextView.setText(classInfo.name);
 
         teacherNameTextView = (TextView) findViewById(R.id.teacherNameTextView);
-        teacherNameTextView.setText(classInfo.teacher);
+        teacherNameTextView.setText("教师: " + classInfo.teacher);
 
         classNoTextView = (TextView) findViewById(R.id.classNoTextView);
         classNoTextView.setText("开课班号: " + classInfo.id);
 
+
+        String classTime = classInfo.duration + "周";
+
+        String[] weeks = {
+                "周一", "周二", "周三", "周四", "周五", "周六", "周日",
+        };
+
+        ArrayList<String> keyList = new ArrayList<>();
+        for (String key : classInfo.days.keySet()) {
+            keyList.add(key);
+        }
+
+        Collections.sort(keyList, new Comparator<String>() {
+            @Override
+            public int compare(String s, String t1) {
+                return s.charAt(1) - t1.charAt(1);
+            }
+        });
+
+        for (String key : keyList) {
+            if (!key.isEmpty())
+                classTime += " , " + weeks[key.charAt(1) - '1'];
+            if (key.length() > 2) {
+                classTime += key.substring(2);
+            }
+            classTime += classInfo.days.get(key);
+        }
+
         beginTimeTextView = (TextView) findViewById(R.id.beginTimeTextView);
-        beginTimeTextView.setText(classInfo.duration);
+        beginTimeTextView.setText(classTime);
+
 
         classRoomTextView = (TextView) findViewById(R.id.classRoomTextView);
-        classRoomTextView.setText(classInfo.room);
+        classRoomTextView.setText("教室: " + classInfo.room);
 
-        button.setOnClickListener(new View.OnClickListener() {
+        class_name_card = (CardView) findViewById(R.id.class_name_card);
+        class_name_card.setCardBackgroundColor(classInfo.colorID);
+
+        show_student_card.setCardBackgroundColor(classInfo.colorID);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            class_name_card.setCardElevation(getResources().getDimension(R.dimen.card_ele));
+        }
+        isCheckStudent = false;
+
+        buttonTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                StudentsPullTask pullTask = new StudentsPullTask(WebApi.get_server_address()
-                        + getString(R.string.students_api) + "?class_id=" + classInfo.id);
-                pullTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                if (!isCheckStudent) {
+                    StudentsPullTask pullTask = new StudentsPullTask(WebApi.get_server_address()
+                            + getString(R.string.students_api) + "?class_id=" + classInfo.id);
+                    pullTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    isCheckStudent = true;
+                }
+
             }
         });
 
@@ -102,16 +171,19 @@ public class ShowClassInfoActivity extends AppCompatActivity {
 //                raw_data = "";
 //            }
             try {
-                Log.d("parser_error", "hahaha"+raw_data);
+                Log.d("parser_error", "hahaha" + raw_data);
                 studentInfoList = StudentParser.parser(raw_data);
+                Intent intent = new Intent(ShowClassInfoActivity.this, ShowStudentInfoListActivity.class);
+                intent.putExtra("studentInfoList", (Serializable) studentInfoList);
+                startActivity(intent);
             } catch (JSONException e) {
                 studentInfoList = new ArrayList<>();
+                Toast.makeText(ShowClassInfoActivity.this, "查询失败,请检查网络连接", Toast.LENGTH_SHORT).show();
                 Log.d("parser_error", e.getMessage());
             }
 
-            Intent intent = new Intent(ShowClassInfoActivity.this, ShowStudentInfoListActivity.class);
-            intent.putExtra("studentInfoList", (Serializable) studentInfoList);
-            startActivity(intent);
+            isCheckStudent = false;
+
         }
 
     }

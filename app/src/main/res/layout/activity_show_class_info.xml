@@ -1,98 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
     android:orientation="vertical">
 
 
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/class_name_card"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:transitionName="lesson_grid"
+        card_view:cardBackgroundColor="#2196f3">
 
-    <LinearLayout
+
+        <TextView
+            android:id="@+id/classNameTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:text="算法设计与分析"
+            android:textColor="#ddffffff"
+            android:textSize="35sp" />
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginTop="1dp"
+        card_view:cardBackgroundColor="@android:color/white"
+        card_view:cardElevation="1dp">
 
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/teacherNameTextView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:background="@android:color/white"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:hint="daidaijie"
+            android:paddingLeft="20dp"
+            android:textSize="16sp" />
+    </android.support.v7.widget.CardView>
 
-            <TextView
-                android:text="算法设计与分析"
-                android:id="@+id/classNameTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#34CED9"
-                android:textSize="25sp" />
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        card_view:cardBackgroundColor="@android:color/white"
+        card_view:cardElevation="1dp">
 
-            <TextView
-                android:hint="daidaijie"
-                android:id="@+id/teacherNameTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp" />
-
-            <TextView
-                android:hint="开课班号:84810"
-                android:id="@+id/classNoTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/classNoTextView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="1dp"
-            android:background="@android:color/white"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:hint="开课班号:84810"
+            android:paddingLeft="20dp"
+            android:textSize="16sp" />
+    </android.support.v7.widget.CardView>
 
-            <TextView
-                android:hint="1-16"
-                android:id="@+id/beginTimeTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp" />
-
-            <TextView
-                android:hint="E203"
-                android:id="@+id/classRoomTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:textColor="@android:color/black"
-                android:textSize="15sp" />
-
-        </LinearLayout>
-=
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/show_student"
-        android:text="查看同学"
-        android:layout_gravity="center"
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        card_view:cardBackgroundColor="@android:color/white"
+        card_view:cardElevation="1dp">
 
-    <LinearLayout
+        <TextView
+            android:id="@+id/beginTimeTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:hint="1-16"
+            android:paddingLeft="20dp"
+            android:textSize="16sp" />
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:background="@android:color/white"
-        android:orientation="vertical">
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        card_view:cardBackgroundColor="@android:color/white"
+        card_view:cardElevation="1dp">
+
+        <TextView
+            android:id="@+id/classRoomTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:hint="E203"
+            android:paddingLeft="20dp"
+            android:textSize="16sp" />
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/show_student_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        card_view:cardBackgroundColor="@android:color/holo_blue_light"
+        card_view:cardElevation="2dp">
+
+        <TextView
+            android:id="@+id/show_student"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center"
+            android:text="查看班级同学"
+            android:textColor="#ffffff"
+            android:textSize="18sp" />
+    </android.support.v7.widget.CardView>
+
 
 </LinearLayout>
