@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#f5f5f5"
+    android:orientation="vertical"
     android:paddingBottom="5dp"
     tools:context="com.hjsmallfly.syllabus.activities.GlobalDiscussActivity">
 
@@ -13,34 +13,32 @@
     <!--android:paddingTop="@dimen/activity_vertical_margin"-->
 
 
-
     <ListView
         android:id="@+id/global_discuss_list_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="7dp"
-        >
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1px">
 
     </ListView>
 
     <LinearLayout
-        android:layout_margin="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:layout_margin="10dp"
         android:gravity="bottom"
         android:orientation="horizontal">
 
         <EditText
-            android:textColor="@android:color/black"
             android:id="@+id/global_discuss_edit"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/text_shape"
-            android:hint="140字以内" />
+            android:hint="140字以内"
+            android:textColor="@android:color/black" />
 
         <LinearLayout
             android:layout_width="wrap_content"

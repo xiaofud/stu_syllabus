@@ -379,10 +379,10 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 //                startActivity(intent);
 //                break;
 
-            case R.id.choose_class_action:
-                Intent choose_activity = new Intent(this, ChooseLessonActivity.class);
-                startActivity(choose_activity);
-                break;
+//            case R.id.choose_class_action:
+//                Intent choose_activity = new Intent(this, ChooseLessonActivity.class);
+//                startActivity(choose_activity);
+//                break;
 
             case R.id.login_to_internet:
                 InternetLogin.login_to_internet(this, MainActivity.cur_username, MainActivity.cur_password);

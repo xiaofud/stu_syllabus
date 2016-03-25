@@ -70,6 +70,7 @@ public class ShowStudentInfoListActivity extends AppCompatActivity {
 
         students_title = (TextView) findViewById(R.id.students_title);
         students_title.setBackgroundColor(SyllabusActivity.clicked_lesson.colorID);
+        students_title.setText("共同参加(" + studentInfoList.size() + ")");
 
         studentInfoListView = (ListView) findViewById(R.id.studentInfoListView);
         showStudentQuery = (FloatingActionButton) findViewById(R.id.showStudentQuery);
@@ -80,7 +81,7 @@ public class ShowStudentInfoListActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (studentQueryLinearLayout.getVisibility() == View.GONE) {
                     studentQueryLinearLayout.setVisibility(View.VISIBLE);
-                    lastqueryPositon=-1;
+                    lastqueryPositon = -1;
                     studentQueryEditText.setText("");
                 } else {
                     studentQueryLinearLayout.setVisibility(View.GONE);

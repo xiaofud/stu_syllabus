@@ -62,12 +62,11 @@ public class DiscussionAdapter extends ArrayAdapter<Discussion> {
         if (discussion.publisher_nickname != null) {
             // 红色代表昵称
             viewHolder.publisher_text.setText(discussion.publisher_nickname);
-            viewHolder.publisher_text.setTextColor(Color.RED);
         }
         else {
             // 黑色代表账号, 也就是没有昵称的同学
             viewHolder.publisher_text.setText(discussion.publisher);
-            viewHolder.publisher_text.setTextColor(Color.BLACK);
+//            viewHolder.publisher_text.setTextColor(Color.BLACK);
         }
         viewHolder.pub_time_text.setText(discussion.transfer_time());
         viewHolder.content_text.setText(discussion.content.trim());   // 去除没必要的空字符

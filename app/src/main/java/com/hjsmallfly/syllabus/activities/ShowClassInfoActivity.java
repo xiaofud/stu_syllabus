@@ -90,7 +90,7 @@ public class ShowClassInfoActivity extends AppCompatActivity {
         classNoTextView.setText("开课班号: " + classInfo.id);
 
 
-        String classTime = classInfo.duration + "周";
+        String classTime = "上课时间: "+classInfo.duration + "周";
 
         String[] weeks = {
                 "周一", "周二", "周三", "周四", "周五", "周六", "周日",

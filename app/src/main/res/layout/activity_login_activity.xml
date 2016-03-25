@@ -38,91 +38,88 @@
     </android.support.v7.widget.CardView>
 
 
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="15dp"
-        card_view:cardBackgroundColor="#ba4d3e"
-        card_view:cardCornerRadius="5dp"
-        card_view:cardElevation="2dp">
+        android:background="#ba4d3e"
+        android:orientation="vertical">
 
-        <LinearLayout
+
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="13dp"
+            android:layout_marginTop="40dp"
+            card_view:cardBackgroundColor="#58ffffff"
+            card_view:cardCornerRadius="2dp"
+            card_view:cardElevation="0dp">
 
-
-            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            <!--android:drawableLeft="@drawable/account"-->
+            <EditText
+                android:id="@+id/login_user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:layout_marginLeft="13dp"
-                android:layout_marginRight="13dp"
-                card_view:cardBackgroundColor="#58ffffff"
-                card_view:cardCornerRadius="2dp"
-                card_view:cardElevation="0dp">
+                android:layout_margin="3dp"
+                android:background="#00ffffff"
+                android:hint="校园网账号"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:textColor="#2B2B2B" />
+        </android.support.v7.widget.CardView>
 
-                <!--android:drawableLeft="@drawable/account"-->
-                <EditText
-                    android:id="@+id/login_user"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="3dp"
-                    android:hint="校园网账号"
-                    android:singleLine="true"
-                    android:textColor="#2B2B2B" />
-            </android.support.v7.widget.CardView>
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="13dp"
+            android:layout_marginTop="20dp"
+            card_view:cardBackgroundColor="#58ffffff"
+            card_view:cardCornerRadius="2dp"
+            card_view:cardElevation="3dp">
 
-            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            <!--android:drawableLeft="@drawable/lock"-->
+            <EditText
+                android:id="@+id/login_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="13dp"
-                android:layout_marginRight="13dp"
-                card_view:cardBackgroundColor="#58ffffff"
-                card_view:cardCornerRadius="2dp"
-                card_view:cardElevation="3dp">
+                android:layout_margin="5dp"
+                android:background="#00ffffff"
+                android:hint="校园网密码"
+                android:inputType="textPassword"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:textColor="#2B2B2B" />
+        </android.support.v7.widget.CardView>
 
-                <!--android:drawableLeft="@drawable/lock"-->
-                <EditText
-                    android:id="@+id/login_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:hint="校园网密码"
-                    android:inputType="textPassword"
-                    android:singleLine="true"
-                    android:textColor="#2B2B2B" />
-            </android.support.v7.widget.CardView>
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="30dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
+            android:layout_marginTop="20dp"
+            card_view:cardBackgroundColor="#CC191C"
+            card_view:cardCornerRadius="10dp"
+            card_view:cardElevation="3dp">
 
-            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            <Button
+                android:id="@+id/login_button_for_girl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="30dp"
-                android:layout_marginLeft="60dp"
-                android:layout_marginRight="60dp"
-                android:layout_marginTop="20dp"
-                card_view:cardBackgroundColor="#CC191C"
-                card_view:cardCornerRadius="10dp"
-                card_view:cardElevation="3dp">
+                android:background="#CC191C"
+                android:padding="5dp"
+                android:text="登录"
+                android:textColor="@android:color/white"
+                android:textSize="20sp" />
+        </android.support.v7.widget.CardView>
 
-                <Button
-                    android:id="@+id/login_button_for_girl"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="#CC191C"
-                    android:padding="5dp"
-                    android:text="登录"
-                    android:textColor="@android:color/white"
-                    android:textSize="20sp" />
-            </android.support.v7.widget.CardView>
-
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </LinearLayout>
 
 
 </LinearLayout>
