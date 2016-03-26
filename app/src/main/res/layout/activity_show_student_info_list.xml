@@ -110,9 +110,11 @@
                 android:layout_gravity="bottom"
                 android:layout_marginBottom="55dp"
                 android:layout_marginRight="20dp"
+                android:clickable="true"
                 android:src="@drawable/query"
                 app:backgroundTint="#FF4081"
-                app:elevation="10dp" />
+                app:elevation="10dp"
+                app:pressedTranslationZ="2dp" />
         </LinearLayout>
     </FrameLayout>
 

@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -172,6 +173,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 强制显示菜单
         getOverflowMenu();
 
+
+
         YEARS = StringDataHelper.generate_years(4);  // 生成4年的选项
         getAllViews();
         setupViews();
@@ -316,6 +319,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            this.finish();
+        }
 
         if (id == R.id.check_update_action) {
             // 友盟
@@ -659,11 +666,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(this, OAActivity.class);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    View img =  findViewById(R.id.oa_img);
+                    View img = findViewById(R.id.oa_img);
 //                    View text = findViewById(R.id.oa_text);
                     startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(
                             MainActivity.this,
-                            Pair.create(img,"oa_logo_share")).toBundle());
+                            Pair.create(img, "oa_logo_share")).toBundle());
                 } else {
                     startActivity(intent);
                 }
@@ -685,12 +692,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(exam_intent);
                 break;
             case R.id.back_to_login_button:
-                if (cur_username != null && cur_password != null) {
+                /*if (cur_username != null && cur_password != null) {
                     LoginActivity.setted_username = cur_username;
                     LoginActivity.setted_password = cur_password;
                     Intent login_intent = new Intent(this, LoginActivity.class);
                     startActivity(login_intent);
-                }
+                }*/
+                Intent menu_intent = new Intent(MainActivity.this,EastGateMenuActivity.class);
+                startActivity(menu_intent);
                 break;
             default:
                 break;

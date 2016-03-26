@@ -80,10 +80,11 @@
             android:name="com.hjsmallfly.syllabus.activities.ChooseLessonActivity"
             android:label="长按模拟添加/删除课程" />
         <activity android:name="com.hjsmallfly.syllabus.activities.ShowClassInfoActivity" />
-        <activity android:name="com.hjsmallfly.syllabus.activities.LoginActivity"
-            android:screenOrientation="portrait"
-            >
-        </activity>
+        <activity
+            android:name="com.hjsmallfly.syllabus.activities.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name="com.hjsmallfly.syllabus.activities.EastGateMenuActivity" />
+        <activity android:name="com.hjsmallfly.syllabus.activities.ShowMenuInfoActivity"></activity>
     </application>
 
 </manifest>
