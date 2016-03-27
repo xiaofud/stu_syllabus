@@ -6,6 +6,7 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.hjsmallfly.syllabus.activities.MainActivity;
+import com.hjsmallfly.syllabus.activities.PersonalInfoActivity;
 import com.hjsmallfly.syllabus.activities.SyllabusActivity;
 
 import java.io.ByteArrayOutputStream;
@@ -85,6 +86,24 @@ public class FileOperation {
             }
         }
         return null;
+    }
+
+    public static Uri get_avatar_uri() {
+        if (is_sd_mounted()){
+            File f = new File(get_app_folder(true) + PersonalInfoActivity.AVATAR_FILE_NAME);
+            if (!f.exists())
+                try {
+                    if (f.createNewFile()){
+                        return Uri.fromFile(f);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            return Uri.fromFile(f);
+        }else{
+            return null;
+        }
     }
 
 

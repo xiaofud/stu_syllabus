@@ -6,11 +6,11 @@
     android:background="#f5f5f5"
     android:orientation="vertical"
     android:paddingBottom="5dp"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.hjsmallfly.syllabus.activities.GlobalDiscussActivity">
 
-    <!--android:paddingLeft="@dimen/activity_horizontal_margin"-->
-    <!--android:paddingRight="@dimen/activity_horizontal_margin"-->
-    <!--android:paddingTop="@dimen/activity_vertical_margin"-->
 
 
     <ListView
@@ -18,12 +18,15 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:divider="@android:color/darker_gray"
-        android:dividerHeight="1px">
+        android:divider="@android:color/transparent"
+        android:dividerHeight="5dp">
+
+        <!--android:divider="@android:color/darker_gray"-->
 
     </ListView>
 
     <LinearLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
@@ -33,7 +36,7 @@
 
         <EditText
             android:id="@+id/global_discuss_edit"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/text_shape"
@@ -56,5 +59,13 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/new_post_button"
+        android:textColor="@android:color/white"
+        android:text="发表新动态"
+        android:background="#BE4C3C"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

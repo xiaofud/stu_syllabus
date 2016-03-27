@@ -9,6 +9,18 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.hjsmallfly.syllabus.activities.PersonalInfoActivity">
 
+    <ImageView
+        android:layout_gravity="center"
+        android:id="@+id/avatar"
+        android:src="@mipmap/syllabus_icon2"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
+    <TextView
+        android:gravity="center"
+        android:text="点击切换头像"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -50,13 +62,43 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/profile_text_view"
+            android:text="签名: "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/profile_edit_text"
+            android:singleLine="true"
+            android:hint="请输入个人说明"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
+
+
 
     <Button
         android:id="@+id/personal_info_update_button"
         android:text="修改"
+        android:textColor="@android:color/white"
+        android:background="@android:color/holo_blue_bright"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <!--<Button-->
+        <!--android:id="@+id/upload_avatar_button"-->
+        <!--android:text="上传头像"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content" />-->
 
 </LinearLayout>
