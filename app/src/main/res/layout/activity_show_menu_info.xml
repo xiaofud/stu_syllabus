@@ -1,98 +1,199 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.hjsmallfly.syllabus.activities.ShowMenuInfoActivity">
 
-
     <LinearLayout
+        android:id="@+id/main_show_menu"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:background="@android:color/white"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:divider="#2b2b2b"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/white"
+                android:divider="#2b2b2b"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp" />
+                </FrameLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#3b3b3b" />
+
+                <ListView
+
+                    android:id="@+id/sub_menu_info_listView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="#2b2b2b"
+                    android:dividerHeight="1px">
+
+                </ListView>
+            </LinearLayout>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:textColor="@android:color/white"
-                android:textSize="18sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1px"
+                android:layout_width="1px"
+                android:layout_height="match_parent"
                 android:background="#3b3b3b" />
 
-            <ListView
-
-                android:id="@+id/sub_menu_info_listView"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="3"
                 android:divider="#2b2b2b"
-                android:dividerHeight="1px">
+                android:orientation="vertical">
 
-            </ListView>
+                <TextView
+                    android:id="@+id/sub_menu_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/holo_green_light"
+                    android:padding="10dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#3b3b3b" />
+
+                <ListView
+                    android:id="@+id/dist_info_listView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="#2b2b2b"
+                    android:dividerHeight="1px">
+
+                </ListView>
+            </LinearLayout>
+
         </LinearLayout>
 
-        <TextView
-            android:layout_width="1px"
-            android:layout_height="match_parent"
-            android:background="#3b3b3b" />
-
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:divider="#2b2b2b"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#28A69B">
 
             <TextView
-                android:id="@+id/sub_menu_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/holo_green_light"
-                android:padding="10dp"
-                android:textColor="@android:color/white"
-                android:textSize="18sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#3b3b3b" />
-
-            <ListView
-                android:id="@+id/dist_info_listView"
+                android:id="@+id/show_my_poke_linear"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:divider="#2b2b2b"
-                android:dividerHeight="1px">
-
-            </ListView>
+                android:gravity="center"
+                android:text="查看口袋( 0 )"
+                android:textColor="@android:color/white"
+                android:textSize="26sp" />
         </LinearLayout>
     </LinearLayout>
 
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_alignBottom="@+id/main_show_menu"
+        android:visibility="gone"
+        android:id="@+id/show_poke_card"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        card_view:cardBackgroundColor="@android:color/white"
+        card_view:cardElevation="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/holo_blue_bright"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="口袋"
+                    android:textColor="@android:color/white"
+                    android:textSize="26sp"
+                    android:textStyle="bold" />
+
+                <ImageButton
+                    android:id="@+id/close_poke_button"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="0"
+                    android:background="@android:color/holo_red_light"
+                    android:src="@drawable/close_button_icon" />
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/poke_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:divider="#2B2B2B"
+                android:dividerHeight="1px"
+                android:footerDividersEnabled="true" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_weight="0">
+
+                <TextView
+                    android:id="@+id/sum_poke_price_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="10dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </ScrollView>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
     <LinearLayout
+        android:layout_alignBottom="@+id/show_poke_card"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="right">
 
         <android.support.design.widget.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/call_phone_button"
-            app:pressedTranslationZ="2dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="40dp"
-            android:layout_marginRight="40dp"
+            android:layout_marginBottom="100dp"
+            android:layout_marginRight="50dp"
             android:clickable="true"
             android:src="@drawable/call_phone_icon"
-            app:elevation="10dp" />
+            app:elevation="10dp"
+            app:pressedTranslationZ="2dp" />
     </LinearLayout>
-</FrameLayout>
+</RelativeLayout>

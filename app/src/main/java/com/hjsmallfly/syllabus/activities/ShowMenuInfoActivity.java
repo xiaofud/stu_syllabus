@@ -3,21 +3,24 @@ package com.hjsmallfly.syllabus.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hjsmallfly.syllabus.syllabus.MenuInfo;
 import com.hjsmallfly.syllabus.syllabus.R;
@@ -36,7 +39,13 @@ public class ShowMenuInfoActivity extends AppCompatActivity {
     TextView subMenuNameTextView;
     Map<String, List<MenuInfo>> menuList;
     FloatingActionButton callPhoneButton;
+    CardView show_poke_card;
+    TextView show_my_poke_linear;
+    ImageButton close_poke_button;
 
+
+    TextView sum_poke_price_text;
+    ListView pokeListView;
 
     int nowSubMenuPos = 0;
 
@@ -46,6 +55,9 @@ public class ShowMenuInfoActivity extends AppCompatActivity {
     Map<String, Integer> dist2Int;//每个菜式对应的子菜单
 
     LinearLayout lastSelectLayout;
+
+    HashMap<MenuInfo, Integer> buyMenuInfoMap;//购买的菜单已经对应的数量
+    List<MenuInfo> buyMenuInfoList;//购买的菜单
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +69,35 @@ public class ShowMenuInfoActivity extends AppCompatActivity {
 
         lastSelectLayout = null;
 
-        getSupportActionBar().setTitle(storeInfo.getName());
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setTitle(storeInfo.getName());
 
         subMenuinfoListView = (ListView) findViewById(R.id.sub_menu_info_listView);
         distInfoListView = (ListView) findViewById(R.id.dist_info_listView);
+        pokeListView = (ListView) findViewById(R.id.poke_list_view);
         subMenuNameTextView = (TextView) findViewById(R.id.sub_menu_name);
+        sum_poke_price_text = (TextView) findViewById(R.id.sum_poke_price_text);
         callPhoneButton = (FloatingActionButton) findViewById(R.id.call_phone_button);
+        show_poke_card = (CardView) findViewById(R.id.show_poke_card);
+        showPoke(false);
+        show_my_poke_linear = (TextView) findViewById(R.id.show_my_poke_linear);
+        show_my_poke_linear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPoke(true);
+            }
+        });
+        close_poke_button = (ImageButton) findViewById(R.id.close_poke_button);
+        close_poke_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPoke(false);
+            }
+        });
+
+        buyMenuInfoMap = new HashMap<>();
+        buyMenuInfoList = new ArrayList<>();
+        updateSumPrice();
 
         subMenuNameList = new ArrayList<>();
         final List<String> subMenuNameList = new ArrayList<>();
@@ -96,11 +131,9 @@ public class ShowMenuInfoActivity extends AppCompatActivity {
 
                 Log.d("nowSubMenuPos", nowSubMenuPos + "");
 
-
-                layout.setBackgroundColor(Color.parseColor("#EEEEEE"));
-                subMenuItemTextView.setTextColor(Color.parseColor("#787878"));
-
-
+                if (i == nowSubMenuPos) {
+                    subMenuItemTextView.setBackgroundColor(Color.parseColor("#99CC00"));
+                }
                 subMenuItemTextView.setText(subMenuNameList.get(i));
 
                 layout.setOnClickListener(new View.OnClickListener() {
@@ -133,6 +166,14 @@ public class ShowMenuInfoActivity extends AppCompatActivity {
         }
 
         distInfoListView.setAdapter(new BaseAdapter() {
+
+            class ViewHolder {
+                private TextView dishTextView;
+                private TextView priceTextView;
+                private TextView buyItemNum;
+
+            }
+
             @Override
             public int getCount() {
                 return allDishNameList.size();
@@ -149,15 +190,58 @@ public class ShowMenuInfoActivity extends AppCompatActivity {
             }
 
             @Override
-            public View getView(int i, View view, ViewGroup viewGroup) {
-                MenuInfo menuInfo = allDishNameList.get(i);
+            public View getView(int i, View convertView, ViewGroup viewGroup) {
+                final MenuInfo menuInfo = allDishNameList.get(i);
 
-                LinearLayout layout = (LinearLayout) LinearLayout.inflate(ShowMenuInfoActivity.this,
-                        R.layout.dish_item_layout, null);
-                TextView dishTextView = (TextView) layout.findViewById(R.id.dishTextView);
-                TextView priceTextView = (TextView) layout.findViewById(R.id.priceTextView);
-                dishTextView.setText(menuInfo.getDish());
-                priceTextView.setText(menuInfo.getPrice());
+                LinearLayout layout;
+                ViewHolder viewHolder;
+
+                if (convertView == null) {
+                    layout = (LinearLayout) LinearLayout.inflate(ShowMenuInfoActivity.this,
+                            R.layout.dish_item_layout, null);
+                    viewHolder = new ViewHolder();
+                    viewHolder.dishTextView = (TextView) layout.findViewById(R.id.dishTextView);
+                    viewHolder.priceTextView = (TextView) layout.findViewById(R.id.priceTextView);
+                    viewHolder.buyItemNum =(TextView) layout.findViewById(R.id.buy_item_num);
+
+                    layout.setTag(viewHolder);
+                }else{  // 之前缓存过的view
+                    layout = (LinearLayout) convertView;
+                    viewHolder = (ViewHolder) layout.getTag();
+                }
+
+
+                viewHolder.dishTextView.setText(menuInfo.getDish());
+                viewHolder.priceTextView.setText("价格: " + menuInfo.getPrice());
+
+                if (buyMenuInfoMap.get(menuInfo) != null) {
+                    viewHolder.buyItemNum.setVisibility(View.VISIBLE);
+                    viewHolder.buyItemNum.setText(buyMenuInfoMap.get(menuInfo) + "份");
+                }else{
+                    viewHolder.buyItemNum.setVisibility(View.GONE);
+                }
+
+
+                //点击当做是购买
+                layout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (buyMenuInfoMap.get(menuInfo) == null) {
+                            buyMenuInfoMap.put(menuInfo, 1);
+                            buyMenuInfoList.add(menuInfo);
+                        } else {
+                            Integer num = buyMenuInfoMap.get(menuInfo);
+                            buyMenuInfoMap.put(menuInfo, num + 1);
+                        }
+                        Log.d("BUY_THING", menuInfo.getDish() + " " + buyMenuInfoMap.get(menuInfo));
+                        if (pokeListView.getAdapter() != null) {
+                            BaseAdapter adapter = (BaseAdapter) pokeListView.getAdapter();
+                            adapter.notifyDataSetChanged();
+                        }
+                        updateSumPrice();
+                    }
+                });
+
                 return layout;
             }
         });
@@ -181,6 +265,11 @@ public class ShowMenuInfoActivity extends AppCompatActivity {
 //                subMenuinfoListView.setSelection(nowSubMenuPos);
 
                 subMenuNameTextView.setText(subMenuNameList.get(nowSubMenuPos));
+                if (subMenuinfoListView.getAdapter() != null) {
+                    BaseAdapter adapter = (BaseAdapter) subMenuinfoListView.getAdapter();
+                    adapter.notifyDataSetChanged();
+
+                }
             }
         });
 
@@ -222,6 +311,94 @@ public class ShowMenuInfoActivity extends AppCompatActivity {
                 builder.show();
             }
         });
+
+
+        //口袋选项
+        pokeListView.setAdapter(new BaseAdapter() {
+
+            @Override
+            public int getCount() {
+                return buyMenuInfoList.size();
+            }
+
+            @Override
+            public Object getItem(int i) {
+                return null;
+            }
+
+            @Override
+            public long getItemId(int i) {
+                return i;
+            }
+
+            @Override
+            public View getView(int i, View view, ViewGroup viewGroup) {
+                LinearLayout linear = (LinearLayout) LinearLayout.inflate(getApplicationContext(),
+                        R.layout.buy_poke_item, null);
+
+                TextView buy_poke_item_name = (TextView) linear.findViewById(R.id.buy_poke_item_name);
+                buy_poke_item_name.setText(buyMenuInfoList.get(i).getDish());
+
+                final MenuInfo menuInfo = buyMenuInfoList.get(i);
+                Log.d("BUY_THING", menuInfo.getDish() + " " + buyMenuInfoMap.get(menuInfo));
+
+                final Integer num = buyMenuInfoMap.get(menuInfo);
+
+                TextView buy_poke_item_num = (TextView) linear.findViewById(R.id.buy_poke_item_num);
+                buy_poke_item_num.setText(num + "");
+
+                TextView buy_poke_item_price = (TextView) linear.findViewById(R.id.buy_poke_item_price);
+                String priceString = buyMenuInfoList.get(i).getPrice();
+
+                if (isNumberic(priceString)) {
+                    buy_poke_item_price.setText("¥" + num * Integer.parseInt(priceString) + "");
+                } else {
+                    buy_poke_item_price.setText("无");
+                }
+
+                Button dict_add_button = (Button) linear.findViewById(R.id.dict_add_button);
+                dict_add_button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        buyMenuInfoMap.put(menuInfo, num + 1);
+                        if (pokeListView.getAdapter() != null) {
+                            BaseAdapter adapter = (BaseAdapter) pokeListView.getAdapter();
+                            adapter.notifyDataSetChanged();
+                        }
+                        updateSumPrice();
+                    }
+                });
+
+                Button dict_sub_button = (Button) linear.findViewById(R.id.dict_sub_button);
+                dict_sub_button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (num == 1) {
+                            buyMenuInfoList.remove(menuInfo);
+                            buyMenuInfoMap.remove(menuInfo);
+                        } else {
+                            buyMenuInfoMap.put(menuInfo, num - 1);
+                        }
+                        if (pokeListView.getAdapter() != null) {
+                            BaseAdapter adapter = (BaseAdapter) pokeListView.getAdapter();
+                            adapter.notifyDataSetChanged();
+                        }
+                        updateSumPrice();
+                    }
+                });
+                return linear;
+            }
+        });
+
+    }
+
+    public final static boolean isNumberic(String s) {
+        for (char c : s.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void dialPhoneNumber(String phoneNumber) {
@@ -231,5 +408,70 @@ public class ShowMenuInfoActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
+
+    private long exitTime = 0;
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (show_poke_card.getVisibility() == View.VISIBLE) {
+                showPoke(false);
+            } else {
+                exit();
+            }
+            return true;
+        } else {
+            return super.onKeyDown(keyCode, event);
+        }
+    }
+
+    public void exit() {
+        if ((System.currentTimeMillis() - exitTime) > 2000) {
+            Toast.makeText(getApplicationContext(), "再按一次退出本菜单", Toast.LENGTH_SHORT).show();
+            exitTime = System.currentTimeMillis();
+        } else {
+            finish();
+        }
+    }
+
+    public void showPoke(boolean isShow) {
+        if (isShow) {
+            subMenuinfoListView.setEnabled(false);
+            distInfoListView.setEnabled(false);
+            show_poke_card.setVisibility(View.VISIBLE);
+        } else {
+            subMenuinfoListView.setEnabled(true);
+            distInfoListView.setEnabled(true);
+            show_poke_card.setVisibility(View.GONE);
+
+        }
+    }
+
+    public void updateSumPrice() {
+        int sumPrice = 0;
+        StringBuilder canNotCalcPrice = new StringBuilder();
+        for (int i = 0; i < buyMenuInfoList.size(); i++) {
+            MenuInfo menuInfo = buyMenuInfoList.get(i);
+            int num = buyMenuInfoMap.get(menuInfo);
+            String priceString = menuInfo.getPrice();
+            if (isNumberic(priceString)) {
+                sumPrice += Integer.parseInt(priceString) * num;
+            } else {
+                canNotCalcPrice.append(menuInfo.getDish() + " ( " + priceString + " ) * " + num + "\n");
+            }
+        }
+        String resultPrice = "可计算的总价为: ¥" + sumPrice + "\n";
+        if (!canNotCalcPrice.toString().trim().isEmpty()) {
+            resultPrice += "不可计算的总价为: \n" + canNotCalcPrice.toString();
+        }
+        sum_poke_price_text.setText(resultPrice);
+        Log.d("Sum_price", sumPrice + " ");
+        show_my_poke_linear.setText("查看口袋( " + buyMenuInfoList.size() + " )");
+        if(distInfoListView.getAdapter()!=null){
+            BaseAdapter adapter = (BaseAdapter) distInfoListView.getAdapter();
+            adapter.notifyDataSetChanged();
+        }
+    }
+
 }
 
