@@ -18,10 +18,21 @@
         android:id="@+id/priceTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
+        android:layout_marginLeft="10dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="4dp"
         android:hint="18"
         android:textColor="@android:color/holo_red_light"
         android:textSize="16sp" />
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/buy_item_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="26dp"
+        android:hint="1份"
+        android:textSize="26sp"
+        android:textStyle="bold" />
 </LinearLayout>

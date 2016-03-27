@@ -854,10 +854,15 @@
                 {
                     "price": "18", 
                     "dist": "\u53e3\u4ea4"
-                }, 
+                }
+            ]
+        }, 
+        {
+            "sub_menu": "\u5355\u54c1\u6d0b\u9152", 
+            "sub_list": [
                 {
-                    "price": "\u84dd\u5929\u4f0f\u7279\u52a0", 
-                    "dist": "\u5355\u54c1\u6d0b\u9152"
+                    "price": "18/138", 
+                    "dist": "\u84dd\u5929\u4f0f\u7279\u52a0"
                 }, 
                 {
                     "price": "19/150", 
