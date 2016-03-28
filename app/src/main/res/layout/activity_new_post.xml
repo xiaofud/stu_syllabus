@@ -12,6 +12,7 @@
 
     <EditText
         android:id="@+id/new_post_content"
+        android:gravity="top"
         android:layout_weight="2"
         android:hint="@string/new_post_content_hint"
         android:inputType="textMultiLine"

@@ -1,6 +1,7 @@
 package com.hjsmallfly.syllabus.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.hjsmallfly.syllabus.activities.GlobalDiscussActivity;
+import com.hjsmallfly.syllabus.activities.PostContentActivity;
 import com.hjsmallfly.syllabus.helpers.SyllabusRetrofit;
 import com.hjsmallfly.syllabus.pojo.CreatedReturnValue;
 import com.hjsmallfly.syllabus.pojo.PhotoList;
@@ -38,7 +41,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
 
     private Gson gson = new GsonBuilder().create();
     private PushThumbUpApi thumbUpApi;
-    private UnLikeApi unLikeApi;
+//    private UnLikeApi unLikeApi;
 
     class ViewHolder{
         private ImageView avatarView;   // 头像
@@ -67,11 +70,11 @@ public class PostAdapter extends ArrayAdapter<Post> {
         super(context, resource, objects);
         this.layout_id = resource;
         thumbUpApi = SyllabusRetrofit.retrofit.create(PushThumbUpApi.class);
-        unLikeApi = SyllabusRetrofit.retrofit.create(UnLikeApi.class);
+//        unLikeApi = SyllabusRetrofit.retrofit.create(UnLikeApi.class);
     }
 
 
-    private int get_like_id(int uid, Post post){
+    public static int get_like_id(int uid, Post post){
         for(int i = 0 ; i < post.thumbUps.size() ; ++i){
             if (post.thumbUps.get(i).uid == uid)
                 return post.thumbUps.get(i).id;
@@ -79,6 +82,27 @@ public class PostAdapter extends ArrayAdapter<Post> {
         return -1;
     }
 
+    private String trim_string_to_max_len(String str, int max_lines, int max_length, String suffix){
+        int lines = 0;
+        int line_position = -1;
+        for(int i = 0 ; i < str.length() ; ++i)
+            if (str.charAt(i) == '\n'){
+                ++lines;
+                if (lines == max_lines)
+                    line_position = i;
+            }
+
+        if (lines < max_lines) {
+            if (str.length() >= max_length)
+                return str.substring(0, max_length - 1) + suffix;
+            else
+                return str;
+        } else {
+            return max_length - 1 > line_position ? str.substring(0, line_position) + suffix : str.substring(0, max_length - 1) + suffix;
+//            return str.substring(0, line_position) + suffix;
+        }
+
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
@@ -114,7 +138,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
         // 设置头像
         if (post.postUser.image != null && !post.postUser.image.isEmpty()){
             // 显示图片
-            Picasso.with(getContext()).load(post.postUser.image).into(viewHolder.avatarView);
+            Picasso.with(getContext()).load(post.postUser.image).error(R.mipmap.syllabus_icon2).into(viewHolder.avatarView);
         }else{
             viewHolder.avatarView.setImageResource(R.mipmap.syllabus_icon2);
         }
@@ -221,16 +245,38 @@ public class PostAdapter extends ArrayAdapter<Post> {
 
         viewHolder.publisher_text.setText(post.postUser.nickname);
         viewHolder.pub_time_text.setText(post.postTime);
-        viewHolder.content_text.setText(post.content.trim());   // 去除没必要的空字符
+        viewHolder.content_text.setText(trim_string_to_max_len(post.content.trim(), 6, 140, "(点击查看全文)"));   // 去除没必要的空字符
 
         String like_count = post.thumbUps.size() + "";
         String comment_count = post.comments.size() + "";
         viewHolder.like_count_text_view.setText(like_count);
         viewHolder.comment_count_text_view.setText(comment_count);
 
+        DisplayPostListener listener = new DisplayPostListener(post, position);
+        
+        // 设置监听器
+//        viewHolder.comment_image_view.setOnClickListener(listener);
+        view.setOnClickListener(listener);
 
         return view;    // view 里面的对象的属性是通过viewHolder修改的
     }
 
+    private class DisplayPostListener implements View.OnClickListener{
 
+        private Post post_to_display;
+        private int position;
+        
+        public DisplayPostListener(Post post, int position){
+            this.post_to_display = post;
+            this.position = position;
+            GlobalDiscussActivity.ENSURE_POSITION = position;
+        }
+        
+        @Override
+        public void onClick(View v) {
+            PostContentActivity.post = this.post_to_display;
+            getContext().startActivity(new Intent(getContext(), PostContentActivity.class));
+        }
+    }
+    
 }

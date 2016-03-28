@@ -26,7 +26,12 @@ import retrofit2.Response;
 
 public class GlobalDiscussActivity extends AppCompatActivity {
 
+    // =========== 用于给其他类控制这个类的UI ===========
     public static boolean need_to_update_posts = false;
+    public static int ENSURE_POSITION = -1;
+    // =========== 用于给其他类控制这个类的UI ===========
+
+
 
     private ListView global_list_view;
     private Button new_post_button;
@@ -63,6 +68,20 @@ public class GlobalDiscussActivity extends AppCompatActivity {
         if (need_to_update_posts){
             get_posts();
             need_to_update_posts = false;
+        }
+
+        if (GlobalDiscussActivity.ENSURE_POSITION != -1){
+            // 设置回之前设定的位置
+
+            if (GlobalDiscussActivity.ENSURE_POSITION < postAdapter.getCount()){
+                // 数据有可能更新了
+                postAdapter.notifyDataSetChanged();
+                global_list_view.setSelection(GlobalDiscussActivity.ENSURE_POSITION);
+            }
+
+
+
+
         }
 
         MobclickAgent.onResume(this);
@@ -120,6 +139,8 @@ public class GlobalDiscussActivity extends AppCompatActivity {
                         GlobalDiscussActivity.this.postList = response.body();
 //                    Toast.makeText(GlobalDiscussActivity.this, postList.postList.size() + " ", Toast.LENGTH_SHORT).show();
                     display_posts();
+                } else if(response.code() == 404){
+                    Toast.makeText(GlobalDiscussActivity.this, "还没有任何动态", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(GlobalDiscussActivity.this, "code: " + response.code(), Toast.LENGTH_SHORT).show();
                 }
