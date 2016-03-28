@@ -103,6 +103,8 @@ public class Banner {
 
     public static List<String> toUrls(List<Banner> banners){
         List<String> urls = new ArrayList<>();
+        if (banners == null)
+            return urls;
         for(int i = 0 ; i < banners.size() ; ++i){
             Banner banner = banners.get(i);
             urls.add(banner.getUrl());

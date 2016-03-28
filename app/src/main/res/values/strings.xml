@@ -10,7 +10,6 @@
     <!--<string name="server_ip">http://172.18.58.117:8000</string>-->
     <string name="server_ip_debug">192.168.1.100</string>
     <string name="debug_port">5000</string>
-
     <string name="get_home_work_api">/api/course_info/0</string>
     <string name="get_discussion_api">/api/course_info/1</string>
     <string name="insert_class_api">/api/course</string>
@@ -28,6 +27,9 @@
     <string name="get_grades_api">/grade</string>
     <string name="get_oa_list_api">/oa</string>
 
+    <string name="new_post_content_hint">输入新信息</string>
+    <string name="add_photo_button">添加图片</string>
+    <string name="send_post_button">发布</string>
 
     <string name="title_activity_history">历史记录</string>
     <string name="title_activity_about">关于我们</string>

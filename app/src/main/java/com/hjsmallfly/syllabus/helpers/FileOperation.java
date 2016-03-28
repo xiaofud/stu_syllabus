@@ -1,8 +1,10 @@
 package com.hjsmallfly.syllabus.helpers;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import com.hjsmallfly.syllabus.activities.MainActivity;
@@ -207,5 +209,30 @@ public class FileOperation {
         return username + "_" + year_string + "_" + semester_str + "_week_info.txt";
     }
 
+    /**
+     * 从uri返回图片的真实路径
+     * @param context   context
+     * @param contentUri URI
+     * @return  错误时, 返回空字符串
+     */
+    public static String getRealPathFromURI(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] projections = { MediaStore.Images.Media.DATA };
+            cursor = context.getContentResolver().query(contentUri,  projections, null, null, null);
+
+            int column_index;
+            if (cursor != null) {
+                column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                cursor.moveToFirst();
+                return cursor.getString(column_index);
+            }else
+                return "";
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
 
 }

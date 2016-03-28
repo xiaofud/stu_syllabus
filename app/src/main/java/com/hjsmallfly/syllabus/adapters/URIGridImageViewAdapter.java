@@ -1,7 +1,7 @@
 package com.hjsmallfly.syllabus.adapters;
 
 import android.content.Context;
-import android.util.Log;
+import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -12,27 +12,21 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-
 /**
- * Created by smallfly on 16-3-26.
+ * Created by smallfly on 16-3-27.
  *
  */
-public class GridImageViewAdapter extends BaseAdapter {
+public class URIGridImageViewAdapter extends BaseAdapter {
     private final Context context;
-    private List<String> urls;
+    private List<Uri> uris;
 
-    public GridImageViewAdapter(Context context, List<String> url_list) {
+    public URIGridImageViewAdapter(Context context, List<Uri> uri_list) {
         this.context = context;
-        this.urls = url_list;
+        this.uris = uri_list;
     }
 
-    public void update_urls(List<String> urls){
-        this.urls.clear();
-        this.urls.addAll(urls);
-        notifyDataSetChanged();
-    }
-
-    @Override public View getView(int position, View convertView, ViewGroup parent) {
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
 
         SquaredImageView view = (SquaredImageView) convertView;
         if (view == null) {
@@ -43,11 +37,11 @@ public class GridImageViewAdapter extends BaseAdapter {
         }
 
         // Get the image URL for the current position.
-        String url = getItem(position);
+        Uri uri = getItem(position);
 
         // Trigger the download of the URL asynchronously into the image view.
         Picasso.with(context) //
-                .load(url) //
+                .load(uri) //
 //                .placeholder(R.drawable.placeholder) //
 //                .error(R.drawable.error) //
                 .fit() //
@@ -55,20 +49,19 @@ public class GridImageViewAdapter extends BaseAdapter {
 //                .resize(200, 200)
                 .centerCrop()
                 .into(view);
-//        Log.d("GRID_IMAGE_VIEW", url);
+//        Log.d("GRID_IMAGE_VIEW", uri);
         return view;
     }
 
     @Override public int getCount() {
-        return urls.size();
+        return uris.size();
     }
 
-    @Override public String getItem(int position) {
-        return urls.get(position);
+    @Override public Uri getItem(int position) {
+        return uris.get(position);
     }
 
     @Override public long getItemId(int position) {
         return position;
     }
 }
-

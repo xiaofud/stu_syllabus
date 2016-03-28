@@ -3,31 +3,22 @@ package com.hjsmallfly.syllabus.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
 
 import com.hjsmallfly.syllabus.adapters.PostAdapter;
-import com.hjsmallfly.syllabus.helpers.ClipBoardHelper;
-import com.hjsmallfly.syllabus.helpers.JSONHelper;
-import com.hjsmallfly.syllabus.helpers.StringDataHelper;
 import com.hjsmallfly.syllabus.helpers.SyllabusRetrofit;
+import com.hjsmallfly.syllabus.pojo.PhotoList;
 import com.hjsmallfly.syllabus.pojo.PostList;
 import com.hjsmallfly.syllabus.restful.GetPostsApi;
-import com.hjsmallfly.syllabus.syllabus.Discussion;
 import com.hjsmallfly.syllabus.syllabus.R;
 import com.umeng.analytics.MobclickAgent;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,15 +26,12 @@ import retrofit2.Response;
 
 public class GlobalDiscussActivity extends AppCompatActivity {
 
+    public static boolean need_to_update_posts = false;
+
     private ListView global_list_view;
-//    private EditText global_discuss_edit;
-//    private Button global_discuss_button;
+    private Button new_post_button;
 
-//    private List<Discussion> global_discussions;
     private PostAdapter postAdapter;
-//    private List<Banner> banners;
-
-//    private final int DISPLAY_COUNT = 400;
 
     private PostList postList;
 
@@ -72,6 +60,11 @@ public class GlobalDiscussActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (need_to_update_posts){
+            get_posts();
+            need_to_update_posts = false;
+        }
+
         MobclickAgent.onResume(this);
     }
 
@@ -93,30 +86,39 @@ public class GlobalDiscussActivity extends AppCompatActivity {
 
     private void find_views(){
         global_list_view = (ListView) findViewById(R.id.global_discuss_list_view);
-//        global_discuss_edit = (EditText) findViewById(R.id.global_discuss_edit);
-//        global_discuss_button = (Button) findViewById(R.id.global_discuss_button);
+        new_post_button = (Button) findViewById(R.id.new_post_button);
     }
 
     private void setup_views(){
-//        global_discuss_button.setOnClickListener(this);
-
-//        registerForContextMenu(global_list_view);
+        new_post_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(GlobalDiscussActivity.this, PushPostActivity.class));
+                // 返回之后更新数据
+//                startActivity() 是立即返回的
+//                Toast.makeText(GlobalDiscussActivity.this, "更新", Toast.LENGTH_SHORT).show();
+//                get_posts();
+            }
+        });
     }
 
     private void get_posts(){
-//        InfoPullTask global_discussion_getter = new InfoPullTask(this, InfoPullTask.PULL_DISCUSSION);
-//        global_discussion_getter.setDiscussionHandler(this);
-//        global_discussion_getter.get_information(DISPLAY_COUNT, "0", 0, 0, 0);
         Call<PostList> postListCall = getPostsApi.get_posts(100);
         postListCall.enqueue(new Callback<PostList>() {
             @Override
             public void onResponse(Call<PostList> call, Response<PostList> response) {
                 if (response.isSuccessful()) {
-
-                    //                    Toast.makeText(GlobalDiscussActivity.this,
-//                            postList.postList.get(0).content
-//                            , Toast.LENGTH_SHORT).show();
-                    GlobalDiscussActivity.this.postList = response.body();
+                    PostList tmp = response.body();
+                    if (GlobalDiscussActivity.this.postList != null){
+                        // 更新内容
+//                        Toast.makeText(GlobalDiscussActivity.this, "更新内容", Toast.LENGTH_SHORT).show();
+                        GlobalDiscussActivity.this.postList.postList.clear();
+//                        Toast.makeText(GlobalDiscussActivity.this, "get_posts size: " + tmp.postList.size(), Toast.LENGTH_SHORT).show();
+                        GlobalDiscussActivity.this.postList.postList.addAll(tmp.postList);
+//                        Toast.makeText(GlobalDiscussActivity.this, "get_posts size: " + GlobalDiscussActivity.this.postList.postList.size(), Toast.LENGTH_SHORT).show();
+                    }else   // 第一次请求
+                        GlobalDiscussActivity.this.postList = response.body();
+//                    Toast.makeText(GlobalDiscussActivity.this, postList.postList.size() + " ", Toast.LENGTH_SHORT).show();
                     display_posts();
                 } else {
                     Toast.makeText(GlobalDiscussActivity.this, "code: " + response.code(), Toast.LENGTH_SHORT).show();
@@ -131,28 +133,25 @@ public class GlobalDiscussActivity extends AppCompatActivity {
     }
 
     private void display_posts(){
-        // 显示最新的吐槽
+        // 显示最新的posts
         if (this.postList != null){
-            if (postAdapter == null){
+//            if (postAdapter == null){
                 postAdapter = new PostAdapter(this, R.layout.discuss_item_layout, this.postList.postList);
                 global_list_view.setAdapter(postAdapter);
-            }else{
+//            }else{
                 // 更新list view的显示， 注意上面是如何更新 this.discussions 里面的内容的！
                 // 不可以直接 this.discussions = all_discussions
                 // 否则只是把 this.discussions 这个引用本身指向的地方改变了
-                postAdapter.notifyDataSetChanged();
-            }
+//                postAdapter.clear();    // 这句话会把数据源清除
+//                Toast.makeText(GlobalDiscussActivity.this, "size: " + GlobalDiscussActivity.this.postList.postList.size(), Toast.LENGTH_SHORT).show();
+//                postAdapter.addAll(this.postList.postList);
+//                postAdapter.notifyDataSetChanged();
+//            }
         }
 
-//        // 确保最新的消息可见
-//        if (this.discussions.size() > 0)
-//            discussion_list_view.setSelection(this.discussions.size() - 1);
     }
 
-//    private void get_banners(){
-//        BannerGetter bannerGetter = new BannerGetter(this);
-//        bannerGetter.execute(WebApi.get_server_address() + this.getString(R.string.get_banner_api));
-//    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -172,194 +171,4 @@ public class GlobalDiscussActivity extends AppCompatActivity {
         }
     }
 
-//    private void submit_global_discussion(){
-//        String content = global_discuss_edit.getText().toString();
-//        if (content.trim().isEmpty()){
-//            Toast.makeText(GlobalDiscussActivity.this, "不能发送空吐槽!", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//
-//        // curl http://127.0.0.1:5000/api/v1.0/discuss -X POST -d "publisher=14xfdeng&pub_time=1000&content=How are you?&number=100000&start_year=2015&end_year=2016&semester=1&token=675054"
-//
-//        HashMap<String, String> post_data = new HashMap<>();
-//        MainActivity.set_local_token(this);
-//        String token = MainActivity.token;
-//        String publisher = MainActivity.cur_username;
-//        String pub_time = System.currentTimeMillis() * 1000 + "";
-//        String number = "0";
-//        String start_year = "0";
-//        String end_year = "0";
-//        String semester = "0";
-//
-//        post_data.put("publisher", publisher);
-//        post_data.put("pub_time", pub_time);
-//        post_data.put("content", content);
-//        post_data.put("number", number);
-//        post_data.put("start_year", start_year);
-//        post_data.put("end_year", end_year);
-//        post_data.put("token", token);
-//        post_data.put("semester", semester);
-//
-//        InsertTask insert_discussion_task = new InsertTask(this, this);
-//        insert_discussion_task.execute(post_data);
-//
-//        // 禁用按钮
-//        global_discuss_button.setEnabled(false);
-//
-//
-//    }
-
-//    @Override
-//    public void deal_with_discussion(ArrayList<Discussion> all_discussions) {
-//
-//        // 恢复按钮
-//        global_discuss_button.setEnabled(true);
-//
-//        if (all_discussions == null) {
-//            // 发生了某些错误
-////            Toast.makeText(GlobalDiscussActivity.this, "没有任何吹水数据呢", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//
-//        if (all_discussions.size() == 0){
-//            Toast.makeText(GlobalDiscussActivity.this, "还没有吹水数据呢", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//
-//        if (global_discussions == null){
-//            global_discussions = new ArrayList<>(all_discussions);
-//            postAdapter = new PostAdapter(this, R.layout.discuss_item_layout, global_discussions);
-//            global_list_view.setAdapter(postAdapter);
-//        }else{
-//            global_discussions.clear();
-//            global_discussions.addAll(all_discussions);
-//            postAdapter.notifyDataSetChanged();
-//        }
-//
-//        // 保证最后一个能看到
-//        if (global_discussions.size() > 0)
-//            global_list_view.setSelection(global_discussions.size() - 1);
-//    }
-
-//    @Override
-//    public void deal_with_insert_result(String ret_val) {
-//        String error = JSONHelper.check_and_get_error(ret_val);
-//        if (error != null){
-//            if (error.equals("wrong token")){
-//                Toast.makeText(GlobalDiscussActivity.this, StringDataHelper.ERROR_TOKEN, Toast.LENGTH_SHORT).show();
-//                return;
-//            }else{
-////                Toast.makeText(GlobalDiscussActivity.this, "出现错误: " + error, Toast.LENGTH_SHORT).show();
-//                return;
-//            }
-//        }
-//        // 友盟
-//        MobclickAgent.onEvent(this, "Global_Post_Discuss");
-//
-//        Toast.makeText(GlobalDiscussActivity.this, "吐槽成功", Toast.LENGTH_SHORT).show();
-//        global_discuss_edit.setText("");
-//        get_posts();
-//    }
-
-//    @Override
-//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
-//        super.onCreateContextMenu(menu, v, menuInfo);
-//
-//        String header_title = "请选择一个操作";
-//        menu.add(0, v.getId(), 0, "复制");
-//        menu.add(0, v.getId(), 0, "删除");
-//
-//
-//
-//        if (MainActivity.cur_username.equals("14xfdeng") || MainActivity.cur_username.equals("14jhwang") || MainActivity.cur_username.equals("13yjli3")){
-//            // 加入一些管理功能
-//            MenuItem item = menu.getItem(0);
-//            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-//            int index = info.position;
-//            Discussion discussion = (Discussion) global_list_view.getItemAtPosition(index);
-//            header_title += "(" + discussion.publisher + ")";
-//        }
-//
-//        menu.setHeaderTitle(header_title);
-//
-//
-////        Toast.makeText(GlobalDiscussActivity.this, discussion.publisher, Toast.LENGTH_SHORT).show();
-//    }
-
-//    @Override
-//    public boolean onContextItemSelected(MenuItem item) {
-//
-//
-//        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-//
-//        //  info.position will give the index of selected item
-//        if (item.getTitle().equals("复制")){
-//            int index = info.position; // 被点击的项的所在位置
-//            Discussion discussion = (Discussion) global_list_view.getItemAtPosition(index);
-//            ClipBoardHelper.setContent(this, discussion.content);
-//            Toast.makeText(this, "成功复制内容到剪贴板", Toast.LENGTH_SHORT).show();
-//            return true;
-//        }else if (item.getTitle().equals("删除")){
-//            // 删除信息
-//            int index = info.position;
-//            Discussion discussion = (Discussion) global_list_view.getItemAtPosition(index);
-//            HashMap<String, String> delete_data = new HashMap<>();
-//            delete_data.put("resource_id", discussion.id + "");
-//            delete_data.put("token", MainActivity.token);
-//            delete_data.put("user", MainActivity.cur_username);
-//
-////            DeleteTask task = new DeleteTask(this, this, DeleteTask.DELETE_DISCUSSION, index);
-////            task.execute(delete_data);
-//            return true;
-//        }
-//        return false;
-//    }
-
-//    @Override
-//    public void onClick(View v) {
-//        switch (v.getId()){
-//            case R.id.global_discuss_button:
-//                submit_global_discussion();
-//                break;
-//            default:
-//                break;
-//        }
-//    }
-
-//    @Override
-//    public void deal_with_delete(String response, int position) {
-//        String error = JSONHelper.check_and_get_error(response);
-//        if (error != null){
-////            Toast.makeText(MyTabActivity.this, "删除错误: " + error, Toast.LENGTH_SHORT).show();
-//            if (error.equals(DeleteTask.ERROR_WRONG_TOKEN))
-//                Toast.makeText(this, StringDataHelper.ERROR_TOKEN, Toast.LENGTH_SHORT).show();
-//            else if (error.equals(DeleteTask.ERROR_NO_AUTHORIZED)){
-//                Toast.makeText(this, "只能删除自己的信息哟", Toast.LENGTH_SHORT).show();
-//            }
-//            return;
-//
-//        }
-//        // 代表删除成功
-//        Discussion discussion = (Discussion) global_list_view.getItemAtPosition(position);
-//        postAdapter.remove(discussion);
-//        postAdapter.notifyDataSetChanged();
-//        Toast.makeText(this, "成功删除消息" /*+ discussion.content*/, Toast.LENGTH_SHORT).show();
-//    }
-
-//    private void set_banners(){
-//        Toast.makeText(GlobalDiscussActivity.this, "正在设置banners", Toast.LENGTH_SHORT).show();
-//    }
-
-//    @Override
-//    public void handle_get_response(String result) {
-//        if (result.isEmpty()){
-//            Toast.makeText(GlobalDiscussActivity.this, "未能成功获取图片", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//        this.banners = Banner.parse(result);
-//        if (banners != null && banners.size() > 0)
-//            set_banners();
-//        else
-//            Toast.makeText(GlobalDiscussActivity.this, "服务器没有资源,或者解析失败", Toast.LENGTH_SHORT).show();
-//    }
 }

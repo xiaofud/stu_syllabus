@@ -84,7 +84,8 @@
             android:name="com.hjsmallfly.syllabus.activities.LoginActivity"
             android:screenOrientation="portrait" />
         <activity android:name="com.hjsmallfly.syllabus.activities.EastGateMenuActivity" />
-        <activity android:name="com.hjsmallfly.syllabus.activities.ShowMenuInfoActivity"></activity>
+        <activity android:name="com.hjsmallfly.syllabus.activities.ShowMenuInfoActivity" />
+        <activity android:name="com.hjsmallfly.syllabus.activities.PushPostActivity"></activity>
     </application>
 
 </manifest>

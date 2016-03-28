@@ -14,4 +14,9 @@ public class PostThumbUp {
     @Expose
     public Integer uid;
 
+    public PostThumbUp(int id, int uid){
+        this.id = id;
+        this.uid = uid;
+    }
+
 }

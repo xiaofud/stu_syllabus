@@ -1,7 +1,6 @@
 package com.hjsmallfly.syllabus.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,15 +13,22 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.hjsmallfly.syllabus.activities.MainActivity;
+import com.hjsmallfly.syllabus.helpers.SyllabusRetrofit;
+import com.hjsmallfly.syllabus.pojo.CreatedReturnValue;
 import com.hjsmallfly.syllabus.pojo.PhotoList;
 import com.hjsmallfly.syllabus.pojo.Post;
-import com.hjsmallfly.syllabus.syllabus.Discussion;
+import com.hjsmallfly.syllabus.pojo.PostThumbUp;
+import com.hjsmallfly.syllabus.pojo.ThumbUpTask;
+import com.hjsmallfly.syllabus.restful.PushThumbUpApi;
+import com.hjsmallfly.syllabus.restful.UnLikeApi;
 import com.hjsmallfly.syllabus.syllabus.R;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by STU_nwad on 2015/10/11.
@@ -31,6 +37,8 @@ import java.util.List;
 public class PostAdapter extends ArrayAdapter<Post> {
 
     private Gson gson = new GsonBuilder().create();
+    private PushThumbUpApi thumbUpApi;
+    private UnLikeApi unLikeApi;
 
     class ViewHolder{
         private ImageView avatarView;   // 头像
@@ -58,11 +66,24 @@ public class PostAdapter extends ArrayAdapter<Post> {
     public PostAdapter(Context context, int resource, List<Post> objects) {
         super(context, resource, objects);
         this.layout_id = resource;
+        thumbUpApi = SyllabusRetrofit.retrofit.create(PushThumbUpApi.class);
+        unLikeApi = SyllabusRetrofit.retrofit.create(UnLikeApi.class);
     }
+
+
+    private int get_like_id(int uid, Post post){
+        for(int i = 0 ; i < post.thumbUps.size() ; ++i){
+            if (post.thumbUps.get(i).uid == uid)
+                return post.thumbUps.get(i).id;
+        }
+        return -1;
+    }
+
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
-        Post post = getItem(position);  // 传进来的那个数据源
+        final Post post = getItem(position);  // 传进来的那个数据源
+        Log.d("post_adapter", "post_id " + post.id + " position: " + position);
         View view;
         ViewHolder viewHolder;
         // 判断之前有没有缓存过这个数据
@@ -98,15 +119,105 @@ public class PostAdapter extends ArrayAdapter<Post> {
             viewHolder.avatarView.setImageResource(R.mipmap.syllabus_icon2);
         }
 
+        final int like_id = get_like_id(1, post);
 
-
-        if (viewHolder.post_photos_grid_view.getAdapter() == null) {
-            PhotoList photoList = gson.fromJson(post.photoListJson, PhotoList.class);
-//            Toast.makeText(getContext(), post.photoListJson, Toast.LENGTH_SHORT).show();
-            List<String> thumbnails = photoList.get_thumbnails();
-            Toast.makeText(getContext(), "" + photoList.photo_list.size(), Toast.LENGTH_SHORT).show();
-            viewHolder.post_photos_grid_view.setAdapter(new GridImageViewAdapter(getContext(), thumbnails));
+        // 判断用户是否点过赞, 设置相应的图片
+        if (like_id != -1){ // 点过赞
+            viewHolder.like_image_view.setImageResource(R.drawable.liked);
+            // 暂时不能删除赞
+//            if (!viewHolder.like_image_view.hasOnClickListeners()){
+//                viewHolder.like_image_view.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        final ImageView image_view = (ImageView) v;
+//                        Call<Void> unlike_it = unLikeApi.unlike_this(like_id, 1, "000000");
+//                        unlike_it.enqueue(new Callback<Void>() {
+//                            @Override
+//                            public void onResponse(Call<Void> call, Response<Void> response) {
+//                                if (response.isSuccessful()){
+//                                    image_view.setImageResource(R.drawable.to_like);
+//                                    Toast.makeText(getContext(), "已经删除赞", Toast.LENGTH_SHORT).show();
+//                                }else if (response.code() == 401){
+//                                    Toast.makeText(getContext(), "登录超时, 请同步一下课表", Toast.LENGTH_SHORT).show();
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void onFailure(Call<Void> call, Throwable t) {
+//                                Toast.makeText(getContext(), "网络错误, 请重试", Toast.LENGTH_SHORT).show();
+//                            }
+//                        });
+//                    }
+//                });
+//            }
+        }else{
+            viewHolder.like_image_view.setImageResource(R.drawable.to_like);
         }
+
+
+        // 设置监听器
+//        if (!viewHolder.like_image_view.hasOnClickListeners()){
+        // 因为会重用, 所以暂时先每次都添加解决冲突
+        viewHolder.like_image_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final ImageView imageView = (ImageView) v;
+                ThumbUpTask task = new ThumbUpTask(post.id, 1, "000000");
+                Call<CreatedReturnValue> thumbUpCall = thumbUpApi.like_this(task);
+                thumbUpCall.enqueue(new Callback<CreatedReturnValue>() {
+                    @Override
+                    public void onResponse(Call<CreatedReturnValue> call, Response<CreatedReturnValue> response) {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(getContext(), "点赞成功", Toast.LENGTH_SHORT).show();
+                            int id = response.body().id;
+                            imageView.setImageResource(R.drawable.liked);
+                            post.thumbUps.add(new PostThumbUp(id, 1));
+                            notifyDataSetChanged();
+                        } else if (response.code() == 401) {
+                            Toast.makeText(getContext(), "登录超时, 请同步一下课表", Toast.LENGTH_SHORT).show();
+                        } else if (response.code() == 403) {
+                            Toast.makeText(getContext(), "已经赞过了", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<CreatedReturnValue> call, Throwable t) {
+                        Toast.makeText(getContext(), "网络错误, 请重试", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+//        }
+
+        // 先判断这个post有没有图片
+        PhotoList photoList = gson.fromJson(post.photoListJson, PhotoList.class);
+
+        if (photoList != null){
+            // 说明这个post有图片
+            // 将显示图片的控件设置为可见
+            viewHolder.post_photos_grid_view.setVisibility(View.VISIBLE);
+            if (viewHolder.post_photos_grid_view.getAdapter() == null) {
+                // 第一次处理这个view
+                List<String> thumbnails = photoList.get_thumbnails();
+                viewHolder.post_photos_grid_view.setAdapter(new GridImageViewAdapter(getContext(), thumbnails));
+            }else{
+                GridImageViewAdapter adapter = (GridImageViewAdapter) viewHolder.post_photos_grid_view.getAdapter();
+                adapter.update_urls(photoList.get_thumbnails());
+            }
+        }else{
+            // 没有图片, 则该控件不应该显示出来
+            viewHolder.post_photos_grid_view.setVisibility(View.GONE);
+        }
+
+
+
+//        // 防止view被重用, 导致不同的post显示相同的图片
+//        if (photoList == null)
+//            viewHolder.post_photos_grid_view.setVisibility(View.GONE);
+//        else
+//            viewHolder.post_photos_grid_view.setVisibility(View.VISIBLE);
+
+
 
         viewHolder.publisher_text.setText(post.postUser.nickname);
         viewHolder.pub_time_text.setText(post.postTime);
