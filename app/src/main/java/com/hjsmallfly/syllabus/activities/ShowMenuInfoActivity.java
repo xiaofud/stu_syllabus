@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class ShowMenuInfoActivity extends AppCompatActivity {
 
@@ -68,6 +69,7 @@ public class ShowMenuInfoActivity extends AppCompatActivity {
         menuList = storeInfo.getMenuList();
 
         lastSelectLayout = null;
+
 
         if (getSupportActionBar() != null)
             getSupportActionBar().setTitle(storeInfo.getName());

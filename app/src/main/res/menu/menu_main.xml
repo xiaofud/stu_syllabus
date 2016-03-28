@@ -1,30 +1,38 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
 
     <item
-        android:title="清除默认课表"
         android:id="@+id/delete_default_syllabus"
-        app:showAsAction="never"/>
+        android:title="清除默认课表"
+        app:showAsAction="never" />
 
     <!--<item-->
-        <!--android:title="清除缓存文件"-->
-        <!--android:id="@+id/delete_action"-->
-        <!--app:showAsAction="never"/>-->
+    <!--android:title="清除缓存文件"-->
+    <!--android:id="@+id/delete_action"-->
+    <!--app:showAsAction="never"/>-->
 
 
     <item
         android:id="@+id/check_update_action"
         android:title="检查更新"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/help_action"
-        android:title="帮助信息"/>
+        android:title="帮助信息" />
 
     <item
         android:id="@+id/about_us_action"
         android:title="关于我们"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/logout_action"
+        android:icon="@drawable/logout_icon"
+        android:showAsAction="ifRoom"
+        android:title="注销" />
+
 
 </menu>

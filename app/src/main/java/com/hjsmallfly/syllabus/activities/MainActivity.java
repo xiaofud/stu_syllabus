@@ -174,7 +174,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getOverflowMenu();
 
 
-
         YEARS = StringDataHelper.generate_years(4);  // 生成4年的选项
         getAllViews();
         setupViews();
@@ -354,6 +353,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return true;
         }
 
+        if (id == R.id.logout_action) {
+            if (cur_username != null && cur_password != null) {
+                LoginActivity.setted_username = cur_username;
+                LoginActivity.setted_password = cur_password;
+                Intent login_intent = new Intent(this, LoginActivity.class);
+                startActivity(login_intent);
+            }
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -698,7 +705,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Intent login_intent = new Intent(this, LoginActivity.class);
                     startActivity(login_intent);
                 }*/
-                Intent menu_intent = new Intent(MainActivity.this,EastGateMenuActivity.class);
+                Intent menu_intent = new Intent(MainActivity.this, EastGateMenuActivity.class);
                 startActivity(menu_intent);
                 break;
             default:

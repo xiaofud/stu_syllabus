@@ -4,7 +4,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
          <!--Customize your theme here. -->
         <item name="colorPrimary">#BE4C3C</item>
-        <item name="colorPrimaryDark">#BE4C3C</item>
+        <item name="colorPrimaryDark">#b43827</item>
         <item name="android:actionBarSize">45dp</item>
         <item name="android:windowContentTransitions" tools:targetApi="lollipop">true</item>
     </style>
