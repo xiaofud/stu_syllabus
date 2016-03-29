@@ -3,7 +3,7 @@
     android:shape="rectangle">
     <stroke
         android:width="1px"
-        android:color="#96ffffff" />
+        android:color="#e18477" />
     <!--矩形的边线  -->
     <!--<size
         android:width="400dp"
@@ -12,7 +12,7 @@
 
 
     <gradient
-        android:endColor="#50ffffff"
-        android:startColor="#50FFFFFF" />
+        android:endColor="#55ffffff"
+        android:startColor="#55FFFFFF" />
     <!-- 矩形的内部颜色，这里设置成白色，即空心 -->
 </shape>
