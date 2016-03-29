@@ -319,7 +319,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     builder.setItems(show, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-
                         }
                     });
                     builder.show();
