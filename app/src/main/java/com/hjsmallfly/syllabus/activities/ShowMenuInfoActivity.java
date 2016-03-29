@@ -70,9 +70,11 @@ public class ShowMenuInfoActivity extends AppCompatActivity {
     private Button mFindForwardDictButton;
     private Button mFindNextDictButton;
 
-    int lastqueryPositon = 0;
+    int lastqueryPositon;
 
     private void assignFindViews() {
+        lastqueryPositon = 0;
+
         mDictQueryLinearLayout = (LinearLayout) findViewById(R.id.dictQueryLinearLayout);
         mDictQueryEditText = (EditText) findViewById(R.id.dictQueryEditText);
         mDictQueryButton = (Button) findViewById(R.id.dictQueryButton);
@@ -100,7 +102,7 @@ public class ShowMenuInfoActivity extends AppCompatActivity {
                 if (queryPositon == -1) {
                     Toast.makeText(ShowMenuInfoActivity.this, "查找不到选项", Toast.LENGTH_SHORT).show();
                 } else {
-//                    distInfoListView.setSelection(0);
+                    distInfoListView.setSelection(0);
                     distInfoListView.setSelection(queryPositon);
                     lastqueryPositon = queryPositon;
                 }
@@ -127,14 +129,14 @@ public class ShowMenuInfoActivity extends AppCompatActivity {
                 if (queryPositon == -1) {
                     Toast.makeText(ShowMenuInfoActivity.this, "已经是最后一个选项", Toast.LENGTH_SHORT).show();
                 } else {
-//                    distInfoListView.setSelection(0);
+                    distInfoListView.setSelection(0);
                     distInfoListView.setSelection(queryPositon);
                     lastqueryPositon = queryPositon;
                 }
             }
         });
 
-        mDictQueryButton.setOnClickListener(new View.OnClickListener() {
+        mFindForwardDictButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String queryDict = mDictQueryEditText.getText().toString();
@@ -156,7 +158,7 @@ public class ShowMenuInfoActivity extends AppCompatActivity {
                 if (queryPositon == -1) {
                     Toast.makeText(ShowMenuInfoActivity.this, "已经是第一个选项", Toast.LENGTH_SHORT).show();
                 } else {
-//                    distInfoListView.setSelection(0);
+                    distInfoListView.setSelection(0);
                     distInfoListView.setSelection(queryPositon);
                     lastqueryPositon = queryPositon;
                 }
@@ -605,6 +607,42 @@ public class ShowMenuInfoActivity extends AppCompatActivity {
                 } else {
                     mDictQueryLinearLayout.setVisibility(View.GONE);
                 }
+                break;
+            case R.id.call_phone:
+                String[] lphone;
+                if (storeInfo.getLong_number().trim().isEmpty()) {
+                    lphone = new String[0];
+                } else {
+                    lphone = storeInfo.getLong_number().split("/");
+                }
+                String[] sphone;
+                if (storeInfo.getShort_number().trim().isEmpty()) {
+                    sphone = new String[0];
+                } else {
+                    sphone = storeInfo.getShort_number().split("/");
+                }
+
+                final String[] phoneNumber = new String[lphone.length + sphone.length];
+                int index = 0;
+                for (String phone : lphone) {
+                    phoneNumber[index++] = phone.trim();
+                }
+                for (String phone : sphone) {
+                    phoneNumber[index++] = phone.trim();
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(ShowMenuInfoActivity.this)
+                        .setTitle("选择要拨打的号码");
+
+                builder.setItems(phoneNumber, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialPhoneNumber(phoneNumber[i]);
+                    }
+                });
+
+                builder.show();
+
                 break;
         }
 
