@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
@@ -12,6 +13,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.util.Pair;
 import android.view.Menu;
@@ -144,6 +148,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+//        return super.onPrepareOptionsMenu(menu);
+        try {
+            for (int i = 0; i < menu.size(); i++) {
+                MenuItem item = menu.getItem(i);
+                String title = item.getTitle().toString();
+                Spannable spannable = new SpannableString(title);
+                spannable.setSpan(new ForegroundColorSpan(Color.WHITE), 0,
+                        spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                item.setTitle(spannable);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return true;
+
     }
 
     // 创建主界面

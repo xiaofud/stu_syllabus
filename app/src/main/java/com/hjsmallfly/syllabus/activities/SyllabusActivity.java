@@ -21,6 +21,9 @@ import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.transition.Explode;
 import android.transition.Fade;
 import android.transition.Slide;
@@ -257,6 +260,25 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         if (actionBar != null) {
             actionBar.setTitle(title);
         }
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+//        return super.onPrepareOptionsMenu(menu);
+        try {
+            for (int i = 0; i < menu.size(); i++) {
+                MenuItem item = menu.getItem(i);
+                String title = item.getTitle().toString();
+                Spannable spannable = new SpannableString(title);
+                spannable.setSpan(new ForegroundColorSpan(Color.WHITE), 0,
+                        spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                item.setTitle(spannable);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return true;
+
     }
 
     private void getOverflowMenu() {

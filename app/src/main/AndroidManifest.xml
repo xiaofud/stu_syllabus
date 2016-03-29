@@ -41,14 +41,6 @@
             android:label="@string/title_activity_syllabus"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.hjsmallfly.syllabus.activities.MyTabActivity"
-            android:label="具体信息"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name="com.hjsmallfly.syllabus.activities.HistoryActivity"
-            android:label="@string/title_activity_history"
-            android:screenOrientation="portrait" />
-        <activity
             android:name="com.hjsmallfly.syllabus.activities.AboutActivity"
             android:label="@string/title_activity_about" />
         <activity

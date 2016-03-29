@@ -6,15 +6,19 @@
         <item name="colorPrimary">#BE4C3C</item>
         <item name="colorPrimaryDark">#b43827</item>
         <item name="android:actionBarSize">45dp</item>
-        <item name="android:windowContentTransitions" tools:targetApi="lollipop">true</item>
+        <item name="android:windowContentTransitions" tools:targetApi="lollipop">true</item>1
+        <!-- item背景色 红色-->
+        <item name="android:itemBackground">@drawable/menu_item_bg</item>
     </style>
+
 
 
     <style name="ClassDialog" parent="Theme.AppCompat.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>
-        <item name="android:windowContentOverlay">@null</item>>
+        <item name="android:windowContentOverlay">@null</item>
+
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -22,8 +26,7 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <!---->
 
 </resources>
