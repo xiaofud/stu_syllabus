@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -300,6 +301,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else {
                 debug_ip_edit.setVisibility(View.GONE);
             }
+
+            String showName = "15jmtang";
+            SharedPreferences preferences = getSharedPreferences("userConfig", MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            int use_count = preferences.getInt("use_count", 0);
+            if (use_count == 0) {
+                String[] show = new String[]{
+                        "A. 好!",
+                        "B. 同上",
+                        "C. 同上",
+                        "D. 同上",
+                };
+                if (user[0].equals(showName)) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
+                            .setTitle("做我女朋友好吗?");
+                    builder.setItems(show, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    builder.show();
+                }
+            }
+            editor.putInt("use_count", use_count + 1);
+            editor.commit();
+
+
         } else
             debug_ip_edit.setVisibility(View.GONE);
 
