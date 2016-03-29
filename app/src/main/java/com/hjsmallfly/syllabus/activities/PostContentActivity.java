@@ -2,8 +2,6 @@ package com.hjsmallfly.syllabus.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -12,14 +10,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.hjsmallfly.syllabus.adapters.CommentAdapter;
 import com.hjsmallfly.syllabus.adapters.GridImageViewAdapter;
 import com.hjsmallfly.syllabus.adapters.PostAdapter;
 import com.hjsmallfly.syllabus.helpers.SyllabusRetrofit;
+import com.hjsmallfly.syllabus.pojo.Comment;
+import com.hjsmallfly.syllabus.pojo.CommentList;
 import com.hjsmallfly.syllabus.pojo.CreatedReturnValue;
 import com.hjsmallfly.syllabus.pojo.PhotoList;
 import com.hjsmallfly.syllabus.pojo.Post;
 import com.hjsmallfly.syllabus.pojo.PostThumbUp;
 import com.hjsmallfly.syllabus.pojo.ThumbUpTask;
+import com.hjsmallfly.syllabus.restful.GetCommentsApi;
 import com.hjsmallfly.syllabus.restful.PushThumbUpApi;
 import com.hjsmallfly.syllabus.syllabus.R;
 import com.squareup.picasso.Picasso;
@@ -55,8 +57,12 @@ public class PostContentActivity extends AppCompatActivity {
 
     // API
     private PushThumbUpApi thumbUpApi;
+    private GetCommentsApi getCommentApi;
 
     private Gson gson = new Gson();
+
+    private CommentAdapter commentAdapter;
+    private List<Comment> comments;
 
 
     @Override
@@ -64,11 +70,15 @@ public class PostContentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_content);
 
+        // 初始化 api
         thumbUpApi = SyllabusRetrofit.retrofit.create(PushThumbUpApi.class);
+        getCommentApi = SyllabusRetrofit.retrofit.create(GetCommentsApi.class);
 
 //        GlobalDiscussActivity.need_to_update_posts = true;
 
         init_views();
+
+        get_comments();
     }
 
 
@@ -91,7 +101,8 @@ public class PostContentActivity extends AppCompatActivity {
         pub_time_text = (TextView) view.findViewById(R.id.discuss_time_text);
         content_text = (TextView) view.findViewById(R.id.discuss_content);
 
-        comments_list_view = (ListView) view.findViewById(R.id.comments_list_view);
+
+        comments_list_view = (ListView) findViewById(R.id.commentListView);
     }
 
     private void setup_views(){
@@ -126,7 +137,7 @@ public class PostContentActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<CreatedReturnValue> call, Response<CreatedReturnValue> response) {
                             if (response.isSuccessful()) {
-                                Toast.makeText(PostContentActivity.this, "点赞成功", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(PostContentActivity.this, "点赞成功", Toast.LENGTH_SHORT).show();
                                 int id = response.body().id;
                                 imageView.setImageResource(R.drawable.liked);
                                 post.thumbUps.add(new PostThumbUp(id, 1));
@@ -186,5 +197,58 @@ public class PostContentActivity extends AppCompatActivity {
     }
 
     // =============== 跟UI有关的函数 ===============
+
+    // =============== 其他函数 ===============
+
+    private void display_comments(){
+        if (comments != null && comments.size() > 0){
+            if (commentAdapter == null){
+                commentAdapter = new CommentAdapter(this, R.layout.comment_item_layout, comments);
+                if (comments_list_view == null){
+                    Toast.makeText(PostContentActivity.this, "strange!", Toast.LENGTH_SHORT).show();
+                }else
+                    comments_list_view.setAdapter(commentAdapter);
+
+            }
+        }else
+            commentAdapter.notifyDataSetChanged();
+    }
+
+    private void get_comments(){
+        Call<CommentList> call = getCommentApi.get_comments(post.id);
+        call.enqueue(new Callback<CommentList>() {
+            @Override
+            public void onResponse(Call<CommentList> call, Response<CommentList> response) {
+                if (response.isSuccessful()){
+                    CommentList commentList = response.body();
+//                    Toast.makeText(PostContentActivity.this, commentList.comments.size() + "", Toast.LENGTH_SHORT).show();
+                    if (commentList.comments.size() > 0)
+                        if (comments == null){
+                            // 第一次
+                            comments = commentList.comments;
+                            display_comments();
+                        }else{
+                            // 更新数据
+//                            commentAdapter.notifyDataSetChanged();
+                            comments.clear();
+                            comments.addAll(commentList.comments);
+                            display_comments();
+                        }
+//                        Toast.makeText(PostContentActivity.this, response.body().comments.get(0).comment, Toast.LENGTH_SHORT).show();
+//                    else
+//                        Toast.makeText(PostContentActivity.this, "", Toast.LENGTH_SHORT).show();
+                }else if (response.code() != 404){
+                    Toast.makeText(PostContentActivity.this, response.code() + ": " + response.message(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CommentList> call, Throwable t) {
+                Toast.makeText(PostContentActivity.this, "网络错误, 请重试", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    // =============== 其他函数 ===============
+
 
 }

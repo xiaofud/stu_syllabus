@@ -3,9 +3,11 @@ package com.hjsmallfly.syllabus.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -70,7 +72,7 @@ public class GlobalDiscussActivity extends AppCompatActivity {
             need_to_update_posts = false;
         }
 
-        if (GlobalDiscussActivity.ENSURE_POSITION != -1){
+        if (GlobalDiscussActivity.ENSURE_POSITION != -1 && postAdapter != null){
             // 设置回之前设定的位置
 
             if (GlobalDiscussActivity.ENSURE_POSITION < postAdapter.getCount()){
@@ -78,9 +80,6 @@ public class GlobalDiscussActivity extends AppCompatActivity {
                 postAdapter.notifyDataSetChanged();
                 global_list_view.setSelection(GlobalDiscussActivity.ENSURE_POSITION);
             }
-
-
-
 
         }
 
@@ -113,12 +112,9 @@ public class GlobalDiscussActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(GlobalDiscussActivity.this, PushPostActivity.class));
-                // 返回之后更新数据
-//                startActivity() 是立即返回的
-//                Toast.makeText(GlobalDiscussActivity.this, "更新", Toast.LENGTH_SHORT).show();
-//                get_posts();
             }
         });
+
     }
 
     private void get_posts(){
@@ -159,19 +155,9 @@ public class GlobalDiscussActivity extends AppCompatActivity {
 //            if (postAdapter == null){
                 postAdapter = new PostAdapter(this, R.layout.discuss_item_layout, this.postList.postList);
                 global_list_view.setAdapter(postAdapter);
-//            }else{
-                // 更新list view的显示， 注意上面是如何更新 this.discussions 里面的内容的！
-                // 不可以直接 this.discussions = all_discussions
-                // 否则只是把 this.discussions 这个引用本身指向的地方改变了
-//                postAdapter.clear();    // 这句话会把数据源清除
-//                Toast.makeText(GlobalDiscussActivity.this, "size: " + GlobalDiscussActivity.this.postList.postList.size(), Toast.LENGTH_SHORT).show();
-//                postAdapter.addAll(this.postList.postList);
-//                postAdapter.notifyDataSetChanged();
-//            }
         }
 
     }
-
 
 
     @Override

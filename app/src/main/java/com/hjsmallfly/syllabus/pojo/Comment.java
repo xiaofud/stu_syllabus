@@ -1,18 +1,29 @@
 package com.hjsmallfly.syllabus.pojo;
 
-//import javax.annotation.Generated;
+/**
+ * Created by smallfly on 16-3-28.
+ * 评论
+ */
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-//@Generated("org.jsonschema2pojo")
-public class PostUser {
+public class Comment {
 
+    @SerializedName("comment")
+    @Expose
+    public String comment;
     @SerializedName("id")
     @Expose
     public Integer id;
-    @SerializedName("image")
+    @SerializedName("post_id")
     @Expose
-    public String image;
+    public Integer postId;
+    @SerializedName("post_time")
+    @Expose
+    public String postTime;
+    @SerializedName("uid")
+    @Expose
+    public Integer uid;
     @SerializedName("nickname")
     @Expose
     public String nickname;

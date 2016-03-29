@@ -1,6 +1,8 @@
 package com.hjsmallfly.syllabus.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,13 +17,16 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hjsmallfly.syllabus.activities.GlobalDiscussActivity;
+import com.hjsmallfly.syllabus.activities.MainActivity;
 import com.hjsmallfly.syllabus.activities.PostContentActivity;
+import com.hjsmallfly.syllabus.helpers.ClipBoardHelper;
 import com.hjsmallfly.syllabus.helpers.SyllabusRetrofit;
 import com.hjsmallfly.syllabus.pojo.CreatedReturnValue;
 import com.hjsmallfly.syllabus.pojo.PhotoList;
 import com.hjsmallfly.syllabus.pojo.Post;
 import com.hjsmallfly.syllabus.pojo.PostThumbUp;
 import com.hjsmallfly.syllabus.pojo.ThumbUpTask;
+import com.hjsmallfly.syllabus.restful.DeletePostApi;
 import com.hjsmallfly.syllabus.restful.PushThumbUpApi;
 import com.hjsmallfly.syllabus.restful.UnLikeApi;
 import com.hjsmallfly.syllabus.syllabus.R;
@@ -192,7 +197,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
                     @Override
                     public void onResponse(Call<CreatedReturnValue> call, Response<CreatedReturnValue> response) {
                         if (response.isSuccessful()) {
-                            Toast.makeText(getContext(), "点赞成功", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(getContext(), "点赞成功", Toast.LENGTH_SHORT).show();
                             int id = response.body().id;
                             imageView.setImageResource(R.drawable.liked);
                             post.thumbUps.add(new PostThumbUp(id, 1));
@@ -253,12 +258,80 @@ public class PostAdapter extends ArrayAdapter<Post> {
         viewHolder.comment_count_text_view.setText(comment_count);
 
         DisplayPostListener listener = new DisplayPostListener(post, position);
+        CopyOrDeleteLongListener longListener = new CopyOrDeleteLongListener(post);
+
+        // 点击就会跳转到具体页面的控件
+        viewHolder.comment_count_text_view.setOnClickListener(listener);
+        viewHolder.comment_image_view.setOnClickListener(listener);
+        viewHolder.content_text.setOnClickListener(listener);
+        viewHolder.content_text.setOnLongClickListener(longListener);
         
         // 设置监听器
 //        viewHolder.comment_image_view.setOnClickListener(listener);
-        view.setOnClickListener(listener);
+//        view.setOnClickListener(listener);
 
         return view;    // view 里面的对象的属性是通过viewHolder修改的
+    }
+
+    private class CopyOrDeleteLongListener implements View.OnLongClickListener{
+//        private Context context;
+        private Post post;
+        private DeletePostApi deletePostApi;
+//        private int position;
+
+        public CopyOrDeleteLongListener(Post post){
+            this.post = post;
+//            this.position = position;
+        }
+
+
+        @Override
+        public boolean onLongClick(View v) {
+            AlertDialog.Builder builder =
+                    new AlertDialog.Builder(getContext());
+            if (MainActivity.cur_username.equals("14xfdeng") || MainActivity.cur_username.equals("13yjli3") || MainActivity.cur_username.equals("14jhwang")){
+                builder.setTitle("请选择一个操作" + "(" + post.postUser.account + ")");
+            }else
+                builder.setTitle("请选择一个操作");
+
+            builder.setPositiveButton("复制", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ClipBoardHelper.setContent(getContext(), post.content);
+                    Toast.makeText(getContext(), "已将内容复制到剪贴板上", Toast.LENGTH_SHORT).show();
+                }
+            });
+            builder.setNegativeButton("删除", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (deletePostApi == null){
+                        deletePostApi = SyllabusRetrofit.retrofit.create(DeletePostApi.class);
+                        Call<Void> call = deletePostApi.delete_post(post.id, 1, "000000");
+                        call.enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                if (response.isSuccessful()){
+                                    Toast.makeText(getContext(), "删除成功", Toast.LENGTH_SHORT).show();
+                                    remove(post);
+                                    notifyDataSetChanged();
+                                }else if (response.code() == 401){
+                                    Toast.makeText(getContext(), "登录超时, 请同步一次课表", Toast.LENGTH_SHORT).show();
+                                }else if (response.code() == 403){
+                                    Toast.makeText(getContext(), "不能删除别人的资源", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+                                Toast.makeText(getContext(), "网络错误, 请重试", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+            });
+            builder.create().show();
+            return false;
+        }
     }
 
     private class DisplayPostListener implements View.OnClickListener{
@@ -269,12 +342,12 @@ public class PostAdapter extends ArrayAdapter<Post> {
         public DisplayPostListener(Post post, int position){
             this.post_to_display = post;
             this.position = position;
-            GlobalDiscussActivity.ENSURE_POSITION = position;
         }
         
         @Override
         public void onClick(View v) {
             PostContentActivity.post = this.post_to_display;
+            GlobalDiscussActivity.ENSURE_POSITION = position;
             getContext().startActivity(new Intent(getContext(), PostContentActivity.class));
         }
     }

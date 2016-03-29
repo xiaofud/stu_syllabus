@@ -257,6 +257,8 @@ public class PushPostActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
+                if (uploaded_photo_urls != null)
+                    uploaded_photo_urls.clear();
                 Toast.makeText(PushPostActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
             }
         });

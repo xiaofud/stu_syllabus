@@ -98,4 +98,10 @@
     5.如果觉得该app好用请推荐给朋友, 一定要推荐给朋友!!!\n
     6.目前的地址是 fir.im/syllabus\n</string>
 
+    <!-- comment item 相关-->
+    <string name="comment_nickname">昵称</string>
+    <string name="comment_time">时间</string>
+    <string name="comment_content">内容</string>
+    <!-- comment item 相关-->
+
 </resources>

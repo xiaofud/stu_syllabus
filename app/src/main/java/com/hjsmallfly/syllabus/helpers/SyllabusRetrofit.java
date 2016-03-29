@@ -10,8 +10,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class SyllabusRetrofit {
 
 //    172.19.73.180
-//    public static final String SERVER_ADDRESS = "http://192.168.0.104:8080";
-    public static final String SERVER_ADDRESS = "http://172.19.73.180:8080";
+    public static final String SERVER_ADDRESS = "http://192.168.0.104:8080";
+//    public static final String SERVER_ADDRESS = "http://172.19.73.180:8080";
 
     // 用于与自己服务器通信的全局 retrofit 对象
     public static final Retrofit retrofit = new Retrofit.Builder()
