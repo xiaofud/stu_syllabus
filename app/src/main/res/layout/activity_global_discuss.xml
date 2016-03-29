@@ -60,12 +60,34 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/new_post_button"
-        android:textColor="@android:color/white"
-        android:text="发表新动态"
-        android:background="#BE4C3C"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
+
+        <!--android:layout_marginRight="4dp"-->
+        <Button
+
+            android:layout_weight="1"
+            android:id="@+id/new_post_button"
+            android:textColor="@android:color/white"
+            android:text="发布新动态"
+            android:background="#BE4C3C"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+        <!--android:layout_marginLeft="4dp"-->
+        <Button
+            android:layout_weight="1"
+            android:id="@+id/view_more_button"
+            android:text="查看更多"
+            android:layout_width="0dp"
+            android:textColor="@android:color/white"
+            android:background="#BE4C3C"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
 
 </LinearLayout>

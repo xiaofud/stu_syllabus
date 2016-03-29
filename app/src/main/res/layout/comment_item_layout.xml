@@ -2,38 +2,34 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:background="@android:color/white"
-    android:layout_margin="10dp"
+    android:padding="@dimen/activity_horizontal_margin"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:orientation="horizontal"
 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/comment_nickname"
+        android:textColor="#576B95"
+        android:layout_gravity="start"
+        android:textStyle="bold"
+        android:text="@string/comment_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/comment_nickname"
-            android:layout_weight="1"
-            android:layout_gravity="start"
-            android:text="@string/comment_nickname"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/comment_time"
-            android:layout_weight="1"
-            android:gravity="end"
-            android:text="@string/comment_time"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
 
     <TextView
         android:id="@+id/comment_content"
         android:text="@string/comment_content"
+        android:textColor="@android:color/black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/comment_time"
+
+        android:textSize="12sp"
+        android:text="@string/comment_time"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content" />
 
 </LinearLayout>

@@ -136,8 +136,9 @@ public class UpdateActivity extends AppCompatActivity implements UpdateHandler, 
             copy_button.setVisibility(View.VISIBLE);
 
         }else if (flag == UpdateHandler.ALREADY_UPDATED){
-            new_version_text.setText("已经是最新版本啦!");
             remote_version = version;
+            String description = "(当前版本的更新说明: )" + version.description;
+            new_version_text.setText(description);
             update_button.setText("已经是最新版本啦!");
 
             copy_button.setVisibility(View.VISIBLE);

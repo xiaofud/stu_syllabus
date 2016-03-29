@@ -1,8 +1,13 @@
 package com.hjsmallfly.syllabus.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -19,9 +24,12 @@ import com.hjsmallfly.syllabus.pojo.CommentList;
 import com.hjsmallfly.syllabus.pojo.CreatedReturnValue;
 import com.hjsmallfly.syllabus.pojo.PhotoList;
 import com.hjsmallfly.syllabus.pojo.Post;
+import com.hjsmallfly.syllabus.pojo.PostComment;
+import com.hjsmallfly.syllabus.pojo.PostCommentTask;
 import com.hjsmallfly.syllabus.pojo.PostThumbUp;
 import com.hjsmallfly.syllabus.pojo.ThumbUpTask;
 import com.hjsmallfly.syllabus.restful.GetCommentsApi;
+import com.hjsmallfly.syllabus.restful.PostCommentApi;
 import com.hjsmallfly.syllabus.restful.PushThumbUpApi;
 import com.hjsmallfly.syllabus.syllabus.R;
 import com.squareup.picasso.Picasso;
@@ -53,11 +61,16 @@ public class PostContentActivity extends AppCompatActivity {
 
     private ListView comments_list_view;
 
+    private EditText comment_edit;
+    private AlertDialog.Builder dialog_builder;
+    private AlertDialog dialog;
+
     // =============== views ================
 
     // API
     private PushThumbUpApi thumbUpApi;
     private GetCommentsApi getCommentApi;
+    private PostCommentApi postCommentApi;
 
     private Gson gson = new Gson();
 
@@ -73,6 +86,7 @@ public class PostContentActivity extends AppCompatActivity {
         // 初始化 api
         thumbUpApi = SyllabusRetrofit.retrofit.create(PushThumbUpApi.class);
         getCommentApi = SyllabusRetrofit.retrofit.create(GetCommentsApi.class);
+        postCommentApi = SyllabusRetrofit.retrofit.create(PostCommentApi.class);
 
 //        GlobalDiscussActivity.need_to_update_posts = true;
 
@@ -179,6 +193,18 @@ public class PostContentActivity extends AppCompatActivity {
                 post_photos_grid_view.setVisibility(View.GONE);
             }
 
+            // 点击评论按钮 显示/隐藏 评论
+            comment_image_view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int flag = comments_list_view.getVisibility();
+                    if (flag == View.VISIBLE)
+                        comments_list_view.setVisibility(View.GONE);
+                    else
+                        comments_list_view.setVisibility(View.VISIBLE);
+                }
+            });
+
             publisher_text.setText(post.postUser.nickname);
             pub_time_text.setText(post.postTime);
             content_text.setText(post.content.trim());   // 去除没必要的空字符
@@ -196,9 +222,81 @@ public class PostContentActivity extends AppCompatActivity {
         setup_views();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_post_content, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.make_comment:
+                make_comment();
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     // =============== 跟UI有关的函数 ===============
 
     // =============== 其他函数 ===============
+
+    private void make_comment(){
+
+        if (dialog_builder == null) {
+            dialog_builder = new AlertDialog.Builder(this);
+
+            if (comment_edit == null) {
+                comment_edit = new EditText(this);
+                comment_edit.setMaxLines(6);
+            }
+
+            dialog_builder.setView(comment_edit);
+            dialog_builder.setTitle("请输入评论内容");
+            dialog_builder.setCancelable(false);
+            dialog_builder.setPositiveButton("发送", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(final DialogInterface dialog, int which) {
+//                    Toast.makeText(PostContentActivity.this, "发表评论", Toast.LENGTH_SHORT).show();
+//                    dialog.dismiss();
+                    PostCommentTask task = new PostCommentTask(post.id, 1, comment_edit.getText().toString().trim(), "000000");
+                    Call<Void> commentCall = postCommentApi.post_comment(task);
+                    commentCall.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if (response.isSuccessful()) {
+                                Toast.makeText(PostContentActivity.this, "评论成功", Toast.LENGTH_SHORT).show();
+                                comment_edit.setText("");
+//                                post.comments.add(new PostComment());
+                                get_comments();
+//                                dialog.dismiss();
+                            } else {
+                                Toast.makeText(PostContentActivity.this, response.code() + ": " + response.message(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            Toast.makeText(PostContentActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                }
+            });
+            dialog_builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            dialog = dialog_builder.create();
+        }
+        dialog.show();
+    }
 
     private void display_comments(){
         if (comments != null && comments.size() > 0){
@@ -208,10 +306,9 @@ public class PostContentActivity extends AppCompatActivity {
                     Toast.makeText(PostContentActivity.this, "strange!", Toast.LENGTH_SHORT).show();
                 }else
                     comments_list_view.setAdapter(commentAdapter);
-
-            }
-        }else
-            commentAdapter.notifyDataSetChanged();
+            }else
+                commentAdapter.notifyDataSetChanged();
+        }
     }
 
     private void get_comments(){
@@ -230,13 +327,11 @@ public class PostContentActivity extends AppCompatActivity {
                         }else{
                             // 更新数据
 //                            commentAdapter.notifyDataSetChanged();
+//                            Toast.makeText(PostContentActivity.this, "更新数据 " + commentList.comments.size(), Toast.LENGTH_SHORT).show();
                             comments.clear();
                             comments.addAll(commentList.comments);
                             display_comments();
                         }
-//                        Toast.makeText(PostContentActivity.this, response.body().comments.get(0).comment, Toast.LENGTH_SHORT).show();
-//                    else
-//                        Toast.makeText(PostContentActivity.this, "", Toast.LENGTH_SHORT).show();
                 }else if (response.code() != 404){
                     Toast.makeText(PostContentActivity.this, response.code() + ": " + response.message(), Toast.LENGTH_SHORT).show();
                 }

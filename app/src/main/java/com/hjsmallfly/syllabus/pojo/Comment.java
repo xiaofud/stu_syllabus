@@ -24,11 +24,8 @@ public class Comment {
     @SerializedName("uid")
     @Expose
     public Integer uid;
-    @SerializedName("nickname")
+    @SerializedName("user")
     @Expose
-    public String nickname;
-    @SerializedName("account")
-    @Expose
-    public String account;
+    public CommentUser user;
 
 }

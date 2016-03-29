@@ -39,6 +39,8 @@
             android:layout_height="wrap_content">
         </GridView>
 
+
+
         <Button
             android:id="@+id/push_post_button"
             android:text="@string/send_post_button"

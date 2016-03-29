@@ -67,9 +67,9 @@ public class InternetLogin {
                 String end = "</td>";
                 String used_bytes_string = null;
                 int begin_index = lower_case.indexOf(begin);
-                if (begin_index != -1){
+                if (begin_index > 0){
                     int end_index = lower_case.indexOf(end, begin_index);
-                    if (end_index != -1){
+                    if (end_index > 0){
                         used_bytes_string = lower_case.substring(begin_index + begin.length() + 1, end_index);
                         used_bytes_string = used_bytes_string.replace(",", "");
                     }
@@ -80,7 +80,7 @@ public class InternetLogin {
                     used_mb = Integer.parseInt(used_bytes_string) / (1024 * 1024);
                 }
 
-                if (used_mb != -1)
+                if (used_mb > 0)
                     Toast.makeText(InternetLogin.this.context, "已接入外网 已使用流量" + used_mb + "MB", Toast.LENGTH_SHORT).show();
                 else
                     Toast.makeText(InternetLogin.this.context, "已接入外网 " + used_bytes_string, Toast.LENGTH_SHORT).show();

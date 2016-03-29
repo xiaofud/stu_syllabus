@@ -53,7 +53,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
         }
 
         // 设置需要显示的数据
-        String nickname = comment.nickname;
+        String nickname = comment.user.nickname;
         String time_str = comment.postTime;
         String comment_content = comment.comment;
 

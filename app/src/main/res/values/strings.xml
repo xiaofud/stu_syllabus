@@ -2,8 +2,8 @@
     <string name="app_name">汕大课程表</string>
     <string name="title_activity_syllabus">课程表</string>
     <string name="help_message">在课表界面的菜单里可以设置默认学期</string>
-    <string name="about_message">xiaofud: 14xfdeng@stu.edu.cn(Android)\ndaidaijie: 13yjli3@stu.edu.cn(Android)\njhwang: 14jhwang@stu.edu.cn(iOS)</string>
-    <string name="github_app_address">本项目开源:https://github.com/Hjsmallfly/stu_syllabus</string>
+    <string name="about_message">晓拂: 14xfdeng@stu.edu.cn(Android)\n呆杰: 13yjli3@stu.edu.cn(Android)\n俊皓: 14jhwang@stu.edu.cn(iOS)</string>
+    <string name="github_app_address">安卓源码:\nhttps://github.com/Hjsmallfly/stu_syllabus</string>
     <string name="syllabus_get_api">/syllabus</string>
     <!--<string name="server_ip">http://hjsmallfly.wicp.net</string>-->
     <string name="server_ip">http://121.42.175.83:8084</string>
@@ -89,19 +89,19 @@
     <string name="title_activity_personal_info">用户个人信息</string>
 
     <string name="help_activity_message">帮助:\n
-        [本次新功能] 模拟排课,在课表界面的菜单的上有[模拟排课]功能.\n
-        输入开课班号即可模拟添加课程到课程表中以作为参考.\n
-    1.设置默认课程表(在课表的界面的菜单上),设置以后便不用每次都重新登录了\n
-    2.查看办公自动化 成绩 考试安排 一键连网等功能都在课表界面的菜单里面\n
-    3.使用登陆学校wifi,是用当前账号登入流量验证页面.请注意有可能需要多次连接(因为学校服务器并不是很稳定)\n
-    4.好困啊,写不下去啦 哈哈哈\n
-    5.如果觉得该app好用请推荐给朋友, 一定要推荐给朋友!!!\n
-    6.目前的地址是 fir.im/syllabus\n</string>
+        1.登录流量验证, 快速登录学校的WIFI, 不用再去浏览器手动登录上网.
+        2.校园动态, 新版本的校园动态可以发图片, 点赞, 评论, 同时也可以更换头像.
+        3.东门外卖, 订外卖的实用工具, 提供快捷拨号功能.
+        4.如果提示登录超时, 则需要进课表界面重新同步一次课表.
+        5.apk短地址: fir.im/syllabus(觉得好用请推荐给朋友~)
+    </string>
 
     <!-- comment item 相关-->
     <string name="comment_nickname">昵称</string>
     <string name="comment_time">时间</string>
     <string name="comment_content">内容</string>
+    <string name="comment_area">用户评论(点击标题栏图案发表评论): </string>
+    <string name="post_comment">评论</string>
     <!-- comment item 相关-->
 
 </resources>
