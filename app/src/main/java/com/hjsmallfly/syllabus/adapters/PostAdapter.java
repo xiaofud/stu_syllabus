@@ -190,8 +190,14 @@ public class PostAdapter extends ArrayAdapter<Post> {
         viewHolder.like_image_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (MainActivity.user_id == -1){
+                    Toast.makeText(getContext(), "登录超时, 请同步一次课表", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 final ImageView imageView = (ImageView) v;
-                ThumbUpTask task = new ThumbUpTask(post.id, 1, "000000");
+                ThumbUpTask task = new ThumbUpTask(post.id, MainActivity.user_id, MainActivity.token);
                 Call<CreatedReturnValue> thumbUpCall = thumbUpApi.like_this(task);
                 thumbUpCall.enqueue(new Callback<CreatedReturnValue>() {
                     @Override
@@ -287,6 +293,8 @@ public class PostAdapter extends ArrayAdapter<Post> {
 
         @Override
         public boolean onLongClick(View v) {
+
+
             AlertDialog.Builder builder =
                     new AlertDialog.Builder(getContext());
             if (MainActivity.cur_username.equals("14xfdeng") || MainActivity.cur_username.equals("13yjli3") || MainActivity.cur_username.equals("14jhwang")){
@@ -304,9 +312,13 @@ public class PostAdapter extends ArrayAdapter<Post> {
             builder.setNegativeButton("删除", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    if (MainActivity.user_id == -1){
+                        Toast.makeText(getContext(), "登录超时, 请同步一次课表", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     if (deletePostApi == null){
                         deletePostApi = SyllabusRetrofit.retrofit.create(DeletePostApi.class);
-                        Call<Void> call = deletePostApi.delete_post(post.id, 1, "000000");
+                        Call<Void> call = deletePostApi.delete_post(post.id, MainActivity.user_id, MainActivity.token);
                         call.enqueue(new Callback<Void>() {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {

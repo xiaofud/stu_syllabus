@@ -77,7 +77,7 @@ public class ClassParser {
     public static final String ERROR = "ERROR";
 
     public static final int ROWS = 14;
-    public static final int COLUMNS = 8;    // 包含了 一个 空单元 以及 星期一到星期五
+    public static final int COLUMNS = 8;    // 包含了 一个 空单元 以及 星期一到星期日
     public Object[] weekdays_syllabus_data;  // 用于适配 课表的 view 的数据
 
     private Context context;
@@ -129,6 +129,15 @@ public class ClassParser {
                 String token = curriculum.getString("token");
                 tokenGetter.get_token(token);
             }
+
+            // 更新本地的用户id
+            if (curriculum.has("user_id")) {
+                int uid = curriculum.getInt("user_id");
+                MainActivity.user_id = uid;
+                MainActivity.save_uid(context, MainActivity.user_id);
+                Log.d("syllabus", "用户id: " + uid);
+            }
+
 //            Toast.makeText(context, "the token is " + token, Toast.LENGTH_SHORT).show();
 //            Log.d(MainActivity.TAG, classes.length() + " classes");
             // 得到颜色的种类数

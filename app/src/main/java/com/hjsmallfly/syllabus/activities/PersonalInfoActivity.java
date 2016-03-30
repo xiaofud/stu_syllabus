@@ -153,6 +153,7 @@ public class PersonalInfoActivity extends AppCompatActivity implements View.OnCl
                 if (response.isSuccessful()) {
                     need_to_upload_avatar = false;
                     Toast.makeText(PersonalInfoActivity.this, "更改成功", Toast.LENGTH_SHORT).show();
+                    finish();
                 } else if (response.code() == 400) {
                     Toast.makeText(PersonalInfoActivity.this, "请求错误", Toast.LENGTH_SHORT).show();
                 } else if (response.code() == 401) {
@@ -233,6 +234,8 @@ public class PersonalInfoActivity extends AppCompatActivity implements View.OnCl
 //                                Toast.makeText(PersonalInfoActivity.this, bmobPhoto.url, Toast.LENGTH_SHORT).show();
                                 User user = PersonalInfoActivity.this.user;
                                 user.image = ImageUploader.IMAGE_URL_PREFIX_WITH_TAILING_SLASH + bmobPhoto.url;
+                                user.nickname = nickname_edit.getText().toString().trim();
+                                user.profile = profile_edit_text.getText().toString().trim();
                                 update_user(user);
                                 Log.d(ImageUploader.DEBUG_TAG, bmobPhoto.url);
                             }else{

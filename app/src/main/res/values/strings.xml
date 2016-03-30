@@ -4,28 +4,18 @@
     <string name="help_message">在课表界面的菜单里可以设置默认学期</string>
     <string name="about_message">晓拂: 14xfdeng@stu.edu.cn(Android)\n呆杰: 13yjli3@stu.edu.cn(Android)\n俊皓: 14jhwang@stu.edu.cn(iOS)</string>
     <string name="github_app_address">安卓源码:\nhttps://github.com/Hjsmallfly/stu_syllabus</string>
-    <string name="syllabus_get_api">/syllabus</string>
-    <!--<string name="server_ip">http://hjsmallfly.wicp.net</string>-->
-    <string name="server_ip">http://121.42.175.83:8084</string>
+    <string name="syllabus_get_api">/credit/api/v2/syllabus</string>
+    <!--<string name="server_ip">http://121.42.175.83:8084</string>-->
+    <string name="server_ip">http://119.29.95.245:8080</string>
     <!--<string name="server_ip">http://172.18.58.117:8000</string>-->
     <string name="server_ip_debug">192.168.1.100</string>
     <string name="debug_port">5000</string>
-    <string name="get_home_work_api">/api/course_info/0</string>
-    <string name="get_discussion_api">/api/course_info/1</string>
-    <string name="insert_class_api">/api/course</string>
-    <string name="insert_user_api">/api/user</string>
-    <string name="insert_home_work_api">/api/homework</string>
-    <string name="insert_discussion_api">/api/discuss</string>
-    <string name="insert_discussion_api_v1">/api/v1.0/discuss</string>
-    <string name="get_banner_api">/api/v1.0/notification</string>
-    <string name="version_control_address">/api/version</string>
-    <string name="get_user_information_api">/api/user/</string>
-    <string name="change_user_information_api">/api/v1.0/modify_user</string>
-    <string name="delete_api">/api/v1.0/delete/</string>
-    <string name="students_api">/api/v1.0/member</string>
-    <string name="get_exam_list_api">/exam</string>
-    <string name="get_grades_api">/grade</string>
-    <string name="get_oa_list_api">/oa</string>
+    <string name="get_banner_api">/interaction/api/v2/banner</string>
+    <string name="version_control_address">/interaction/api/v2/version</string>
+    <string name="students_api">/credit/api/v2/member</string>
+    <string name="get_exam_list_api">/credit/api/v2/exam</string>
+    <string name="get_grades_api">/credit/api/v2/grade</string>
+    <string name="get_oa_list_api">/credit/api/v2/oa</string>
 
     <string name="new_post_content_hint">输入新信息</string>
     <string name="add_photo_button">添加图片</string>
@@ -89,11 +79,11 @@
     <string name="title_activity_personal_info">用户个人信息</string>
 
     <string name="help_activity_message">帮助:\n
-        1.登录流量验证, 快速登录学校的WIFI, 不用再去浏览器手动登录上网.
-        2.校园动态, 新版本的校园动态可以发图片, 点赞, 评论, 同时也可以更换头像.
-        3.东门外卖, 订外卖的实用工具, 提供快捷拨号功能.
-        4.如果提示登录超时, 则需要进课表界面重新同步一次课表.
-        5.apk短地址: fir.im/syllabus(觉得好用请推荐给朋友~)
+        1.登录流量验证, 快速登录学校的WIFI, 不用再去浏览器手动登录上网.\n
+        2.校园动态, 新版本的校园动态可以发图片, 点赞, 评论, 同时也可以更换头像.\n
+        3.东门外卖, 订外卖的实用工具, 提供快捷拨号功能.\n
+        4.如果提示登录超时, 则需要进课表界面重新同步一次课表.\n
+        5.apk短地址: fir.im/syllabus(觉得好用请推荐给朋友~).\n
     </string>
 
     <!-- comment item 相关-->

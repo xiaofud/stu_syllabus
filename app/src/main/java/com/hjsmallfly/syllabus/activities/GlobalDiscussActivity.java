@@ -117,6 +117,10 @@ public class GlobalDiscussActivity extends AppCompatActivity {
         new_post_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (MainActivity.user_id == -1){
+                    Toast.makeText(GlobalDiscussActivity.this, "亲, 请同步一下课表", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 startActivity(new Intent(GlobalDiscussActivity.this, PushPostActivity.class));
             }
         });
@@ -138,7 +142,12 @@ public class GlobalDiscussActivity extends AppCompatActivity {
             public void onResponse(Call<PostList> call, Response<PostList> response) {
                 if (response.isSuccessful()) {
                     PostList tmp = response.body();
+                    // 记录原来列表的最后一项
+                    int origin_max_item_id = global_list_view.getCount();
                     if (GlobalDiscussActivity.this.postList != null){
+
+
+
                         // 更新内容
                         if (re_pull)    // 意味着要拉取最新的数据
                             GlobalDiscussActivity.this.postList.postList.clear();
@@ -148,10 +157,11 @@ public class GlobalDiscussActivity extends AppCompatActivity {
                         GlobalDiscussActivity.this.postList = response.body();
                         current_max_id = GlobalDiscussActivity.this.postList.postList.get(tmp.postList.size() - 1).id;
                     }
+
                     if (re_pull) {
                         display_posts(0);   // 显示第一个
                     }else{
-                        display_posts(postAdapter.getCount() - 1);
+                        display_posts(origin_max_item_id - 1);  // 点按钮之前的最后一个item的position
                     }
                 } else if(response.code() == 404){
                     Toast.makeText(GlobalDiscussActivity.this, "没新动态啦", Toast.LENGTH_SHORT).show();
@@ -196,6 +206,10 @@ public class GlobalDiscussActivity extends AppCompatActivity {
                 return true;
 
             case R.id.personal_info_action:
+                if (MainActivity.user_id == -1){
+                    Toast.makeText(GlobalDiscussActivity.this, "亲, 请同步一次课表", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
                 Intent person_intent = new Intent(this, PersonalInfoActivity.class);
                 startActivity(person_intent);
                 return true;

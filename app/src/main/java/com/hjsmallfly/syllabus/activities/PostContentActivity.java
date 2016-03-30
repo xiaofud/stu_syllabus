@@ -144,8 +144,14 @@ public class PostContentActivity extends AppCompatActivity {
             like_image_view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    if (MainActivity.user_id == -1){
+                        Toast.makeText(PostContentActivity.this, "登录超时, 请同步一次课表", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     final ImageView imageView = (ImageView) v;
-                    ThumbUpTask task = new ThumbUpTask(post.id, 1, "000000");
+                    ThumbUpTask task = new ThumbUpTask(post.id, MainActivity.user_id, MainActivity.token);
                     Call<CreatedReturnValue> thumbUpCall = thumbUpApi.like_this(task);
                     thumbUpCall.enqueue(new Callback<CreatedReturnValue>() {
                         @Override
@@ -246,6 +252,11 @@ public class PostContentActivity extends AppCompatActivity {
 
     private void make_comment(){
 
+        if (MainActivity.user_id == -1){
+            Toast.makeText(PostContentActivity.this, "登录超时, 请同步一次课表", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (dialog_builder == null) {
             dialog_builder = new AlertDialog.Builder(this);
 
@@ -260,9 +271,7 @@ public class PostContentActivity extends AppCompatActivity {
             dialog_builder.setPositiveButton("发送", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(final DialogInterface dialog, int which) {
-//                    Toast.makeText(PostContentActivity.this, "发表评论", Toast.LENGTH_SHORT).show();
-//                    dialog.dismiss();
-                    PostCommentTask task = new PostCommentTask(post.id, 1, comment_edit.getText().toString().trim(), "000000");
+                    PostCommentTask task = new PostCommentTask(post.id, MainActivity.user_id, comment_edit.getText().toString().trim(), MainActivity.token);
                     Call<Void> commentCall = postCommentApi.post_comment(task);
                     commentCall.enqueue(new Callback<Void>() {
                         @Override

@@ -232,6 +232,12 @@ public class PushPostActivity extends AppCompatActivity {
     }
 
     private void post(){
+
+        if (MainActivity.user_id == -1){
+            Toast.makeText(this, "登录超时, 请同步一次课表", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         String content = post_content.getText().toString().trim();
         String photo_list_json = null;
         if (uploaded_photo_urls != null && uploaded_photo_urls.size() > 0){
@@ -240,7 +246,7 @@ public class PushPostActivity extends AppCompatActivity {
                 photoList.add(new Photo(uploaded_photo_urls.get(i), uploaded_photo_urls.get(i)));
             photo_list_json = generate_photo_list(photoList);
         }
-        PushPostTask pushPostTask = new PushPostTask(content, "None", 1, "000000", 1, photo_list_json);
+        PushPostTask pushPostTask = new PushPostTask(content, "None", MainActivity.user_id, MainActivity.token, PushPostApi.POST_TYPE_TOPIC, photo_list_json);
         Call<Void> postCall = pushPostApi.post(pushPostTask);
         postCall.enqueue(new Callback<Void>() {
             @Override
