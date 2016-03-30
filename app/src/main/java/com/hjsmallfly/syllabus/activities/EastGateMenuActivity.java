@@ -161,13 +161,13 @@ public class EastGateMenuActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        String tips = "在外卖首界面长按进行拨号,直接点击进入外卖菜单栏界面\n" +
-                "菜单栏界面可以点击左边的子菜单快速定位，也可以用右上角的菜单栏中的放大镜进行搜索\n" +
-                "点击每一个菜品可以添加到口袋中,口袋用于记录要点的菜品\n" +
-                "在口袋中可以增加删除,还能提供价格的估算\n" +
-                "(注意本应用不能直接点外卖,可以先把要点的东西准备在口袋中\n" +
-                "然后点击拨号按钮(菜单栏和悬浮按钮都可以)\n" +
-                "菜单可能会有极个别错误,请以实际菜单为准\n";
+        String tips = "        在外卖首界面长按进行拨号,直接点击进入外卖菜单栏界面\n" +
+                "        菜单栏界面可以点击左边的子菜单快速定位，也可以用右上角的菜单栏中的放大镜进行搜索\n" +
+                "        点击每一个菜品可以添加到口袋中,口袋用于记录要点的菜品\n" +
+                "        在口袋中可以增加删除,还能提供价格的估算\n" +
+                "        (注意本应用不能直接点外卖,可以先把要点的东西准备在口袋中\n" +
+                "        然后点击拨号按钮(菜单栏和悬浮按钮都可以)\n" +
+                "        菜单可能会有极个别错误,请以实际菜单为准\n";
 
 
         switch (item.getItemId()) {
@@ -175,6 +175,8 @@ public class EastGateMenuActivity extends AppCompatActivity {
 
                 TextView textView = new TextView(EastGateMenuActivity.this);
                 textView.setText(tips);
+                textView.setTextSize(15);
+                textView.setPadding(30,30,30,30);
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(EastGateMenuActivity.this)
                         .setTitle("小Tips")

@@ -67,7 +67,6 @@ public class PersonalInfoActivity extends AppCompatActivity implements View.OnCl
     private boolean need_to_upload_avatar = false;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,7 +107,7 @@ public class PersonalInfoActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.update_information_action){
+        if (item.getItemId() == R.id.update_information_action) {
             get_user_info();
             return true;
         }
@@ -116,7 +115,7 @@ public class PersonalInfoActivity extends AppCompatActivity implements View.OnCl
         return super.onOptionsItemSelected(item);
     }
 
-    private void find_views(){
+    private void find_views() {
         avatarImageView = (ImageView) findViewById(R.id.avatar);
         username_edit = (EditText) findViewById(R.id.username_info_edit);
         nickname_edit = (EditText) findViewById(R.id.nickname_info_edit);
@@ -126,7 +125,7 @@ public class PersonalInfoActivity extends AppCompatActivity implements View.OnCl
 
     }
 
-    private void setup_views(){
+    private void setup_views() {
         // add listener
         update_user_button.setOnClickListener(this);
         // 一开始不能点击, 获取了之前的用户数据才能点击
@@ -135,14 +134,14 @@ public class PersonalInfoActivity extends AppCompatActivity implements View.OnCl
 //        upload_avatar_button.setOnClickListener(this);
     }
 
-    private void load_default_avatar(){
+    private void load_default_avatar() {
         File f = new File(FileOperation.get_app_folder(false), AVATAR_FILE_NAME);
-        if (f.exists()){
+        if (f.exists()) {
             setAvatar(f);
         }
     }
 
-    private void update_user(User user){
+    private void update_user(User user) {
         UpdateUserBody updateUserBody =
                 new UpdateUserBody(user.id, user.id, user.nickname,
                         user.gender, user.profile, MainActivity.token, user.image);
@@ -168,26 +167,26 @@ public class PersonalInfoActivity extends AppCompatActivity implements View.OnCl
         });
     }
 
-    private void update_user_info(){
+    private void update_user_info() {
         String nickname = nickname_edit.getText().toString();
-        if (nickname.trim().isEmpty()){
+        if (nickname.trim().isEmpty()) {
             Toast.makeText(PersonalInfoActivity.this, "昵称不能为空", Toast.LENGTH_SHORT).show();
             return;
-        }else if(nickname.length() > 20){
+        } else if (nickname.length() > 20) {
             Toast.makeText(PersonalInfoActivity.this, "昵称不能超过20个字符", Toast.LENGTH_SHORT).show();
             return;
         }
 
         String profile = profile_edit_text.getText().toString().trim();
-        if (profile.length() > 40){
+        if (profile.length() > 40) {
             Toast.makeText(PersonalInfoActivity.this, "个性签名不能超过40个字符", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (need_to_upload_avatar){
+        if (need_to_upload_avatar) {
             // 上传图片的时候会更新用户
             upload_avatar();
-        }else{
+        } else {
             User user = this.user;
             user.nickname = nickname;
             user.profile = profile;
@@ -198,10 +197,10 @@ public class PersonalInfoActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.personal_info_update_button){
+        if (v.getId() == R.id.personal_info_update_button) {
             // 提交修改
             update_user_info();
-        }else if(v.getId() == R.id.avatar) {
+        } else if (v.getId() == R.id.avatar) {
             // 选择图片
             Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(i, SELECT_IMAGE_REQUEST_CODE);
@@ -214,11 +213,11 @@ public class PersonalInfoActivity extends AppCompatActivity implements View.OnCl
     /**
      * 上传头像
      */
-    private void upload_avatar(){
+    private void upload_avatar() {
         File avatar = new File(FileOperation.get_app_folder(false), AVATAR_FILE_NAME);
         MediaType mediaType = MediaType.parse("image/jpg");
         String filename = MainActivity.cur_username + System.currentTimeMillis() + ".jpg";
-        if (avatar.exists()){
+        if (avatar.exists()) {
             // 禁用按钮, 防止多次点击
 //            upload_avatar_button.setEnabled(false);
             Log.d(ImageUploader.DEBUG_TAG, "开始上传图片");
@@ -228,7 +227,7 @@ public class PersonalInfoActivity extends AppCompatActivity implements View.OnCl
                         @Override
                         public void onResponse(Call<BmobPhoto> call, Response<BmobPhoto> response) {
                             Log.d(ImageUploader.DEBUG_TAG, "onResponse");
-                            if (response.isSuccessful()){
+                            if (response.isSuccessful()) {
 //                                Toast.makeText(PersonalInfoActivity.this, "头像上传成功", Toast.LENGTH_SHORT).show();
                                 BmobPhoto bmobPhoto = response.body();
 //                                Toast.makeText(PersonalInfoActivity.this, bmobPhoto.url, Toast.LENGTH_SHORT).show();
@@ -238,7 +237,7 @@ public class PersonalInfoActivity extends AppCompatActivity implements View.OnCl
                                 user.profile = profile_edit_text.getText().toString().trim();
                                 update_user(user);
                                 Log.d(ImageUploader.DEBUG_TAG, bmobPhoto.url);
-                            }else{
+                            } else {
 //                                Toast.makeText(PersonalInfoActivity.this, "failed: " + response.code() + " " + response.message(), Toast.LENGTH_SHORT).show();
                                 Toast.makeText(PersonalInfoActivity.this, "头像上传失败", Toast.LENGTH_SHORT).show();
                                 Log.d(ImageUploader.DEBUG_TAG, response.code() + " " + response.message());
@@ -255,7 +254,7 @@ public class PersonalInfoActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode){
+        switch (requestCode) {
             case SELECT_IMAGE_REQUEST_CODE: {
                 if (resultCode == RESULT_OK) {
 //                    Toast.makeText(PersonalInfoActivity.this, "选择了图片", Toast.LENGTH_SHORT).show();
@@ -266,22 +265,25 @@ public class PersonalInfoActivity extends AppCompatActivity implements View.OnCl
                 }
                 break;
             }
-            case CROP_PHOTO_REQUEST_CODE:{
+            case CROP_PHOTO_REQUEST_CODE: {
 //                Toast.makeText(PersonalInfoActivity.this, "存储好了头像", Toast.LENGTH_SHORT).show();
                 File avatar_file = new File(FileOperation.get_app_folder(false), AVATAR_FILE_NAME);
-                if (avatar_file.exists()){
+                if (avatar_file.exists()) {
                     // 需要上传头像
                     need_to_upload_avatar = true;
                     setAvatar(avatar_file);
-                }else{
+                } else {
                     Toast.makeText(PersonalInfoActivity.this, "选择头像失败", Toast.LENGTH_SHORT).show();
                 }
+                Toast.makeText(PersonalInfoActivity.this, "修改头像后要再按一次修改按钮才能完成修改",
+                        Toast.LENGTH_SHORT).show();
                 break;
             }
             default:
                 super.onActivityResult(requestCode, resultCode, data);
                 break;
         }
+
 
     }
 
@@ -313,28 +315,28 @@ public class PersonalInfoActivity extends AppCompatActivity implements View.OnCl
         startActivityForResult(intent, CROP_PHOTO_REQUEST_CODE);
     }
 
-    private void setAvatar(File avatar){
+    private void setAvatar(File avatar) {
         Bitmap bitmap = BitmapFactory.decodeFile(avatar.toString());
         if (bitmap != null) {
             avatarImageView.setImageBitmap(bitmap);
-        }else{
+        } else {
             Log.d("avatar", "the avatar file has broken");
-            if (avatar.delete()){
+            if (avatar.delete()) {
                 Log.d("avatar", "deleted the broken avatar file");
-            }else
+            } else
                 Log.d("avatar", "failed to delete the broken avatar file");
         }
     }
 
 
-    private void get_user_info(){
+    private void get_user_info() {
 
         Call<User> userCall = getUserApi.get_user(MainActivity.cur_username);
 //        Toast.makeText(PersonalInfoActivity.this, "开始获取用户信息", Toast.LENGTH_SHORT).show();
         userCall.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
                     User user = response.body();
                     PersonalInfoActivity.this.user = user;
                     username_edit.setText(user.account);
@@ -343,9 +345,9 @@ public class PersonalInfoActivity extends AppCompatActivity implements View.OnCl
                     // 这样才能修改
                     update_user_button.setEnabled(true);
                     return;
-                }else if (response.code() == 404){
+                } else if (response.code() == 404) {
                     Toast.makeText(PersonalInfoActivity.this, "亲, 请登录查询一次课表", Toast.LENGTH_SHORT).show();
-                }else if (response.code() == 400){
+                } else if (response.code() == 400) {
                     Toast.makeText(PersonalInfoActivity.this, "bad request", Toast.LENGTH_SHORT).show();
                 }
                 update_user_button.setEnabled(false);
@@ -371,7 +373,6 @@ public class PersonalInfoActivity extends AppCompatActivity implements View.OnCl
 //            nickname_edit.setText(userInformation.nick_name);
 //        }
 //    }
-
 
 
 //    @Override
