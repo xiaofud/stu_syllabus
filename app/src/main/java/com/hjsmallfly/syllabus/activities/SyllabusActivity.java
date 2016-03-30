@@ -307,8 +307,6 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         setContentView(R.layout.activity_syllabus);
         getOverflowMenu();
         setupViews();
-        
-
         int this_week = ClassParser.calculate_week(Calendar.getInstance());
         setActionBarTitle("第" + this_week + "周");
 //        Toast.makeText(SyllabusActivity.this, "当前周数是" + MainActivity.initial_week, Toast.LENGTH_SHORT).show();

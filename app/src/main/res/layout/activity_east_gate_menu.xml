@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="本数据由“汕大知汕”公众号提供\n汕大知汕微信号:STUzhishan\n我们对此表示感谢!" />
+            android:text="本数据由“汕大知汕”公众号提供\n汕大知汕微信号:STUzhishan\n我们对此表示感谢!\n数据可能会有错误,如有纰漏,请大家以实际菜单为准" />
     </LinearLayout>
 
 </LinearLayout>

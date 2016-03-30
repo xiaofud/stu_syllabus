@@ -11,11 +11,15 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -25,12 +29,12 @@ import android.widget.Toast;
 import com.hjsmallfly.syllabus.syllabus.MenuInfo;
 import com.hjsmallfly.syllabus.syllabus.R;
 import com.hjsmallfly.syllabus.syllabus.StoreInfo;
+import com.hjsmallfly.syllabus.syllabus.StudentInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 public class ShowMenuInfoActivity extends AppCompatActivity {
 
@@ -60,6 +64,112 @@ public class ShowMenuInfoActivity extends AppCompatActivity {
     HashMap<MenuInfo, Integer> buyMenuInfoMap;//购买的菜单已经对应的数量
     List<MenuInfo> buyMenuInfoList;//购买的菜单
 
+    private LinearLayout mDictQueryLinearLayout;
+    private EditText mDictQueryEditText;
+    private Button mDictQueryButton;
+    private Button mFindForwardDictButton;
+    private Button mFindNextDictButton;
+
+    int lastqueryPositon;
+
+    private void assignFindViews() {
+        lastqueryPositon = 0;
+
+        mDictQueryLinearLayout = (LinearLayout) findViewById(R.id.dictQueryLinearLayout);
+        mDictQueryEditText = (EditText) findViewById(R.id.dictQueryEditText);
+        mDictQueryButton = (Button) findViewById(R.id.dictQueryButton);
+        mFindForwardDictButton = (Button) findViewById(R.id.findForwardDictButton);
+        mFindNextDictButton = (Button) findViewById(R.id.findNextDictButton);
+
+
+        mDictQueryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String queryDict = mDictQueryEditText.getText().toString();
+                if (queryDict.isEmpty()) {
+                    Toast.makeText(ShowMenuInfoActivity.this, "输入不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                int queryPositon = -1;
+
+                for (int i = 0; i < allDishNameList.size(); i++) {
+                    MenuInfo menuInfo = allDishNameList.get(i);
+                    if (menuInfo.getDish().indexOf(queryDict) != -1) {
+                        queryPositon = i;
+                        break;
+                    }
+                }
+                if (queryPositon == -1) {
+                    Toast.makeText(ShowMenuInfoActivity.this, "查找不到选项", Toast.LENGTH_SHORT).show();
+                } else {
+                    distInfoListView.setSelection(0);
+                    distInfoListView.setSelection(queryPositon);
+                    lastqueryPositon = queryPositon;
+                }
+            }
+        });
+
+        mFindNextDictButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String queryDict = mDictQueryEditText.getText().toString();
+                if (queryDict.isEmpty()) {
+                    Toast.makeText(ShowMenuInfoActivity.this, "输入不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                int queryPositon = -1;
+
+                for (int i = lastqueryPositon + 1; i < allDishNameList.size(); i++) {
+                    MenuInfo menuInfo = allDishNameList.get(i);
+                    if (menuInfo.getDish().indexOf(queryDict) != -1) {
+                        queryPositon = i;
+                        break;
+                    }
+                }
+                if (queryPositon == -1) {
+                    Toast.makeText(ShowMenuInfoActivity.this, "已经是最后一个选项", Toast.LENGTH_SHORT).show();
+                } else {
+                    distInfoListView.setSelection(0);
+                    distInfoListView.setSelection(queryPositon);
+                    lastqueryPositon = queryPositon;
+                }
+            }
+        });
+
+        mFindForwardDictButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String queryDict = mDictQueryEditText.getText().toString();
+                if (queryDict.isEmpty()) {
+                    Toast.makeText(ShowMenuInfoActivity.this, "输入不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                int queryPositon = -1;
+
+                if (lastqueryPositon == -1) lastqueryPositon = allDishNameList.size();
+
+                for (int i = lastqueryPositon - 1; i > 0; --i) {
+                    MenuInfo menuInfo = allDishNameList.get(i);
+                    if (menuInfo.getDish().indexOf(queryDict) != -1) {
+                        queryPositon = i;
+                        break;
+                    }
+                }
+                if (queryPositon == -1) {
+                    Toast.makeText(ShowMenuInfoActivity.this, "已经是第一个选项", Toast.LENGTH_SHORT).show();
+                } else {
+                    distInfoListView.setSelection(0);
+                    distInfoListView.setSelection(queryPositon);
+                    lastqueryPositon = queryPositon;
+                }
+
+            }
+        });
+
+
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,9 +180,11 @@ public class ShowMenuInfoActivity extends AppCompatActivity {
 
         lastSelectLayout = null;
 
-
         if (getSupportActionBar() != null)
             getSupportActionBar().setTitle(storeInfo.getName());
+
+
+        assignFindViews();
 
         subMenuinfoListView = (ListView) findViewById(R.id.sub_menu_info_listView);
         distInfoListView = (ListView) findViewById(R.id.dist_info_listView);
@@ -204,10 +316,10 @@ public class ShowMenuInfoActivity extends AppCompatActivity {
                     viewHolder = new ViewHolder();
                     viewHolder.dishTextView = (TextView) layout.findViewById(R.id.dishTextView);
                     viewHolder.priceTextView = (TextView) layout.findViewById(R.id.priceTextView);
-                    viewHolder.buyItemNum =(TextView) layout.findViewById(R.id.buy_item_num);
+                    viewHolder.buyItemNum = (TextView) layout.findViewById(R.id.buy_item_num);
 
                     layout.setTag(viewHolder);
-                }else{  // 之前缓存过的view
+                } else {  // 之前缓存过的view
                     layout = (LinearLayout) convertView;
                     viewHolder = (ViewHolder) layout.getTag();
                 }
@@ -219,7 +331,7 @@ public class ShowMenuInfoActivity extends AppCompatActivity {
                 if (buyMenuInfoMap.get(menuInfo) != null) {
                     viewHolder.buyItemNum.setVisibility(View.VISIBLE);
                     viewHolder.buyItemNum.setText(buyMenuInfoMap.get(menuInfo) + "份");
-                }else{
+                } else {
                     viewHolder.buyItemNum.setVisibility(View.GONE);
                 }
 
@@ -261,6 +373,7 @@ public class ShowMenuInfoActivity extends AppCompatActivity {
                 TextView tt = (TextView) ll.getChildAt(0);
                 if (tt == null) return;
                 nowSubMenuPos = dist2Int.get(tt.getText());
+
 
 //                Log.d("onScrollStateChanged", tt.getText() + "");
 //                Log.d("onScrollStateChanged", subMenuNameList.get(nowSubMenuPos));
@@ -469,10 +582,71 @@ public class ShowMenuInfoActivity extends AppCompatActivity {
         sum_poke_price_text.setText(resultPrice);
         Log.d("Sum_price", sumPrice + " ");
         show_my_poke_linear.setText("查看口袋( " + buyMenuInfoList.size() + " )");
-        if(distInfoListView.getAdapter()!=null){
+        if (distInfoListView.getAdapter() != null) {
             BaseAdapter adapter = (BaseAdapter) distInfoListView.getAdapter();
             adapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = new MenuInflater(this);
+        inflater.inflate(R.menu.menu_dict_find, menu);
+
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.find_dict:
+                if (mDictQueryLinearLayout.getVisibility() == View.GONE) {
+                    mDictQueryLinearLayout.setVisibility(View.VISIBLE);
+                } else {
+                    mDictQueryLinearLayout.setVisibility(View.GONE);
+                }
+                break;
+            case R.id.call_phone:
+                String[] lphone;
+                if (storeInfo.getLong_number().trim().isEmpty()) {
+                    lphone = new String[0];
+                } else {
+                    lphone = storeInfo.getLong_number().split("/");
+                }
+                String[] sphone;
+                if (storeInfo.getShort_number().trim().isEmpty()) {
+                    sphone = new String[0];
+                } else {
+                    sphone = storeInfo.getShort_number().split("/");
+                }
+
+                final String[] phoneNumber = new String[lphone.length + sphone.length];
+                int index = 0;
+                for (String phone : lphone) {
+                    phoneNumber[index++] = phone.trim();
+                }
+                for (String phone : sphone) {
+                    phoneNumber[index++] = phone.trim();
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(ShowMenuInfoActivity.this)
+                        .setTitle("选择要拨打的号码");
+
+                builder.setItems(phoneNumber, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialPhoneNumber(phoneNumber[i]);
+                    }
+                });
+
+                builder.show();
+
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }
