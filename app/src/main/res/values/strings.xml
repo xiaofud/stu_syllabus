@@ -94,4 +94,6 @@
     <string name="post_comment">评论</string>
     <!-- comment item 相关-->
 
+    <string name="image_activity">photo</string>
+
 </resources>

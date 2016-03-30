@@ -42,57 +42,67 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.hjsmallfly.syllabus.activities.AboutActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_about" />
+            android:label="@string/title_activity_about"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.hjsmallfly.syllabus.activities.UpdateActivity"
             android:label="@string/title_activity_update"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.hjsmallfly.syllabus.activities.GradeActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_grade" />
+            android:label="@string/title_activity_grade"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.hjsmallfly.syllabus.activities.GlobalDiscussActivity"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_global_discuss"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="com.hjsmallfly.syllabus.activities.ExamActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_exam" />
+            android:label="@string/title_activity_exam"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.hjsmallfly.syllabus.activities.PersonalInfoActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_personal_info" />
+            android:label="@string/title_activity_personal_info"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.hjsmallfly.syllabus.activities.OAActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/oa_label" />
+            android:label="@string/oa_label"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.hjsmallfly.syllabus.activities.OAWebViewActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/oa_web_view_label" />
-        <activity android:name="com.hjsmallfly.syllabus.activities.HelpActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name="com.hjsmallfly.syllabus.activities.ShowStudentInfoListActivity"
-            android:screenOrientation="portrait"/>
+            android:label="@string/oa_web_view_label"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.hjsmallfly.syllabus.activities.HelpActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.hjsmallfly.syllabus.activities.ShowStudentInfoListActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.hjsmallfly.syllabus.activities.ChooseLessonActivity"
-            android:screenOrientation="portrait"
-            android:label="长按模拟添加/删除课程" />
+            android:label="长按模拟添加/删除课程"
+            android:screenOrientation="portrait" />
         <activity android:name="com.hjsmallfly.syllabus.activities.ShowClassInfoActivity" />
         <activity
             android:name="com.hjsmallfly.syllabus.activities.LoginActivity"
             android:screenOrientation="portrait" />
-        <activity android:name="com.hjsmallfly.syllabus.activities.EastGateMenuActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name="com.hjsmallfly.syllabus.activities.ShowMenuInfoActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name="com.hjsmallfly.syllabus.activities.PushPostActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name="com.hjsmallfly.syllabus.activities.PostContentActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.hjsmallfly.syllabus.activities.EastGateMenuActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.hjsmallfly.syllabus.activities.ShowMenuInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.hjsmallfly.syllabus.activities.PushPostActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.hjsmallfly.syllabus.activities.PostContentActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name="com.hjsmallfly.syllabus.activities.DisplayImageActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:screenOrientation="portrait"
+            />
     </application>
 
 </manifest>

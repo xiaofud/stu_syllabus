@@ -2,6 +2,7 @@ package com.hjsmallfly.syllabus.helpers;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -232,6 +233,23 @@ public class FileOperation {
             if (cursor != null) {
                 cursor.close();
             }
+        }
+    }
+
+    public static boolean save_bitmap(Bitmap bitmap, String path){
+        if (bitmap == null)
+            return false;
+        File file = new File(path);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        try {
+            FileOutputStream outputStream = new FileOutputStream(file);
+            outputStream.write(byteArrayOutputStream.toByteArray());
+            outputStream.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 

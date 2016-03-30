@@ -24,7 +24,6 @@ import com.hjsmallfly.syllabus.pojo.CommentList;
 import com.hjsmallfly.syllabus.pojo.CreatedReturnValue;
 import com.hjsmallfly.syllabus.pojo.PhotoList;
 import com.hjsmallfly.syllabus.pojo.Post;
-import com.hjsmallfly.syllabus.pojo.PostComment;
 import com.hjsmallfly.syllabus.pojo.PostCommentTask;
 import com.hjsmallfly.syllabus.pojo.PostThumbUp;
 import com.hjsmallfly.syllabus.pojo.ThumbUpTask;

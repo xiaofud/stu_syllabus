@@ -12,6 +12,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+
 /**
  * Created by smallfly on 16-3-27.
  *
@@ -19,6 +20,7 @@ import java.util.List;
 public class URIGridImageViewAdapter extends BaseAdapter {
     private final Context context;
     private List<Uri> uris;
+
 
     public URIGridImageViewAdapter(Context context, List<Uri> uri_list) {
         this.context = context;
@@ -50,6 +52,8 @@ public class URIGridImageViewAdapter extends BaseAdapter {
                 .centerCrop()
                 .into(view);
 //        Log.d("GRID_IMAGE_VIEW", uri);
+
+
         return view;
     }
 

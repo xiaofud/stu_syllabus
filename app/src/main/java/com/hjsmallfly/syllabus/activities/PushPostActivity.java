@@ -80,7 +80,7 @@ public class PushPostActivity extends AppCompatActivity {
                     upload_photos();    // 包含了push文字信息到服务器
                     return;
                 }
-                Toast.makeText(PushPostActivity.this, "仅发布文字消息", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(PushPostActivity.this, "仅发布文字消息", Toast.LENGTH_SHORT).show();
                 post(); // 仅仅发布文字信息
 
             }
@@ -130,7 +130,6 @@ public class PushPostActivity extends AppCompatActivity {
             FileOutputStream os = new FileOutputStream(tmp_file);
             os.write(stream.toByteArray());
             os.close();
-//            Toast.makeText(PushPostActivity.this, "压缩之后大小为" + (tmp_file.length() / (1024 * 1024.0)) + "mb", Toast.LENGTH_SHORT).show();
             return tmp_file;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -158,7 +157,7 @@ public class PushPostActivity extends AppCompatActivity {
 
         String real_path = FileOperation.getRealPathFromURI(this, data.getData());
         if (real_path.isEmpty()){
-            Toast.makeText(PushPostActivity.this, "无法读取图片路径", Toast.LENGTH_SHORT).show();
+            Toast.makeText(PushPostActivity.this, "无法读取图片路径(见到这条消息, 请微信联系STU_nwad)", Toast.LENGTH_SHORT).show();
             return;
         }
         File file = new File(real_path);
