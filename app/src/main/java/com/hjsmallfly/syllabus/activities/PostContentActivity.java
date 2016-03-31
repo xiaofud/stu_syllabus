@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -185,6 +186,15 @@ public class PostContentActivity extends AppCompatActivity {
                 webView.getSettings().setSupportZoom(true);
                 webView.getSettings().setBuiltInZoomControls(true);
                 webView.getSettings().setDisplayZoomControls(true);
+                // webView 自动重定向
+                webView.setWebViewClient(new WebViewClient() {
+                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                        // do your handling codes here, which url is the requested url
+                        // probably you need to open that url rather than redirect:
+                        view.loadUrl(url);
+                        return true; // then it is not handled by default action
+                    }
+                });
                 // 读取页面内容
                 webView.loadUrl(post.content);
             }

@@ -89,7 +89,7 @@ public class PushPostActivity extends AppCompatActivity {
                     Toast.makeText(PushPostActivity.this, "内容不能为空", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                String url;
+                String url = "";
 
                 if (post_type == PushPostApi.POST_TYPE_ACTIVITY) {
                     url = post_url_edit.getText().toString().trim();
@@ -98,6 +98,7 @@ public class PushPostActivity extends AppCompatActivity {
                         return;
                     }
                 }
+
 
                 if (photo_files != null && photo_files.size() > 0) {
                     upload_photos();    // 包含了push文字信息到服务器
@@ -302,6 +303,9 @@ public class PushPostActivity extends AppCompatActivity {
         }else{
             // 推文等
             String url = post_url_edit.getText().toString().trim();
+            if (!url.startsWith("http://")){
+                url = "http://" + url;
+            }
             pushPostTask = new PushPostTask(url, content_or_description, MainActivity.user_id, MainActivity.token, PushPostApi.POST_TYPE_ACTIVITY, photo_list_json);
 //            Toast.makeText(PushPostActivity.this, "推文", Toast.LENGTH_SHORT).show();
         }

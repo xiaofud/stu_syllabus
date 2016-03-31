@@ -90,7 +90,10 @@ public class GridImageViewAdapter extends BaseAdapter {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(context, DisplayImageActivity.class);
-            DisplayImageActivity.drawable = ((ImageView)v).getDrawable();
+            Drawable drawable = ((ImageView)v).getDrawable();
+            if (drawable == null)
+                return;
+            DisplayImageActivity.drawable = drawable;
             intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             context.startActivity(intent);
         }
