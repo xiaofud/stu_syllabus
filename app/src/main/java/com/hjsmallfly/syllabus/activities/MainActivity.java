@@ -330,7 +330,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             String showName = "15jmtang";
-//            String showName = "14xfdeng";
+//            String showName = "13yjli3";
             SharedPreferences preferences = getSharedPreferences("userConfig", MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
             int use_count = preferences.getInt("use_count", 0);
@@ -343,12 +343,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 };
                 if (user[0].equals(showName)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
-                            .setTitle("做我女朋友好吗?");
+                            .setTitle("唐嘉敏, 做我女朋友好吗?");
                     builder.setItems(show, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                         }
                     });
+                    builder.setCancelable(false);
                     builder.show();
                 }
             }
@@ -439,7 +440,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
     private void set_cur_semester_with_spinner(int selection_id) {
         switch (selection_id) {
             case 0:
@@ -459,7 +459,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
-
 
 
     // 创建主界面
@@ -518,13 +517,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // ================= UI 相关函数 =================
 
 
-
-
-
-
-
-
-
     // 友盟的统计功能
     @Override
     protected void onResume() {
@@ -540,14 +532,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // ============= APP 数据相关函数 =============
 
-    public static boolean save_uid(Context context, int uid){
+    public static boolean save_uid(Context context, int uid) {
         return FileOperation.save_to_file(context, USER_ID_FILE, uid + "");
     }
 
-    private void get_uid_of_account(){
+    private void get_uid_of_account() {
 
         // 先尝试从本地获取
-        if (FileOperation.hasFile(this, USER_ID_FILE)){
+        if (FileOperation.hasFile(this, USER_ID_FILE)) {
             String id_str = FileOperation.read_from_file(this, USER_ID_FILE);
             if (id_str != null) {
                 MainActivity.user_id = Integer.parseInt(id_str);
@@ -563,7 +555,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             userCall.enqueue(new Callback<User>() {
                 @Override
                 public void onResponse(Call<User> call, Response<User> response) {
-                    if (response.isSuccessful()){
+                    if (response.isSuccessful()) {
 
                         MainActivity.user_id = response.body().id;
 //                        Toast.makeText(MainActivity.this, "uid: " + MainActivity.user_id, Toast.LENGTH_SHORT).show();
@@ -571,9 +563,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             Log.d("save_uid", "succeed");
                         else
                             Log.d("save_uid", "failed");
-                    }else if (response.code() == 404){
+                    } else if (response.code() == 404) {
                         Toast.makeText(MainActivity.this, "没有该用户", Toast.LENGTH_SHORT).show();
-                    }else
+                    } else
                         Toast.makeText(MainActivity.this, response.code() + ": " + response.message(), Toast.LENGTH_SHORT).show();
                 }
 
@@ -695,9 +687,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
     // ============= APP 数据相关函数 =============
-
 
 
     // ============= 辅助函数 =============
@@ -747,8 +737,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     // ============= 辅助函数 =============
-
-
 
 
     // ============= 功能块 =============
@@ -903,7 +891,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // ============= 功能块 =============
 
 
-
     // ============= 回调接口 =============
 
     @Override
@@ -1009,8 +996,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // ============= 回调接口 =============
 
 
-
-
     // ============= 监听器 ================
     @Override
     public void onClick(View v) {
@@ -1063,12 +1048,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
-
-
-
-
-
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         set_cur_semester_with_spinner(position);
@@ -1081,13 +1060,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     // ============= 监听器 ================
-
-
-
-
-
-
-
 
 
 }
