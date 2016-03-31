@@ -6,6 +6,7 @@
     <string name="github_app_address">安卓源码:\nhttps://github.com/Hjsmallfly/stu_syllabus</string>
     <string name="syllabus_get_api">/credit/api/v2/syllabus</string>
     <!--<string name="server_ip">http://121.42.175.83:8084</string>-->
+    <!--<string name="server_ip">http://192.168.0.104:8080</string>-->
     <string name="server_ip">http://119.29.95.245:8080</string>
     <!--<string name="server_ip">http://172.18.58.117:8000</string>-->
     <string name="server_ip_debug">192.168.1.100</string>
@@ -17,7 +18,8 @@
     <string name="get_grades_api">/credit/api/v2/grade</string>
     <string name="get_oa_list_api">/credit/api/v2/oa</string>
 
-    <string name="new_post_content_hint">输入新信息</string>
+    <string name="post_url_hint">请输入合法的URL</string>
+    <string name="new_post_content_hint">内容或者描述</string>
     <string name="add_photo_button">添加图片</string>
     <string name="send_post_button">发布</string>
 

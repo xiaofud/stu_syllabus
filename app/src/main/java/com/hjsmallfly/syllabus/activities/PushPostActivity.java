@@ -7,10 +7,14 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -40,9 +44,14 @@ import retrofit2.Response;
 
 public class PushPostActivity extends AppCompatActivity {
 
-    private final static int SELECT_IMAGE_REQUEST_CODE = 1;     // 这个随自己定义
+    private final static int SELECT_IMAGE_REQUEST_CODE = 1;     // 作为选择图片操作的返回值
+    private final static String[] TYPE_ARRAY = new String[]{"普通动态", "网站/推文等"};
+//    public final static int TYPE_TOPIC = 0;
+//    public final static int TYPE_ACTIVITY = 1;
 
     // =========== 控件 ===========
+    private Spinner select_type_spinner;
+    private EditText post_url_edit;
     private EditText post_content;
     private GridView photos_view;
     private Button add_photo_button;
@@ -53,6 +62,8 @@ public class PushPostActivity extends AppCompatActivity {
     private URIGridImageViewAdapter adapter;
     private List<File> photo_files;
     private List<File> tmp_files;   // 用于删除之用
+    private int post_type = PushPostApi.POST_TYPE_TOPIC;
+
 
     private List<String> uploaded_photo_urls;
 
@@ -63,6 +74,8 @@ public class PushPostActivity extends AppCompatActivity {
 
 
     private void init_views(){
+        select_type_spinner = (Spinner) findViewById(R.id.content_type_spinner);
+        post_url_edit = (EditText) findViewById(R.id.post_url_edit);
         post_content = (EditText) findViewById(R.id.new_post_content);
         photos_view = (GridView) findViewById(R.id.post_photos_grid_view);
         add_photo_button = (Button) findViewById(R.id.add_photo_button);
@@ -76,6 +89,16 @@ public class PushPostActivity extends AppCompatActivity {
                     Toast.makeText(PushPostActivity.this, "内容不能为空", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                String url;
+
+                if (post_type == PushPostApi.POST_TYPE_ACTIVITY) {
+                    url = post_url_edit.getText().toString().trim();
+                    if (!valid_url(url)) {
+                        Toast.makeText(PushPostActivity.this, "请输入合法的URL", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+
                 if (photo_files != null && photo_files.size() > 0) {
                     upload_photos();    // 包含了push文字信息到服务器
                     return;
@@ -97,6 +120,26 @@ public class PushPostActivity extends AppCompatActivity {
                 startActivityForResult(i, SELECT_IMAGE_REQUEST_CODE);
             }
         });
+
+        select_type_spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, TYPE_ARRAY));
+        select_type_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                String message = null;
+                if (position == PushPostApi.POST_TYPE_TOPIC) {
+                    post_url_edit.setVisibility(View.GONE);
+                }
+                else {
+                    post_url_edit.setVisibility(View.VISIBLE);
+                }
+                post_type = position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     @Override
@@ -106,6 +149,10 @@ public class PushPostActivity extends AppCompatActivity {
         init_views();
 
         pushPostApi = SyllabusRetrofit.retrofit.create(PushPostApi.class);
+    }
+
+    public static boolean valid_url(String url){
+        return Patterns.WEB_URL.matcher(url).matches();
     }
 
     private File compress_photo(String image_path, int divide_by, String tmp_file_name){
@@ -237,7 +284,8 @@ public class PushPostActivity extends AppCompatActivity {
             return;
         }
 
-        String content = post_content.getText().toString().trim();
+        // 当post_type为推文的时候这个输入框的内容是作为描述信息
+        String content_or_description = post_content.getText().toString().trim();
         String photo_list_json = null;
         if (uploaded_photo_urls != null && uploaded_photo_urls.size() > 0){
             List<Photo> photoList = new ArrayList<>();
@@ -245,7 +293,19 @@ public class PushPostActivity extends AppCompatActivity {
                 photoList.add(new Photo(uploaded_photo_urls.get(i), uploaded_photo_urls.get(i)));
             photo_list_json = generate_photo_list(photoList);
         }
-        PushPostTask pushPostTask = new PushPostTask(content, "None", MainActivity.user_id, MainActivity.token, PushPostApi.POST_TYPE_TOPIC, photo_list_json);
+        PushPostTask pushPostTask;// = new PushPostTask(content_or_description, "None", MainActivity.user_id, MainActivity.token, PushPostApi.POST_TYPE_TOPIC, photo_list_json);
+
+        // 判断类型
+        if (post_type == PushPostApi.POST_TYPE_TOPIC){
+            // 普通动态
+            pushPostTask = new PushPostTask(content_or_description, "None", MainActivity.user_id, MainActivity.token, PushPostApi.POST_TYPE_TOPIC, photo_list_json);
+        }else{
+            // 推文等
+            String url = post_url_edit.getText().toString().trim();
+            pushPostTask = new PushPostTask(url, content_or_description, MainActivity.user_id, MainActivity.token, PushPostApi.POST_TYPE_ACTIVITY, photo_list_json);
+//            Toast.makeText(PushPostActivity.this, "推文", Toast.LENGTH_SHORT).show();
+        }
+
         Call<Void> postCall = pushPostApi.post(pushPostTask);
         postCall.enqueue(new Callback<Void>() {
             @Override
@@ -255,7 +315,10 @@ public class PushPostActivity extends AppCompatActivity {
                     clear_tmp_files();
                     GlobalDiscussActivity.need_to_update_posts = true;
                     finish();
-                }else{
+                }else if (response.code() == 401){
+                    Toast.makeText(PushPostActivity.this, "登录超时, 请同步一次课表~", Toast.LENGTH_SHORT).show();
+                }
+                else{
                     Toast.makeText(PushPostActivity.this, response.code() + ": " + response.message(), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -269,7 +332,7 @@ public class PushPostActivity extends AppCompatActivity {
         });
 
 
-//        PushPostTask pushPostTask = new PushPostTask(content, "None", 1, "000000", 1, )
+//        PushPostTask pushPostTask = new PushPostTask(content_or_description, "None", 1, "000000", 1, )
     }
 
     private void upload_photos(){

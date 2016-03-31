@@ -32,7 +32,7 @@ public class GlobalDiscussActivity extends AppCompatActivity {
     public static boolean need_to_update_posts = false;
     public static  int ENSURE_POSITION = -1;
     public static final int VERY_BIG_INTEGER = 99999999;
-    public static final int NUMBER_OF_POSTS_PER_PULL = 5;  // 每次拉取的文章数量
+    public static final int NUMBER_OF_POSTS_PER_PULL = 10;  // 每次拉取的文章数量
     // =========== 用于给其他类控制这个类的UI ===========
 
 

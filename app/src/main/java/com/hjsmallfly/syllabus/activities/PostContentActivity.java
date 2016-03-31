@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -29,6 +30,7 @@ import com.hjsmallfly.syllabus.pojo.PostThumbUp;
 import com.hjsmallfly.syllabus.pojo.ThumbUpTask;
 import com.hjsmallfly.syllabus.restful.GetCommentsApi;
 import com.hjsmallfly.syllabus.restful.PostCommentApi;
+import com.hjsmallfly.syllabus.restful.PushPostApi;
 import com.hjsmallfly.syllabus.restful.PushThumbUpApi;
 import com.hjsmallfly.syllabus.syllabus.R;
 import com.squareup.picasso.Picasso;
@@ -64,6 +66,10 @@ public class PostContentActivity extends AppCompatActivity {
     private AlertDialog.Builder dialog_builder;
     private AlertDialog dialog;
 
+    private WebView webView;
+
+    private View view;
+
     // =============== views ================
 
     // API
@@ -80,7 +86,12 @@ public class PostContentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post_content);
+        if (post.postType == PushPostApi.POST_TYPE_TOPIC)
+            setContentView(R.layout.topic_post_content);
+        else
+            setContentView(R.layout.activity_activity_post_content);
+
+        view = findViewById(R.id.postArea);
 
         // 初始化 api
         thumbUpApi = SyllabusRetrofit.retrofit.create(PushThumbUpApi.class);
@@ -98,46 +109,103 @@ public class PostContentActivity extends AppCompatActivity {
     // =============== 跟UI有关的函数 ===============
 
     private void find_views(){
-        // include 的内容
-        View view = findViewById(R.id.post_area);
+
+//        view = findViewById(R.id.postArea);
+
+        // 普通动态单独有的views
         avatarView = (ImageView) view.findViewById(R.id.discuss_avatar_image_view);
 
+        post_photos_grid_view = (GridView) view.findViewById(R.id.discuss_grid_image_view);
+        publisher_text = (TextView) view.findViewById(R.id.discuss_speaker_text);
+        pub_time_text = (TextView) view.findViewById(R.id.discuss_time_text);
+        content_text = (TextView) view.findViewById(R.id.discuss_content);
+
+        // 普通动态单独有的views
+
+        // 推文独有的views
+        webView = (WebView) view.findViewById(R.id.web_page_view);
+
+        // 两者共有的views
         like_image_view = (ImageView) view.findViewById(R.id.like_image_view);
         like_count_text_view = (TextView) view.findViewById(R.id.like_count_text_view);
 
         comment_image_view = (ImageView) view.findViewById(R.id.comment_image_view);
         comment_count_text_view = (TextView) view.findViewById(R.id.comment_count_text_view);
-
-        post_photos_grid_view = (GridView) view.findViewById(R.id.discuss_grid_image_view);
-
-        publisher_text = (TextView) view.findViewById(R.id.discuss_speaker_text);
-        pub_time_text = (TextView) view.findViewById(R.id.discuss_time_text);
-        content_text = (TextView) view.findViewById(R.id.discuss_content);
-
-
         comments_list_view = (ListView) findViewById(R.id.commentListView);
+        // 两者共有的views
     }
 
     private void setup_views(){
+
         if (post != null){
 
-            // 设置头像
-            if (post.postUser.image != null && !post.postUser.image.isEmpty()){
-                // 显示图片
-                Picasso.with(PostContentActivity.this).load(post.postUser.image).error(R.mipmap.syllabus_icon2).into(avatarView);
-            }else{
-                avatarView.setImageResource(R.mipmap.syllabus_icon2);
+            // 普通动态独有的views
+
+            if (post.postType == PushPostApi.POST_TYPE_TOPIC) {
+
+                // 作者信息 和 内容
+                publisher_text.setText(post.postUser.nickname);
+                pub_time_text.setText(post.postTime);
+                content_text.setText(post.content.trim());   // 去除没必要的空字符
+                // 设置头像
+                if (post.postUser.image != null && !post.postUser.image.isEmpty()) {
+                    // 显示图片
+                    Picasso.with(PostContentActivity.this).load(post.postUser.image).error(R.mipmap.syllabus_icon2).into(avatarView);
+                } else {
+                    avatarView.setImageResource(R.mipmap.syllabus_icon2);
+                }
+
+                // 发布同时的图片
+                // 先判断这个post有没有图片
+                PhotoList photoList = gson.fromJson(post.photoListJson, PhotoList.class);
+
+                if (photoList != null) {
+                    // 说明这个post有图片
+                    // 将显示图片的控件设置为可见
+                    post_photos_grid_view.setVisibility(View.VISIBLE);
+                    if (post_photos_grid_view.getAdapter() == null) {
+                        // 第一次处理这个view
+                        List<String> thumbnails = photoList.get_thumbnails();
+                        post_photos_grid_view.setAdapter(new GridImageViewAdapter(PostContentActivity.this, thumbnails));
+                    } else {
+                        GridImageViewAdapter adapter = (GridImageViewAdapter) post_photos_grid_view.getAdapter();
+                        adapter.update_urls(photoList.get_thumbnails());
+                    }
+                } else {
+                    // 没有图片, 则该控件不应该显示出来
+                    post_photos_grid_view.setVisibility(View.GONE);
+                }
+
             }
+            // 普通动态独有的views
 
+            // 推文独有的views
+            if (post.postType == PushPostApi.POST_TYPE_ACTIVITY){
+                webView.getSettings().setJavaScriptEnabled(true);
+                webView.getSettings().setSupportZoom(true);
+                webView.getSettings().setBuiltInZoomControls(true);
+                webView.getSettings().setDisplayZoomControls(true);
+                // 读取页面内容
+                webView.loadUrl(post.content);
+            }
+            // 推文独有的views
+
+            // 共有的views
+
+            // 评论 和 点赞
+            String like_count = post.thumbUps.size() + "";
+            String comment_count = post.comments.size() + "";
+            like_count_text_view.setText(like_count);
+            comment_count_text_view.setText(comment_count);
+
+            // 点赞
             final int like_id = PostAdapter.get_like_id(1, post);
-
             // 判断用户是否点过赞, 设置相应的图片
             if (like_id != -1){ // 点过赞
                 like_image_view.setImageResource(R.drawable.liked);
             }else{
                 like_image_view.setImageResource(R.drawable.to_like);
             }
-
             // 设置监听器
             // 因为会重用, 所以暂时先每次都添加解决冲突
             like_image_view.setOnClickListener(new View.OnClickListener() {
@@ -176,28 +244,9 @@ public class PostContentActivity extends AppCompatActivity {
                     });
                 }
             });
-//        }
+            // 点赞
 
-            // 先判断这个post有没有图片
-            PhotoList photoList = gson.fromJson(post.photoListJson, PhotoList.class);
-
-            if (photoList != null){
-                // 说明这个post有图片
-                // 将显示图片的控件设置为可见
-                post_photos_grid_view.setVisibility(View.VISIBLE);
-                if (post_photos_grid_view.getAdapter() == null) {
-                    // 第一次处理这个view
-                    List<String> thumbnails = photoList.get_thumbnails();
-                    post_photos_grid_view.setAdapter(new GridImageViewAdapter(PostContentActivity.this, thumbnails));
-                }else{
-                    GridImageViewAdapter adapter = (GridImageViewAdapter) post_photos_grid_view.getAdapter();
-                    adapter.update_urls(photoList.get_thumbnails());
-                }
-            }else{
-                // 没有图片, 则该控件不应该显示出来
-                post_photos_grid_view.setVisibility(View.GONE);
-            }
-
+            // 评论
             // 点击评论按钮 显示/隐藏 评论
             comment_image_view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -209,16 +258,7 @@ public class PostContentActivity extends AppCompatActivity {
                         comments_list_view.setVisibility(View.VISIBLE);
                 }
             });
-
-            publisher_text.setText(post.postUser.nickname);
-            pub_time_text.setText(post.postTime);
-            content_text.setText(post.content.trim());   // 去除没必要的空字符
-
-            String like_count = post.thumbUps.size() + "";
-            String comment_count = post.comments.size() + "";
-            like_count_text_view.setText(like_count);
-            comment_count_text_view.setText(comment_count);
-
+            // 评论
         }
     }
 

@@ -99,10 +99,10 @@
         <activity
             android:name="com.hjsmallfly.syllabus.activities.PostContentActivity"
             android:screenOrientation="portrait" />
-        <activity android:name="com.hjsmallfly.syllabus.activities.DisplayImageActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"
+        <activity
+            android:name="com.hjsmallfly.syllabus.activities.DisplayImageActivity"
             android:screenOrientation="portrait"
-            />
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
     </application>
 
 </manifest>

@@ -17,7 +17,7 @@
         android:layout_height="100dp" />
     <TextView
         android:gravity="center"
-        android:text="点击切换头像"
+        android:text="点击更改头像(需要按修改按钮上传)"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

@@ -10,6 +10,21 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.hjsmallfly.syllabus.activities.PushPostActivity">
 
+    <Spinner
+        android:id="@+id/content_type_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </Spinner>
+
+    <EditText
+        android:id="@+id/post_url_edit"
+        android:visibility="gone"
+        android:inputType="textUri"
+        android:hint="@string/post_url_hint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <EditText
         android:id="@+id/new_post_content"
         android:gravity="top"

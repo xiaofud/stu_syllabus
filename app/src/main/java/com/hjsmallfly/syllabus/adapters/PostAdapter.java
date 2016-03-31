@@ -27,6 +27,7 @@ import com.hjsmallfly.syllabus.pojo.Post;
 import com.hjsmallfly.syllabus.pojo.PostThumbUp;
 import com.hjsmallfly.syllabus.pojo.ThumbUpTask;
 import com.hjsmallfly.syllabus.restful.DeletePostApi;
+import com.hjsmallfly.syllabus.restful.PushPostApi;
 import com.hjsmallfly.syllabus.restful.PushThumbUpApi;
 import com.hjsmallfly.syllabus.restful.UnLikeApi;
 import com.hjsmallfly.syllabus.syllabus.R;
@@ -152,46 +153,49 @@ public class PostAdapter extends ArrayAdapter<Post> {
 
         // 判断用户是否点过赞, 设置相应的图片
         if (like_id != -1){ // 点过赞
+
             viewHolder.like_image_view.setImageResource(R.drawable.liked);
             // 暂时不能删除赞
-//            if (!viewHolder.like_image_view.hasOnClickListeners()){
-//                viewHolder.like_image_view.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        final ImageView image_view = (ImageView) v;
-//                        Call<Void> unlike_it = unLikeApi.unlike_this(like_id, 1, "000000");
-//                        unlike_it.enqueue(new Callback<Void>() {
-//                            @Override
-//                            public void onResponse(Call<Void> call, Response<Void> response) {
-//                                if (response.isSuccessful()){
-//                                    image_view.setImageResource(R.drawable.to_like);
-//                                    Toast.makeText(getContext(), "已经删除赞", Toast.LENGTH_SHORT).show();
-//                                }else if (response.code() == 401){
-//                                    Toast.makeText(getContext(), "登录超时, 请同步一下课表", Toast.LENGTH_SHORT).show();
-//                                }
-//                            }
+//            viewHolder.like_image_view.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
 //
-//                            @Override
-//                            public void onFailure(Call<Void> call, Throwable t) {
-//                                Toast.makeText(getContext(), "网络错误, 请重试", Toast.LENGTH_SHORT).show();
-//                            }
-//                        });
+//                    if (MainActivity.user_id == -1){
+//                        Toast.makeText(getContext(), "登录超时, 请同步一次课表", Toast.LENGTH_SHORT).show();
+//                        return;
 //                    }
-//                });
-//            }
+//
+//                    final ImageView image_view = (ImageView) v;
+//                    Call<Void> unlike_it = unLikeApi.unlike_this(like_id, MainActivity.user_id, MainActivity.token);
+//                    unlike_it.enqueue(new Callback<Void>() {
+//                        @Override
+//                        public void onResponse(Call<Void> call, Response<Void> response) {
+//                            if (response.isSuccessful()){
+//                                image_view.setImageResource(R.drawable.to_like);
+//                                Toast.makeText(getContext(), "已经删除赞", Toast.LENGTH_SHORT).show();
+//                            }else if (response.code() == 401){
+//                                Toast.makeText(getContext(), "登录超时, 请同步一下课表", Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onFailure(Call<Void> call, Throwable t) {
+//                            Toast.makeText(getContext(), "网络错误, 请重试", Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
+//                }
+//            });
         }else{
             viewHolder.like_image_view.setImageResource(R.drawable.to_like);
+
         }
 
-
-        // 设置监听器
-//        if (!viewHolder.like_image_view.hasOnClickListeners()){
         // 因为会重用, 所以暂时先每次都添加解决冲突
         viewHolder.like_image_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (MainActivity.user_id == -1){
+                if (MainActivity.user_id == -1) {
                     Toast.makeText(getContext(), "登录超时, 请同步一次课表", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -222,6 +226,9 @@ public class PostAdapter extends ArrayAdapter<Post> {
                 });
             }
         });
+
+
+
 //        }
 
         // 先判断这个post有没有图片
@@ -256,7 +263,11 @@ public class PostAdapter extends ArrayAdapter<Post> {
 
         viewHolder.publisher_text.setText(post.postUser.nickname);
         viewHolder.pub_time_text.setText(post.postTime);
-        viewHolder.content_text.setText(trim_string_to_max_len(post.content.trim(), 6, 140, "(点击查看全文)"));   // 去除没必要的空字符
+        if (post.postType == PushPostApi.POST_TYPE_TOPIC){
+            viewHolder.content_text.setText(trim_string_to_max_len(post.content.trim(), 6, 140, "(点击查看全文)"));   // 去除没必要的空字符
+        }else
+            viewHolder.content_text.setText(trim_string_to_max_len("[链接] " + post.description.trim(), 6, 140, "(点击查看详情)"));
+
 
         String like_count = post.thumbUps.size() + "";
         String comment_count = post.comments.size() + "";
@@ -358,9 +369,9 @@ public class PostAdapter extends ArrayAdapter<Post> {
         
         @Override
         public void onClick(View v) {
-            PostContentActivity.post = this.post_to_display;
-            GlobalDiscussActivity.ENSURE_POSITION = position;
-            getContext().startActivity(new Intent(getContext(), PostContentActivity.class));
+                PostContentActivity.post = this.post_to_display;
+                GlobalDiscussActivity.ENSURE_POSITION = position;
+                getContext().startActivity(new Intent(getContext(), PostContentActivity.class));
         }
     }
     

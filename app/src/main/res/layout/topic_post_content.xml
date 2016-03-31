@@ -9,15 +9,15 @@
     tools:context="com.hjsmallfly.syllabus.activities.PostContentActivity">
 
 
-
     <ScrollView
+        android:id="@+id/postContentView"
         android:layout_weight="2"
         android:layout_width="match_parent"
         android:layout_height="0dp">
 
         <include layout="@layout/discuss_item_layout"
 
-            android:id="@+id/post_area"/>
+            android:id="@+id/postArea"/>
 
     </ScrollView>
 
