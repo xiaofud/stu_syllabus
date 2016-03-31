@@ -303,7 +303,7 @@ public class PushPostActivity extends AppCompatActivity {
         }else{
             // 推文等
             String url = post_url_edit.getText().toString().trim();
-            if (!url.startsWith("http://")){
+            if (!url.startsWith("http")){
                 url = "http://" + url;
             }
             pushPostTask = new PushPostTask(url, content_or_description, MainActivity.user_id, MainActivity.token, PushPostApi.POST_TYPE_ACTIVITY, photo_list_json);
