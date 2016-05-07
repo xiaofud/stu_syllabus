@@ -3,11 +3,9 @@ package com.hjsmallfly.syllabus.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -15,7 +13,6 @@ import android.widget.Toast;
 
 import com.hjsmallfly.syllabus.adapters.PostAdapter;
 import com.hjsmallfly.syllabus.helpers.SyllabusRetrofit;
-import com.hjsmallfly.syllabus.pojo.PhotoList;
 import com.hjsmallfly.syllabus.pojo.PostList;
 import com.hjsmallfly.syllabus.restful.GetPostsApi;
 import com.hjsmallfly.syllabus.syllabus.R;
@@ -26,7 +23,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class GlobalDiscussActivity extends AppCompatActivity {
+public class SocialActivity extends AppCompatActivity {
 
     // =========== 用于给其他类控制这个类的UI ===========
     public static boolean need_to_update_posts = false;
@@ -78,13 +75,13 @@ public class GlobalDiscussActivity extends AppCompatActivity {
             need_to_update_posts = false;
         }
 
-        if (GlobalDiscussActivity.ENSURE_POSITION != -1 && postAdapter != null){
+        if (SocialActivity.ENSURE_POSITION != -1 && postAdapter != null){
             // 设置回之前设定的位置
 
-            if (GlobalDiscussActivity.ENSURE_POSITION < postAdapter.getCount()){
+            if (SocialActivity.ENSURE_POSITION < postAdapter.getCount()){
                 // 数据有可能更新了
                 postAdapter.notifyDataSetChanged();
-                global_list_view.setSelection(GlobalDiscussActivity.ENSURE_POSITION);
+                global_list_view.setSelection(SocialActivity.ENSURE_POSITION);
             }
 
         }
@@ -118,10 +115,10 @@ public class GlobalDiscussActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (MainActivity.user_id == -1){
-                    Toast.makeText(GlobalDiscussActivity.this, "亲, 请同步一下课表", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SocialActivity.this, "亲, 请同步一下课表", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                startActivity(new Intent(GlobalDiscussActivity.this, PushPostActivity.class));
+                startActivity(new Intent(SocialActivity.this, PushPostActivity.class));
             }
         });
 
@@ -144,18 +141,18 @@ public class GlobalDiscussActivity extends AppCompatActivity {
                     PostList tmp = response.body();
                     // 记录原来列表的最后一项
                     int origin_max_item_id = global_list_view.getCount();
-                    if (GlobalDiscussActivity.this.postList != null){
+                    if (SocialActivity.this.postList != null){
 
 
 
                         // 更新内容
                         if (re_pull)    // 意味着要拉取最新的数据
-                            GlobalDiscussActivity.this.postList.postList.clear();
+                            SocialActivity.this.postList.postList.clear();
                         current_max_id = tmp.postList.get(tmp.postList.size() - 1).id;    // 降序排序
-                        GlobalDiscussActivity.this.postList.postList.addAll(tmp.postList);
+                        SocialActivity.this.postList.postList.addAll(tmp.postList);
                     }else {   // 第一次请求
-                        GlobalDiscussActivity.this.postList = response.body();
-                        current_max_id = GlobalDiscussActivity.this.postList.postList.get(tmp.postList.size() - 1).id;
+                        SocialActivity.this.postList = response.body();
+                        current_max_id = SocialActivity.this.postList.postList.get(tmp.postList.size() - 1).id;
                     }
 
                     if (re_pull) {
@@ -164,15 +161,15 @@ public class GlobalDiscussActivity extends AppCompatActivity {
                         display_posts(origin_max_item_id - 1);  // 点按钮之前的最后一个item的position
                     }
                 } else if(response.code() == 404){
-                    Toast.makeText(GlobalDiscussActivity.this, "没新动态啦", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SocialActivity.this, "没新动态啦", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(GlobalDiscussActivity.this, "code: " + response.code(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SocialActivity.this, "code: " + response.code(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<PostList> call, Throwable t) {
-                Toast.makeText(GlobalDiscussActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SocialActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -186,12 +183,12 @@ public class GlobalDiscussActivity extends AppCompatActivity {
                 global_list_view.setAdapter(postAdapter);
             }
             postAdapter.notifyDataSetChanged();
-//            Toast.makeText(GlobalDiscussActivity.this, "select: " + selection_id, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(SocialActivity.this, "select: " + selection_id, Toast.LENGTH_SHORT).show();
             global_list_view.setSelection(selection_id);
         }
 //        else {
 //            postAdapter.notifyDataSetChanged();
-//            Toast.makeText(GlobalDiscussActivity.this, "select: " + selection_id, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(SocialActivity.this, "select: " + selection_id, Toast.LENGTH_SHORT).show();
 //            global_list_view.setSelection(selection_id);
 //        }
 
@@ -207,7 +204,7 @@ public class GlobalDiscussActivity extends AppCompatActivity {
 
             case R.id.personal_info_action:
                 if (MainActivity.user_id == -1){
-                    Toast.makeText(GlobalDiscussActivity.this, "亲, 请同步一次课表", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SocialActivity.this, "亲, 请同步一次课表", Toast.LENGTH_SHORT).show();
                     return true;
                 }
                 Intent person_intent = new Intent(this, PersonalInfoActivity.class);

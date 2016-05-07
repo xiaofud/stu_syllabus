@@ -99,7 +99,7 @@ public class PostContentActivity extends AppCompatActivity {
         getCommentApi = SyllabusRetrofit.retrofit.create(GetCommentsApi.class);
         postCommentApi = SyllabusRetrofit.retrofit.create(PostCommentApi.class);
 
-//        GlobalDiscussActivity.need_to_update_posts = true;
+//        SocialActivity.need_to_update_posts = true;
 
         init_views();
 
@@ -209,7 +209,7 @@ public class PostContentActivity extends AppCompatActivity {
             comment_count_text_view.setText(comment_count);
 
             // 点赞
-            final int like_id = PostAdapter.get_like_id(1, post);
+            final int like_id = PostAdapter.get_like_id(MainActivity.user_id, post);
             // 判断用户是否点过赞, 设置相应的图片
             if (like_id != -1){ // 点过赞
                 like_image_view.setImageResource(R.drawable.liked);

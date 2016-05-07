@@ -317,7 +317,7 @@ public class PushPostActivity extends AppCompatActivity {
                 if (response.isSuccessful()){
                     Toast.makeText(PushPostActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
                     clear_tmp_files();
-                    GlobalDiscussActivity.need_to_update_posts = true;
+                    SocialActivity.need_to_update_posts = true;
                     finish();
                 }else if (response.code() == 401){
                     Toast.makeText(PushPostActivity.this, "登录超时, 请同步一次课表~", Toast.LENGTH_SHORT).show();

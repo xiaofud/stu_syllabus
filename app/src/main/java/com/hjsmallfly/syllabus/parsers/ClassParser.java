@@ -6,7 +6,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.hjsmallfly.syllabus.activities.MainActivity;
-import com.hjsmallfly.syllabus.adapters.SyllabusAdapter;
 import com.hjsmallfly.syllabus.helpers.StringDataHelper;
 import com.hjsmallfly.syllabus.interfaces.TokenGetter;
 import com.hjsmallfly.syllabus.syllabus.Lesson;
@@ -31,7 +30,7 @@ public class ClassParser {
 
     public static final String EMPTY_CLASS_STRING = "";
     //    public static final String[] LABELS = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
-    public static final String[] LABELS = {"周一", "周二", "周三", "周四", "周五", "周六", "周日"};
+//    public static final String[] LABELS = {"周一", "周二", "周三", "周四", "周五", "周六", "周日"};
     public static final HashMap<String, String> time_table;
     public static final Set<String> class_table;
 
@@ -78,7 +77,7 @@ public class ClassParser {
 
     public static final int ROWS = 14;
     public static final int COLUMNS = 8;    // 包含了 一个 空单元 以及 星期一到星期日
-    public Object[] weekdays_syllabus_data;  // 用于适配 课表的 view 的数据
+    public Object[] syllabusGrid;  // 用于适配 课表的 view 的数据
 
     private Context context;
 
@@ -86,7 +85,7 @@ public class ClassParser {
 
     public ClassParser(Context context, TokenGetter tokenGetter) {
 //        this.week = this_week;
-        weekdays_syllabus_data = new Object[ROWS * (COLUMNS + 1)];
+        syllabusGrid = new Object[ROWS * (COLUMNS + 1)];
         all_classes = new ArrayList<>();
 //        weekend_classes = new ArrayList<>();
         this.context = context;
@@ -101,7 +100,7 @@ public class ClassParser {
      * 解析json数据
      *
      * @param json_data 从服务器返回的代表课程信息的 json 数据
-     * @return
+     * @return 解析是否成功
      */
 
     public boolean parseJSON(String json_data, boolean update_local_token) {
@@ -142,7 +141,7 @@ public class ClassParser {
 //            Log.d(MainActivity.TAG, classes.length() + " classes");
             // 得到颜色的种类数
             // 颜色 指针
-            int color_index = -1;
+//            int color_index = -1;
             int colorIndex = 0;
             for (int i = 0; i < classes.length(); ++i) {
                 // 得到每一节课
@@ -170,7 +169,6 @@ public class ClassParser {
                 cls.credit = credit;
                 cls.colorID = bgColor[colorIndex++ % bgColor.length];
 
-//                Log.d(MainActivity.TAG, duration);
 
                 // 额外信息
                 cls.semester = MainActivity.cur_semester;
@@ -239,13 +237,8 @@ public class ClassParser {
             // 说明是周日
             day_of_week = 7;
         }
-//                    Toast.makeText(SyllabusActivity.this, "今天是" + day_of_week, Toast.LENGTH_SHORT).show();
         // 计算出星期一的日期
         calendar.add(Calendar.DAY_OF_MONTH, - (day_of_week - 1 ));
-//            int month = calendar.get(Calendar.MONTH) + 1;
-//            int day = calendar.get(Calendar.DAY_OF_MONTH);
-//                    Toast.makeText(SyllabusActivity.this, "这周星期一是" + month + "/" + day , Toast.LENGTH_SHORT).show();
-//        Calendar today = Calendar.getInstance();
         long diff_day = ( target_calendar.getTime().getTime() - calendar.getTime().getTime() ) / (60 * 60 * 24 * 1000);
 //                    Toast.makeText(SyllabusActivity.this, "日期相差了" + diff, Toast.LENGTH_SHORT).show();
         //            Log.d("this_week",  "初始周数是 " + MainActivity.initial_week +  " 现在的周数是" + this_week);
@@ -254,8 +247,8 @@ public class ClassParser {
                 + "-" + calendar.get(Calendar.DAY_OF_MONTH)
         );
         Log.d("week", "现在的日期是: "
-                        + target_calendar.get(target_calendar.YEAR) + "-" + (target_calendar.get(target_calendar.MONTH) + 1 )
-                        + "-" + target_calendar.get(target_calendar.DAY_OF_MONTH)
+                        + target_calendar.get(Calendar.YEAR) + "-" + (target_calendar.get(Calendar.MONTH) + 1 )
+                        + "-" + target_calendar.get(Calendar.DAY_OF_MONTH)
         );
         Log.d("week", "计算得出的差是: " + diff_day);
         return (int) diff_day / 7 + MainActivity.initial_week;
@@ -263,10 +256,10 @@ public class ClassParser {
 
 
     /**
-     * 用解析得到的课程填充 weekdays_syllabus_data
+     * 用解析得到的课程填充 syllabusGrid
+     * 计算每节课在格子中的位置
      */
-    public void inflateTable() {
-//        Log.d(MainActivity.TAG, "before inflate class_table");
+    public void calcClassPosition() {
         // 填充课表数据
         int this_week = calculate_week(Calendar.getInstance());
         for (int i = 0; i < all_classes.size(); ++i) {
@@ -276,16 +269,10 @@ public class ClassParser {
             // ------------这里可以踢掉已经上完了的课程-------------
             // -------------判断是否课程已经上完了-------------
 
-
-//            Log.d("this_week",  "初始周数是 " + MainActivity.initial_week +  " 现在的周数是" + this_week);
-//                    Toast.makeText(SyllabusActivity.this, "这周是" + this_week, Toast.LENGTH_SHORT).show();
             int[] range = lesson.get_duration();
-//                    Toast.makeText(SyllabusActivity.this, Arrays.toString(range), Toast.LENGTH_SHORT).show();
+
             if (this_week < range[0] || this_week > range[1]) {
                 continue;
-//                do_not_show = true;
-//                Log.d("pick", lesson.name);
-//                need_to_test_single_or_double = false;
             }
 
             // -------------判断是否课程已经上完了-------------
@@ -345,6 +332,7 @@ public class ClassParser {
                         if (row == -1)   // 说明是单双周的情况
                             continue;
 
+                        // 计算出在表格中的位置, 压缩为一维数组
                         int index = row * COLUMNS + offset;
 
                         boolean really_to_add = true;
@@ -385,9 +373,10 @@ public class ClassParser {
                         if (!really_to_add)
                             continue;
 
+
                         Log.v("index", index + " ");
                         if (!hasBeenAdded) {     // 一节课添加一次即可
-                            weekdays_syllabus_data[index] = lesson;   // 将这节课添加到合适的位置
+                            syllabusGrid[index] = lesson;   // 将这节课添加到合适的位置
                             hasBeenAdded = true;
                         } else {
                             // 找前一个位置
@@ -398,13 +387,13 @@ public class ClassParser {
                                 int diff = row - pre_row;
                                 if (diff != 1) {  // 不相邻，如整合思维 一天三节课但是 大班课 不相邻
 //                                    Toast.makeText(context, "the difference is" + diff, Toast.LENGTH_SHORT).show();
-                                    weekdays_syllabus_data[index] = lesson;
+                                    syllabusGrid[index] = lesson;
                                     continue;
                                 }
                                 // 说明这节课和上面的课是连着的而且是同一节课
-//                                weekdays_syllabus_data[index] = "同上";
+//                                syllabusGrid[index] = "同上";
                                 // 取消同上
-                                weekdays_syllabus_data[index] = lesson;
+                                syllabusGrid[index] = lesson;
                             }
 
                         }

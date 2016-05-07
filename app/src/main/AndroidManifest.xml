@@ -53,7 +53,7 @@
             android:label="@string/title_activity_grade"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.hjsmallfly.syllabus.activities.GlobalDiscussActivity"
+            android:name="com.hjsmallfly.syllabus.activities.SocialActivity"
             android:label="@string/title_activity_global_discuss"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />

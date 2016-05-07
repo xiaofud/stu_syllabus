@@ -1,6 +1,5 @@
 package com.hjsmallfly.syllabus.activities;
 
-import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -24,10 +23,7 @@ import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
-import android.transition.Explode;
-import android.transition.Fade;
 import android.transition.Slide;
-import android.transition.Visibility;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -35,7 +31,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
@@ -74,13 +69,9 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 
     public static final String WALL_PAPER_FILE_TEMP = "temp_pic_file.jpg";
 
-    public static final String COLOR_FILE_NAME = "syllabus_text_color";
-
     private static final int PICK_PHOTO_FROM_GALLERY = 1; // 从相册中选择
     private static final int CROP_PHOTO_REQUEST = 2; // 结果
 
-    //private Button show_oa_button;
-//    private TextView info_text;
 
     private Bitmap wall_paper;
 
@@ -133,8 +124,8 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
     public void showSyllabus() {
         ClassParser parser = new ClassParser(this, this);
         parser.parseJSON(MainActivity.syllabus_json_data, false);
-        parser.inflateTable();
-        MainActivity.weekdays_syllabus_data = parser.weekdays_syllabus_data;
+        parser.calcClassPosition();
+        MainActivity.weekdays_syllabus_data = parser.syllabusGrid;
         Object[] weekdays_syllabus_data = MainActivity.weekdays_syllabus_data;
         myClassTable.removeAllViews();
 
@@ -162,7 +153,6 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                     if (prevClassID != null && prevClassID.equals(lesson.id)) {
                         continue;
                     }
-//                    }
                 }
 
 
@@ -195,8 +185,8 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                         if (!(weekdays_syllabus_data[nextIndex] instanceof Lesson)) {
                             break;
                         }
-                        Lesson otherlesson = (Lesson) weekdays_syllabus_data[nextIndex];
-                        if (otherlesson.toString().equals(lesson.toString())) {
+                        Lesson otherLesson = (Lesson) weekdays_syllabus_data[nextIndex];
+                        if (otherLesson.toString().equals(lesson.toString())) {
                             ++timeOfClass;
                         } else break;
                     }
@@ -228,6 +218,16 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                             showClassInfo(finalLesson);
                         }
                     });
+                }else{
+                    final int row_index = j;
+                    final int column_index = i;
+                    // 空白格子
+                    ll.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(SyllabusActivity.this, "空白格子@(" + row_index + ", " + column_index + ")", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
 
                 //ll.setPadding(5,5,5,5);
@@ -245,8 +245,10 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 ll.setLayoutParams(llp);
                 ll.requestLayout();
 
-                if (!do_not_show) prevClassID = lesson.id;
-                else prevClassID = null;
+                if (!do_not_show)
+                    prevClassID = lesson.id;
+                else
+                    prevClassID = null;
 
 
                 myClassTable.requestLayout();
@@ -368,27 +370,12 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 pick_photo();
                 break;
 
-//            case R.id.query_grade_action:
-//
-//                // 友盟
-//                MobclickAgent.onEvent(this, "More_Grade");
-//
-//                // 查看成绩
-//                Intent grade_intent = new Intent(this, GradeActivity.class);
-//                startActivity(grade_intent);
-//                break;
 
             case R.id.global_discuss_action:
-                Intent global_discuss_intent = new Intent(this, GlobalDiscussActivity.class);
+                Intent global_discuss_intent = new Intent(this, SocialActivity.class);
                 startActivity(global_discuss_intent);
                 break;
 
-//            case R.id.query_exam_action:
-//                // 友盟
-//                MobclickAgent.onEvent(this, "More_Exam");
-//                Intent exam_intent = new Intent(this, ExamActivity.class);
-//                startActivity(exam_intent);
-//                break;
 
             case R.id.sync_syllabus_action:
                 // 更新课表
@@ -396,15 +383,6 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 MobclickAgent.onEvent(this, "More_Sync");
                 sync_syllabus();
                 break;
-//            case R.id.show_oa_action:
-//                Intent intent = new Intent(this, OAActivity.class);
-//                startActivity(intent);
-//                break;
-
-//            case R.id.choose_class_action:
-//                Intent choose_activity = new Intent(this, ChooseLessonActivity.class);
-//                startActivity(choose_activity);
-//                break;
 
             case R.id.login_to_internet:
                 InternetLogin.login_to_internet(this, MainActivity.cur_username, MainActivity.cur_password);
@@ -457,8 +435,8 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                     MainActivity.initial_date = date_string;
                     ClassParser parser = new ClassParser(SyllabusActivity.this, SyllabusActivity.this);
                     parser.parseJSON(MainActivity.syllabus_json_data, false);
-                    parser.inflateTable();     // 用数据填充课表
-                    MainActivity.weekdays_syllabus_data = parser.weekdays_syllabus_data;
+                    parser.calcClassPosition();     // 用数据填充课表
+                    MainActivity.weekdays_syllabus_data = parser.syllabusGrid;
                     setActionBarTitle("第" + week + "周");
                 } else {
                     Toast.makeText(SyllabusActivity.this, "设置周数出错", Toast.LENGTH_SHORT).show();
@@ -483,8 +461,8 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 MainActivity.initial_date = date_string;
                 ClassParser parser = new ClassParser(SyllabusActivity.this, SyllabusActivity.this);
                 parser.parseJSON(MainActivity.syllabus_json_data, false);
-                parser.inflateTable();     // 用数据填充课表
-                MainActivity.weekdays_syllabus_data = parser.weekdays_syllabus_data;
+                parser.calcClassPosition();     // 用数据填充课表
+                MainActivity.weekdays_syllabus_data = parser.syllabusGrid;
                 setActionBarTitle("第" + week + "周");
                 showSyllabus();
                 dialog.dismiss();
@@ -591,16 +569,6 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
     }
 
 
-//    private void set_text_color(int color) {
-//
-//        ColorHelper.save_color_to_file(this, color, COLOR_FILE_NAME);
-//    }
-
-//    private void set_random_color() {
-//        int color = ColorHelper.get_random_color();
-//        set_text_color(color);
-//    }
-
     private void sync_syllabus() {
         LessonPullTask sync_task = new LessonPullTask(WebApi.get_server_address() + getString(R.string.syllabus_get_api), this);
         HashMap<String, String> postData = new HashMap<>();
@@ -621,8 +589,8 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 
         ClassParser classParser = new ClassParser(this, this);
         if (classParser.parseJSON(raw_data, true)) {
-            classParser.inflateTable();     // 用数据填充课表
-            MainActivity.weekdays_syllabus_data = classParser.weekdays_syllabus_data;
+            classParser.calcClassPosition();     // 用数据填充课表
+            MainActivity.weekdays_syllabus_data = classParser.syllabusGrid;
 //                    Log.d(TAG, "established adapter");
 
             // 保存文件 命名格式: name_years_semester

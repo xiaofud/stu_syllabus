@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.hjsmallfly.syllabus.activities.GlobalDiscussActivity;
+import com.hjsmallfly.syllabus.activities.SocialActivity;
 import com.hjsmallfly.syllabus.activities.MainActivity;
 import com.hjsmallfly.syllabus.activities.PostContentActivity;
 import com.hjsmallfly.syllabus.helpers.ClipBoardHelper;
@@ -47,7 +47,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
 
     private Gson gson = new GsonBuilder().create();
     private PushThumbUpApi thumbUpApi;
-//    private UnLikeApi unLikeApi;
+    private UnLikeApi unLikeApi;
 
     class ViewHolder{
         private ImageView avatarView;   // 头像
@@ -76,7 +76,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
         super(context, resource, objects);
         this.layout_id = resource;
         thumbUpApi = SyllabusRetrofit.retrofit.create(PushThumbUpApi.class);
-//        unLikeApi = SyllabusRetrofit.retrofit.create(UnLikeApi.class);
+        unLikeApi = SyllabusRetrofit.retrofit.create(UnLikeApi.class);
     }
 
 
@@ -86,6 +86,13 @@ public class PostAdapter extends ArrayAdapter<Post> {
                 return post.thumbUps.get(i).id;
         }
         return -1;
+    }
+
+    public static void remove_like(int uid, Post post){
+        for(int i = 0 ; i < post.thumbUps.size() ; ++i){
+            if (post.thumbUps.get(i).uid == uid)
+                post.thumbUps.remove(i);
+        }
     }
 
     private String trim_string_to_max_len(String str, int max_lines, int max_length, String suffix){
@@ -115,7 +122,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
         final Post post = getItem(position);  // 传进来的那个数据源
         Log.d("post_adapter", "post_id " + post.id + " position: " + position);
         View view;
-        ViewHolder viewHolder;
+        final ViewHolder viewHolder;
         // 判断之前有没有缓存过这个数据
         if (convertView == null){
             // 新建一个view，用自定义的布局
@@ -149,52 +156,48 @@ public class PostAdapter extends ArrayAdapter<Post> {
             viewHolder.avatarView.setImageResource(R.mipmap.syllabus_icon2);
         }
 
-        final int like_id = get_like_id(1, post);
+        final int like_id = get_like_id(MainActivity.user_id, post);
 
         // 判断用户是否点过赞, 设置相应的图片
-        if (like_id != -1){ // 点过赞
 
-            viewHolder.like_image_view.setImageResource(R.drawable.liked);
-            // 暂时不能删除赞
-//            viewHolder.like_image_view.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//
-//                    if (MainActivity.user_id == -1){
-//                        Toast.makeText(getContext(), "登录超时, 请同步一次课表", Toast.LENGTH_SHORT).show();
-//                        return;
-//                    }
-//
-//                    final ImageView image_view = (ImageView) v;
-//                    Call<Void> unlike_it = unLikeApi.unlike_this(like_id, MainActivity.user_id, MainActivity.token);
-//                    unlike_it.enqueue(new Callback<Void>() {
-//                        @Override
-//                        public void onResponse(Call<Void> call, Response<Void> response) {
-//                            if (response.isSuccessful()){
-//                                image_view.setImageResource(R.drawable.to_like);
-//                                Toast.makeText(getContext(), "已经删除赞", Toast.LENGTH_SHORT).show();
-//                            }else if (response.code() == 401){
-//                                Toast.makeText(getContext(), "登录超时, 请同步一下课表", Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onFailure(Call<Void> call, Throwable t) {
-//                            Toast.makeText(getContext(), "网络错误, 请重试", Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
-//                }
-//            });
-        }else{
-            viewHolder.like_image_view.setImageResource(R.drawable.to_like);
+        final String tag = "THUMB";
 
-        }
-
-        // 因为会重用, 所以暂时先每次都添加解决冲突
-        viewHolder.like_image_view.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener to_unlike = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (MainActivity.user_id == -1){
+                    Toast.makeText(getContext(), "登录超时, 请同步一次课表", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
+                final ImageView image_view = (ImageView) v;
+                Call<Void> unlike_it = unLikeApi.unlike_this(like_id, MainActivity.user_id, MainActivity.token);
+                unlike_it.enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.isSuccessful()){
+                            image_view.setImageResource(R.drawable.to_like);
+                            viewHolder.like_image_view.setImageResource(R.drawable.to_like);
+                            remove_like(MainActivity.user_id, post);
+//                            Toast.makeText(getContext(), "已经取消赞", Toast.LENGTH_SHORT).show();
+                            notifyDataSetChanged();
+
+                        }else if (response.code() == 401){
+                            Toast.makeText(getContext(), "登录超时, 请同步一下课表", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Toast.makeText(getContext(), "网络错误, 请重试", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        };
+
+        View.OnClickListener to_like = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 if (MainActivity.user_id == -1) {
                     Toast.makeText(getContext(), "登录超时, 请同步一次课表", Toast.LENGTH_SHORT).show();
                     return;
@@ -208,6 +211,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
                     public void onResponse(Call<CreatedReturnValue> call, Response<CreatedReturnValue> response) {
                         if (response.isSuccessful()) {
 //                            Toast.makeText(getContext(), "点赞成功", Toast.LENGTH_SHORT).show();
+                            Log.d(tag, "点赞成功");
                             int id = response.body().id;
                             imageView.setImageResource(R.drawable.liked);
                             post.thumbUps.add(new PostThumbUp(id, 1));
@@ -223,9 +227,22 @@ public class PostAdapter extends ArrayAdapter<Post> {
                     public void onFailure(Call<CreatedReturnValue> call, Throwable t) {
                         Toast.makeText(getContext(), "网络错误, 请重试", Toast.LENGTH_SHORT).show();
                     }
-                });
+            });
             }
-        });
+        };
+
+        if (like_id != -1){ // 点过赞
+            Log.d(tag, "已经点过赞了");
+            // 设置删除赞的监听器
+            viewHolder.like_image_view.setImageResource(R.drawable.liked);
+            viewHolder.like_image_view.setOnClickListener(to_unlike);
+
+        }else{
+            Log.d(tag, "还没有赞过");
+            viewHolder.like_image_view.setImageResource(R.drawable.to_like);
+            viewHolder.like_image_view.setOnClickListener(to_like);
+        }
+
 
 
 
@@ -370,7 +387,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
         @Override
         public void onClick(View v) {
                 PostContentActivity.post = this.post_to_display;
-                GlobalDiscussActivity.ENSURE_POSITION = position;
+//                SocialActivity.ENSURE_POSITION = position;
                 getContext().startActivity(new Intent(getContext(), PostContentActivity.class));
         }
     }

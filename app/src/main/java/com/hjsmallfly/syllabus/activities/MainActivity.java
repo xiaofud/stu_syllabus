@@ -818,8 +818,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 每次用新的classParser [暂时这样修复这个BUG]
         ClassParser classParser = new ClassParser(this, this);
         if (classParser.parseJSON(json_data, update_local_token)) {
-            classParser.inflateTable();     // 用数据填充课表
-            MainActivity.weekdays_syllabus_data = classParser.weekdays_syllabus_data;
+            classParser.calcClassPosition();     // 用数据填充课表
+            MainActivity.weekdays_syllabus_data = classParser.syllabusGrid;
 //            MainActivity.weekends_syllabus_data = classParser.weekend_classes;
 //                    Log.d(TAG, "established adapter");
 
@@ -1018,7 +1018,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
             case R.id.school_activity_button:
-                Intent global_discuss_intent = new Intent(this, GlobalDiscussActivity.class);
+                Intent global_discuss_intent = new Intent(this, SocialActivity.class);
                 startActivity(global_discuss_intent);
                 break;
             case R.id.query_grade_text_view:
