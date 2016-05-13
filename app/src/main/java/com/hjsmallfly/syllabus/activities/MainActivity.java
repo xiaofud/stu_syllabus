@@ -777,6 +777,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String filename = StringDataHelper.generate_syllabus_file_name(cur_username, years, cur_semester, "_");
         String json_data = FileOperation.read_from_file(MainActivity.this, filename);
         if (json_data != null) {
+            Log.d("strange", json_data);
             // 检查有没有设置周数
             String[] week_info = get_week_info();
             if (week_info == null) {

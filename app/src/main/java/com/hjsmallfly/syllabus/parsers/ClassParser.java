@@ -25,7 +25,7 @@ import java.util.Set;
 
 public class ClassParser {
 
-    private ArrayList<Lesson> all_classes;
+    public static ArrayList<Lesson> all_classes;
 
     public static final String EMPTY_CLASS_STRING = "";
     public static final HashMap<String, String> time_table;
@@ -170,9 +170,12 @@ public class ClassParser {
                 HashMap<String, String> lesson_days = new HashMap<>();
                 for (int j = 0; j < weekdays; ++j) {
                     String key = "w" + j;
-                    String isNull = days.getString(key);
-                    if (!isNull.equals("None"))     // 去除没有的天数
-                        lesson_days.put(key, days.getString(key));
+                    if (days.has(key)) {
+                        String isNull = days.getString(key);
+                        if (!isNull.equals("None"))     // 去除没有的天数
+                            lesson_days.put(key, days.getString(key));
+                    }
+
 //                    Log.d(MainActivity.TAG, key + ":" + days.getString(key));
                 }
                 cls.days = lesson_days;
@@ -189,23 +192,35 @@ public class ClassParser {
     }
 
 
-//    public static int change_into_number(char c) {
-//        int num = -1;
-//        switch (c) {
-//            case '0':
-//                num = 10;
-//                break;
-//            case 'A':
-//            case 'B':
-//            case 'C':
-//                num = (c - 'A') + 11;
-//                break;
-//            default:
-//                num = c - '0';
-//                break;
-//        }
-//        return num;
-//    }
+    /**
+     * 检查是否有冲突
+     * @param lessons
+     * @param lesson
+     * @return
+     */
+    public static boolean checkConflict(List<Lesson> lessons, Lesson lesson){
+        int[] duration = lesson.get_duration();
+        for(Lesson each: lessons){
+            for(int i = duration[0] ; i <= duration[1] ; ++i) {
+                List<Integer> position = calcPosition(each, 7, i);
+                List<Integer> position2 = calcPosition(lesson, 7, i);
+//                Log.d("custom_class", "比较: " + position.toString() + ", " + position2.toString());
+                if (position.size() == 0 || position2.size() == 0)
+                    continue;
+
+                for(int j = 0 ; j <position2.size() ; ++j ){
+                    for(Integer pos: position)
+                        if (position2.get(j).equals(pos))
+                            return true;
+                }
+
+            }
+        }
+        return false;
+    }
+
+
+
 
     /**
      * 计算现在距离设定过的周数是第几周

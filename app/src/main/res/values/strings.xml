@@ -98,4 +98,25 @@
 
     <string name="image_activity">photo</string>
 
+    <!--自己添加课程的布局-->
+    <string name="custom_name">课程名字</string>
+    <string name="custom_number">课程班号</string>
+    <string name="custom_room">课程教室</string>
+    <string name="custom_teacher">课程老师</string>
+    <string name="start_week">* 开始周 </string>
+    <string name="end_week">* 结束周 </string>
+    <string name="start_time">* 开始节数 </string>
+    <string name="end_time">* 结束节数 </string>
+    <string name="custom_weekday">* 星期几(从1开始, 7是周日) </string>
+    <string name="odd_week">单周</string>
+    <string name="even_week">双周</string>
+    <string name="all_week">默认</string>
+
+    <string name="custom_notice">自己添加的课程在同步课表之后将会被抹掉, 请注意!!!</string>
+
+    <string name="class_credit">* 课程学分</string>
+    <string name="custom_duration">课程周数</string>
+    <string name="custom_time">上课时间</string>
+    <!--自己添加课程的布局-->
+
 </resources>
