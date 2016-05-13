@@ -125,8 +125,8 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         ClassParser parser = new ClassParser(this, this);
         parser.parseJSON(MainActivity.syllabus_json_data, false);
         parser.calcClassPosition();
-        MainActivity.weekdays_syllabus_data = parser.syllabusGrid;
-        Object[] weekdays_syllabus_data = MainActivity.weekdays_syllabus_data;
+        MainActivity.syllabusData = parser.syllabusGrid;
+        Object[] weekdays_syllabus_data = MainActivity.syllabusData;
         myClassTable.removeAllViews();
 
         final int defaultGridWidth = DisplayUtil.dip2px(this, 48);
@@ -436,7 +436,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                     ClassParser parser = new ClassParser(SyllabusActivity.this, SyllabusActivity.this);
                     parser.parseJSON(MainActivity.syllabus_json_data, false);
                     parser.calcClassPosition();     // 用数据填充课表
-                    MainActivity.weekdays_syllabus_data = parser.syllabusGrid;
+                    MainActivity.syllabusData = parser.syllabusGrid;
                     setActionBarTitle("第" + week + "周");
                 } else {
                     Toast.makeText(SyllabusActivity.this, "设置周数出错", Toast.LENGTH_SHORT).show();
@@ -462,7 +462,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 ClassParser parser = new ClassParser(SyllabusActivity.this, SyllabusActivity.this);
                 parser.parseJSON(MainActivity.syllabus_json_data, false);
                 parser.calcClassPosition();     // 用数据填充课表
-                MainActivity.weekdays_syllabus_data = parser.syllabusGrid;
+                MainActivity.syllabusData = parser.syllabusGrid;
                 setActionBarTitle("第" + week + "周");
                 showSyllabus();
                 dialog.dismiss();
@@ -590,7 +590,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         ClassParser classParser = new ClassParser(this, this);
         if (classParser.parseJSON(raw_data, true)) {
             classParser.calcClassPosition();     // 用数据填充课表
-            MainActivity.weekdays_syllabus_data = classParser.syllabusGrid;
+            MainActivity.syllabusData = classParser.syllabusGrid;
 //                    Log.d(TAG, "established adapter");
 
             // 保存文件 命名格式: name_years_semester

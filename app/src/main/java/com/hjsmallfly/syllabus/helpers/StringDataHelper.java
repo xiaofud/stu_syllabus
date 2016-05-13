@@ -1,5 +1,7 @@
 package com.hjsmallfly.syllabus.helpers;
 
+import android.util.Log;
+
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -43,7 +45,8 @@ public class StringDataHelper {
         // 获取当今年份和月份
         int cur_year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
-        if (month <= 8)
+//        Log.d("MONTH", "如今是" + month + "月份");
+        if (month < 5)
             --cur_year;
         // 生成count年的年份数据
         String[] strs = new String[count];

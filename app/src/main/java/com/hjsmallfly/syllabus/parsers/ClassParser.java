@@ -19,18 +19,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 
 public class ClassParser {
 
     private ArrayList<Lesson> all_classes;
-    // 当前的周数
-//    private int week;
 
     public static final String EMPTY_CLASS_STRING = "";
-    //    public static final String[] LABELS = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
-//    public static final String[] LABELS = {"周一", "周二", "周三", "周四", "周五", "周六", "周日"};
     public static final HashMap<String, String> time_table;
     public static final Set<String> class_table;
 
@@ -84,15 +81,11 @@ public class ClassParser {
     private TokenGetter tokenGetter;
 
     public ClassParser(Context context, TokenGetter tokenGetter) {
-//        this.week = this_week;
+
         syllabusGrid = new Object[ROWS * (COLUMNS + 1)];
         all_classes = new ArrayList<>();
-//        weekend_classes = new ArrayList<>();
         this.context = context;
         this.tokenGetter = tokenGetter;
-
-        //init();     // 生成初始化的数据，在特定位置上填上日期信息之类的
-
     }
 
 
@@ -137,11 +130,6 @@ public class ClassParser {
                 Log.d("syllabus", "用户id: " + uid);
             }
 
-//            Toast.makeText(context, "the token is " + token, Toast.LENGTH_SHORT).show();
-//            Log.d(MainActivity.TAG, classes.length() + " classes");
-            // 得到颜色的种类数
-            // 颜色 指针
-//            int color_index = -1;
             int colorIndex = 0;
             for (int i = 0; i < classes.length(); ++i) {
                 // 得到每一节课
@@ -201,24 +189,29 @@ public class ClassParser {
     }
 
 
-    public static int change_into_number(char c) {
-        int num;
-        switch (c) {
-            case '0':
-                num = 10;
-                break;
-            case 'A':
-            case 'B':
-            case 'C':
-                num = (c - 'A') + 11;
-                break;
-            default:
-                num = c - '0';
-                break;
-        }
-        return num;
-    }
+//    public static int change_into_number(char c) {
+//        int num = -1;
+//        switch (c) {
+//            case '0':
+//                num = 10;
+//                break;
+//            case 'A':
+//            case 'B':
+//            case 'C':
+//                num = (c - 'A') + 11;
+//                break;
+//            default:
+//                num = c - '0';
+//                break;
+//        }
+//        return num;
+//    }
 
+    /**
+     * 计算现在距离设定过的周数是第几周
+     * @param target_calendar
+     * @return
+     */
     public static int calculate_week(Calendar target_calendar){
         Calendar calendar = Calendar.getInstance();
         // 年月日
@@ -256,151 +249,156 @@ public class ClassParser {
 
 
     /**
+     * 计算lesson 应该在哪个位置上
+     * @param lesson    需要计算的课程
+     * @param column_count  表格的列数
+     * @param this_week 当前的周数
+     * @return position 这节课需要添加到的所有位置, 返回的 List size 为0的话表明不需要添加
+     */
+    public static List<Integer> calcPosition(Lesson lesson, int column_count, int this_week) {
+
+        List<Integer> positions = new ArrayList<>();
+
+        // 遍历key set, 所以应该上相同课程的格子，实际上添加的是同一个 Lesson 对象
+        for (String day_key : lesson.days.keySet()) {
+            // key 的值是  w1 w2 这种格式
+            String class_time = lesson.days.get(day_key);
+//                Log.d(MainActivity.TAG, "class_time " + class_time);
+            if (!class_time.equals(EMPTY_CLASS_STRING)) {
+                // w0指的是周日
+                // day_of_week 是这节课所在的星期几
+                int day_of_week = Integer.parseInt(day_key.substring(1));   // 得到 w1 中的数字部分
+
+//                    boolean hasBeenAdded = false;
+                // 遍历时间字符串
+                for (int count = 0; count < class_time.length(); ++count) {
+
+                    char c = class_time.charAt(count);  // 得到数据
+                    int row = -1;
+                    switch (c) {
+                        case '0':
+                            row = 10;
+                            break;
+                        case 'A':
+                            row = 11;
+                            break;
+                        case 'B':
+                            row = 12;
+                            break;
+                        case 'C':
+                            row = 13;
+                            break;
+                        case '单':   // 跳过这个字符
+//                                if (this_week % 2 == 0)
+//                                    continue;
+                        case '双':
+//                                lesson.comment = c + "";
+//                                if (this_week % 2 == 1)
+//                                    continue;
+                            break;
+                        default:
+                            row = c - '0';
+                            break;
+                    }
+                    if (row == -1)   // 说明是单双周的情况
+                        continue;
+
+                    // 计算出在表格中的位置, 压缩为一维数组
+                    int index = row * column_count + day_of_week;
+
+                    boolean week_match = true;
+
+                    // 在单周不显示双周的课程, 在双周不显示单周的课程
+
+                    // 这里需要判断单双周
+                    // -------------判断是否有单双周的情况-------------
+                    // 额外判断周数
+                    // 单双周显示
+                    int w = -1;
+                    String has_single_or_double = null;
+                    for (String day_obj : lesson.days.keySet()) {
+                        String time_str = lesson.days.get(day_obj);
+                        if (time_str.contains("单")) {
+                            has_single_or_double = "单";
+                            w = Integer.parseInt(day_obj.substring(1));
+                        } else if (time_str.contains("双")) {
+                            has_single_or_double = "双";
+                            w = Integer.parseInt(day_obj.substring(1));
+                        }
+                    }
+
+                    if (has_single_or_double != null) {
+                        if (w == day_of_week) {
+//                            lesson_str = "[" + has_single_or_double + "]" + lesson_str;
+//                                int week = MainActivity.initial_week;
+                            if (this_week % 2 == 0 && has_single_or_double.equals("单")) {
+//                                    do_not_show = true;
+                                week_match = false;
+                            } else if (this_week % 2 == 1 && has_single_or_double.equals("双")) {
+//                                    do_not_show = true;
+                                week_match = false;
+                            }
+                        }
+                    }
+
+                    // -------------判断是否有单双周的情况-------------
+
+                    if (!week_match)
+                        continue;
+
+                    positions.add(index);
+                }
+            }
+        }
+        return positions;
+    }
+
+
+
+    /**
+     * 这堂课是否已经上完了
+     * @param lesson 课程
+     * @return true | false
+     */
+    public static boolean class_already_finished(Lesson lesson, int this_week){
+        int[] range = lesson.get_duration();
+
+        if (this_week < range[0] || this_week > range[1])
+            return true;
+        else
+            return false;
+    }
+
+    /**
      * 用解析得到的课程填充 syllabusGrid
      * 计算每节课在格子中的位置
      */
     public void calcClassPosition() {
         // 填充课表数据
+        // 计算出现在是第几周
         int this_week = calculate_week(Calendar.getInstance());
+
         for (int i = 0; i < all_classes.size(); ++i) {
             // 遍历每一堂课
             Lesson lesson = all_classes.get(i);
 
             // ------------这里可以踢掉已经上完了的课程-------------
+
             // -------------判断是否课程已经上完了-------------
 
-            int[] range = lesson.get_duration();
-
-            if (this_week < range[0] || this_week > range[1]) {
+            // 如果这节课已经完结
+            if (class_already_finished(lesson, this_week))
                 continue;
-            }
 
             // -------------判断是否课程已经上完了-------------
 
             // ------------这里可以踢掉已经上完了的课程-------------
 
-            // 遍历key set, 所以应该上相同课程的格子，实际上添加的是同一个 Lesson 对象
-            for (String key : lesson.days.keySet()) {
-                // key 的值是  w1 w2 这种格式
-                String class_time = lesson.days.get(key);
-//                Log.d(MainActivity.TAG, "class_time " + class_time);
-                if (!class_time.equals(EMPTY_CLASS_STRING)) {
-                    // 添加到obj数组中
-                    int offset = Integer.parseInt(key.substring(1));   // 得到 w1 中的数字部分
-                    // 因为json的w0 指 周日
-                    //       if (offset == 0)
-                    //          offset = 7;
 
-//                    if (offset == 0 || offset == 6) {     // 忽略周六周日的课
-////                        offset = 7;     // 因为web api返回的数据 w0 是代表周日
-////                        weekend_classes.add(all_classes.get(i));    // 添加周末的课程到此
-////                        continue;11111
-//                    }
-//                    ++offset;
-//                    Log.v("offset", offset + " ");
-                    boolean hasBeenAdded = false;
-                    for (int count = 0; count < class_time.length(); ++count) {
+            List<Integer> positions = calcPosition(lesson, COLUMNS, this_week);
+            for(int loop = 0 ; loop < positions.size() ; ++loop)
+                syllabusGrid[positions.get(loop)] = lesson;
 
-                        char c = class_time.charAt(count);  // 得到数据
-                        int row = -1;
-                        switch (c) {
-                            case '0':
-                                row = 10;
-                                break;
-                            case 'A':
-                                row = 11;
-                                break;
-                            case 'B':
-                                row = 12;
-                                break;
-                            case 'C':
-                                row = 13;
-                                break;
-                            case '单':   // 跳过这个字符
-//                                if (this_week % 2 == 0)
-//                                    continue;
-                            case '双':
-//                                lesson.comment = c + "";
-//                                if (this_week % 2 == 1)
-//                                    continue;
-                                hasBeenAdded = false;
-                                break;
-                            default:
-                                row = c - '0';
-                                break;
-                        }
-                        if (row == -1)   // 说明是单双周的情况
-                            continue;
-
-                        // 计算出在表格中的位置, 压缩为一维数组
-                        int index = row * COLUMNS + offset;
-
-                        boolean really_to_add = true;
-
-                        // 这里需要判断单双周
-                        // -------------判断是否有单双周的情况-------------
-                        // 额外判断周数
-                        // 单双周显示
-                        int w = -1;
-                        String has_single_or_double = null;
-                        for (String day_obj : lesson.days.keySet()) {
-                            String time_str = lesson.days.get(day_obj);
-                            if (time_str.contains("单")) {
-                                has_single_or_double = "单";
-                                w = Integer.parseInt(day_obj.substring(1));
-                            } else if (time_str.contains("双")) {
-                                has_single_or_double = "双";
-                                w = Integer.parseInt(day_obj.substring(1));
-                            }
-                        }
-
-                        if (has_single_or_double != null) {
-                            if (w == offset) {
-//                            lesson_str = "[" + has_single_or_double + "]" + lesson_str;
-//                                int week = MainActivity.initial_week;
-                                if (this_week % 2 == 0 && has_single_or_double.equals("单")){
-//                                    do_not_show = true;
-                                    really_to_add = false;
-                                }else if (this_week % 2 == 1 && has_single_or_double.equals("双")){
-//                                    do_not_show = true;
-                                    really_to_add = false;
-                                }
-                            }
-                        }
-
-                        // -------------判断是否有单双周的情况-------------
-
-                        if (!really_to_add)
-                            continue;
-
-
-                        Log.v("index", index + " ");
-                        if (!hasBeenAdded) {     // 一节课添加一次即可
-                            syllabusGrid[index] = lesson;   // 将这节课添加到合适的位置
-                            hasBeenAdded = true;
-                        } else {
-                            // 找前一个位置
-                            char pre_char = count == 0 ? 0 : class_time.charAt(count - 1);
-                            if (pre_char > 0) {
-                                // 这里也要注意 90 这种情况 要把 0 转化为 10 , A 11 B 12 C 13
-                                int pre_row = change_into_number(pre_char);
-                                int diff = row - pre_row;
-                                if (diff != 1) {  // 不相邻，如整合思维 一天三节课但是 大班课 不相邻
-//                                    Toast.makeText(context, "the difference is" + diff, Toast.LENGTH_SHORT).show();
-                                    syllabusGrid[index] = lesson;
-                                    continue;
-                                }
-                                // 说明这节课和上面的课是连着的而且是同一节课
-//                                syllabusGrid[index] = "同上";
-                                // 取消同上
-                                syllabusGrid[index] = lesson;
-                            }
-
-                        }
-
-                    }
-                }
-            }
         }
     }
 

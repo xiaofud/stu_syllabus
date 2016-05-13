@@ -69,7 +69,7 @@ import retrofit2.Response;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, UpdateHandler, LessonHandler, TokenGetter, Spinner.OnItemSelectedListener, BannerHandler, FileDownloadedHandle {
-    public static Object[] weekdays_syllabus_data;     // 用于向显示课表的activity传递数据
+    public static Object[] syllabusData;     // 用于向显示课表的activity传递数据
     public static String info_about_syllabus;
     public static final String USERNAME_FILE = "username.txt";
     public static final String PASSWORD_FILE = "password.txt";
@@ -819,7 +819,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ClassParser classParser = new ClassParser(this, this);
         if (classParser.parseJSON(json_data, update_local_token)) {
             classParser.calcClassPosition();     // 用数据填充课表
-            MainActivity.weekdays_syllabus_data = classParser.syllabusGrid;
+            MainActivity.syllabusData = classParser.syllabusGrid;
 //            MainActivity.weekends_syllabus_data = classParser.weekend_classes;
 //                    Log.d(TAG, "established adapter");
 
