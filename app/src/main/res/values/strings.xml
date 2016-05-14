@@ -112,7 +112,7 @@
     <string name="even_week">双周</string>
     <string name="all_week">默认</string>
 
-    <string name="custom_notice">自己添加的课程在同步课表之后将会被抹掉, 请注意!!!</string>
+    <string name="custom_notice">注意: 同步课表将会抹掉自己添加的课程.长按课程格子删除课程</string>
 
     <string name="class_credit">* 课程学分</string>
     <string name="custom_duration">课程周数</string>

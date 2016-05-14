@@ -55,11 +55,17 @@ import com.hjsmallfly.syllabus.syllabus.Lesson;
 import com.hjsmallfly.syllabus.syllabus.R;
 import com.umeng.analytics.MobclickAgent;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class SyllabusActivity extends AppCompatActivity implements LessonHandler, TokenGetter {
@@ -130,6 +136,144 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 
     }
 
+    /**
+     * 添加自定义课程
+     */
+    private void addCustomClass(){
+        final EditText id = (EditText) custom_dialog_layout.findViewById(R.id.custom_id);
+        final EditText name = (EditText) custom_dialog_layout.findViewById(R.id.custom_name);
+        final EditText teacher = (EditText) custom_dialog_layout.findViewById(R.id.custom_teacher);
+        final EditText room = (EditText) custom_dialog_layout.findViewById(R.id.custom_room);
+        final EditText credit = (EditText) custom_dialog_layout.findViewById(R.id.custom_credit);
+        final EditText weekday = (EditText) custom_dialog_layout.findViewById(R.id.custom_weekday);
+        final EditText start_time = (EditText) custom_dialog_layout.findViewById(R.id.start_time);
+        final EditText end_time = (EditText) custom_dialog_layout.findViewById(R.id.end_time);
+        RadioButton default_radio = (RadioButton) custom_dialog_layout.findViewById(R.id.all_week_radio);
+        final RadioButton odd_week_radio = (RadioButton) custom_dialog_layout.findViewById(R.id.single_week_radio);
+        final RadioButton even_week_radio = (RadioButton) custom_dialog_layout.findViewById(R.id.double_week_radio);
+        final EditText start_week = (EditText) custom_dialog_layout.findViewById(R.id.start_week);
+        final EditText end_week = (EditText) custom_dialog_layout.findViewById(R.id.end_week);
+
+
+        // 默认设置
+        default_radio.setChecked(true);
+        start_week.setText("1");
+        end_week.setText("16");
+
+        if (custom_dialog == null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(SyllabusActivity.this);
+            builder.setView(custom_dialog_layout);
+            builder.setPositiveButton("添加", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+//                                        Toast.makeText(SyllabusActivity.this, "确认添加", Toast.LENGTH_SHORT).show();
+                }
+            });
+            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Toast.makeText(SyllabusActivity.this, "取消添加", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                }
+            });
+            builder.setCancelable(false);
+            custom_dialog = builder.create();
+        }
+
+
+        custom_dialog.show();
+        custom_dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // prevent the dialog from dismissing
+                String weekday_ = weekday.getText().toString();
+                String start_time_ = start_time.getText().toString();
+                String end_time_ = end_time.getText().toString();
+                String start_week_ = start_week.getText().toString();
+                String end_week_ = end_week.getText().toString();
+                String credit_ = credit.getText().toString();
+
+                if (credit_.isEmpty() || weekday_.isEmpty() || start_time_.isEmpty() || end_time_.isEmpty() || start_week_.isEmpty() || end_week_.isEmpty()) {
+                    Toast.makeText(SyllabusActivity.this, "*号字段必须填写", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                int week_flag = Lesson.ALL_WEEK;
+
+                if (odd_week_radio.isChecked())
+                    week_flag = Lesson.ODD_WEEK;
+                else if (even_week_radio.isChecked())
+                    week_flag = Lesson.EVEN_WEEK;
+
+
+                Lesson new_lesson = Lesson.makeLesson(name.getText().toString(), teacher.getText().toString(), room.getText().toString(),
+                        week_flag, Integer.parseInt(weekday_), Integer.parseInt(start_week_), Integer.parseInt(end_week_),
+                        Integer.parseInt(start_time_), Integer.parseInt(end_time_), Integer.parseInt(credit_), id.getText().toString());
+
+                Log.d("custom_class", ClassParser.calcPosition(new_lesson, 7, 11).toString());
+                Log.d("custom_class", Arrays.toString(new_lesson.get_duration()));
+                Log.d("custom_class", new_lesson.toJson().toString());
+
+
+                if (ClassParser.checkConflict(ClassParser.all_classes, new_lesson))
+                    Toast.makeText(SyllabusActivity.this, "冲突", Toast.LENGTH_SHORT).show();
+                else {
+
+                    if (new_lesson.addToSyllabus(SyllabusActivity.this)) {
+                        //                                     清空所有数据
+                        id.setText("");
+                        name.setText("");
+                        room.setText("");
+                        teacher.setText("");
+                        credit.setText("");
+                        start_time.setText("");
+                        end_time.setText("");
+                        start_week.setText("");
+                        end_week.setText("");
+                        weekday.setText("");
+                        custom_dialog.dismiss();
+                        Toast.makeText(SyllabusActivity.this, "成功添加", Toast.LENGTH_SHORT).show();
+                        showSyllabus();
+                        custom_dialog.dismiss();
+                    } else
+                        Toast.makeText(SyllabusActivity.this, "存入文件失败", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+
+    }
+
+    /**
+     * 删除课程
+     * @param lesson
+     * @return 是否删除成功
+     */
+    private boolean removeClass(Lesson lesson){
+        try {
+
+            JSONObject syllabusObj = new JSONObject(MainActivity.syllabus_json_data);
+            JSONArray allLessons = syllabusObj.getJSONArray("classes");
+            // 用于生成新的 jsonString
+            JSONArray toKeep = new JSONArray();
+            for(int i = 0 ; i < allLessons.length() ; ++i){
+                JSONObject each_lesson = (JSONObject) allLessons.get(i);
+                String name = each_lesson.getString("name");
+                if (!name.equals(lesson.name))
+                    toKeep.put(each_lesson);
+//                Log.d("removeClass", "比较: " + name + ", " + lesson.name);
+            }
+//            Log.d("removeClass", toKeep.toString());
+            // 抹去数据
+            syllabusObj.put("classes", toKeep);
+            String filename = StringDataHelper.generate_syllabus_file_name(MainActivity.cur_username, MainActivity.cur_year_string, MainActivity.cur_semester, "_");
+            return FileOperation.save_to_file(this, filename, syllabusObj.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     public void showSyllabus() {
         ClassParser parser = new ClassParser(this, this);
@@ -226,6 +370,8 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                     textView.setBackground(new LessonItemShapeDrawable(shape, lesson.colorID));
 
                     final Lesson finalLesson = lesson;
+
+
                     ll.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -233,121 +379,31 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                             showClassInfo(finalLesson);
                         }
                     });
-                }else{
+
+                    ll.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            Toast.makeText(SyllabusActivity.this, "删除课程", Toast.LENGTH_SHORT).show();
+                            if (removeClass(finalLesson))
+                                showSyllabus();
+                            return true;
+                        }
+                    });
+
+                }
+                else{
 //                    final int row_index = j;
 //                    final int column_index = i;
                     // 空白格子
                     ll.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            final EditText id = (EditText) custom_dialog_layout.findViewById(R.id.custom_id);
-                            final EditText name = (EditText) custom_dialog_layout.findViewById(R.id.custom_name);
-                            final EditText teacher = (EditText) custom_dialog_layout.findViewById(R.id.custom_teacher);
-                            final EditText room = (EditText) custom_dialog_layout.findViewById(R.id.custom_room);
-                            final EditText credit = (EditText) custom_dialog_layout.findViewById(R.id.custom_credit);
-                            final EditText weekday = (EditText) custom_dialog_layout.findViewById(R.id.custom_weekday);
-                            final EditText start_time = (EditText) custom_dialog_layout.findViewById(R.id.start_time);
-                            final EditText end_time = (EditText) custom_dialog_layout.findViewById(R.id.end_time);
-                            RadioButton default_radio = (RadioButton) custom_dialog_layout.findViewById(R.id.all_week_radio);
-                            final RadioButton odd_week_radio = (RadioButton) custom_dialog_layout.findViewById(R.id.single_week_radio);
-                            final RadioButton even_week_radio = (RadioButton) custom_dialog_layout.findViewById(R.id.double_week_radio);
-                            final EditText start_week = (EditText) custom_dialog_layout.findViewById(R.id.start_week);
-                            final EditText end_week = (EditText) custom_dialog_layout.findViewById(R.id.end_week);
-
-
-                            // 默认设置
-                            default_radio.setChecked(true);
-                            start_week.setText("1");
-                            end_week.setText("16");
-
-                            if (custom_dialog == null) {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(SyllabusActivity.this);
-                                builder.setView(custom_dialog_layout);
-                                builder.setPositiveButton("添加", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-//                                        Toast.makeText(SyllabusActivity.this, "确认添加", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Toast.makeText(SyllabusActivity.this, "取消添加", Toast.LENGTH_SHORT).show();
-                                        dialog.dismiss();
-                                    }
-                                });
-                                builder.setCancelable(false);
-                                custom_dialog = builder.create();
-                            }
-
-
-                            custom_dialog.show();
-                            custom_dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    // prevent the dialog from dismissing
-                                    String weekday_ = weekday.getText().toString();
-                                    String start_time_ = start_time.getText().toString();
-                                    String end_time_ = end_time.getText().toString();
-                                    String start_week_ = start_week.getText().toString();
-                                    String end_week_ = end_week.getText().toString();
-                                    String credit_ = credit.getText().toString();
-
-                                    if (credit_.isEmpty() || weekday_.isEmpty() || start_time_.isEmpty() || end_time_.isEmpty() || start_week_.isEmpty() || end_week_.isEmpty()){
-                                        Toast.makeText(SyllabusActivity.this, "*号字段必须填写", Toast.LENGTH_SHORT).show();
-                                        return;
-                                    }
-
-                                    int week_flag = Lesson.ALL_WEEK;
-
-                                    if (odd_week_radio.isChecked())
-                                        week_flag = Lesson.ODD_WEEK;
-                                    else if (even_week_radio.isChecked())
-                                        week_flag = Lesson.EVEN_WEEK;
-
-
-                                    Lesson new_lesson = Lesson.makeLesson(name.getText().toString(), teacher.getText().toString(), room.getText().toString(),
-                                            week_flag, Integer.parseInt(weekday_), Integer.parseInt(start_week_), Integer.parseInt(end_week_),
-                                            Integer.parseInt(start_time_), Integer.parseInt(end_time_), Integer.parseInt(credit_), id.getText().toString());
-
-                                    Log.d("custom_class", ClassParser.calcPosition(new_lesson, 7, 11).toString());
-                                    Log.d("custom_class", Arrays.toString(new_lesson.get_duration()));
-                                    Log.d("custom_class", new_lesson.toJson().toString());
-
-
-
-                                    if (ClassParser.checkConflict(ClassParser.all_classes, new_lesson))
-                                        Toast.makeText(SyllabusActivity.this, "冲突", Toast.LENGTH_SHORT).show();
-                                    else {
-
-                                        if (new_lesson.addToSyllabus(SyllabusActivity.this)) {
-                                            //                                     清空所有数据
-                                            id.setText("");
-                                            name.setText("");
-                                            room.setText("");
-                                            teacher.setText("");
-                                            credit.setText("");
-                                            start_time.setText("");
-                                            end_time.setText("");
-                                            start_week.setText("");
-                                            end_week.setText("");
-                                            weekday.setText("");
-                                            custom_dialog.dismiss();
-                                            Toast.makeText(SyllabusActivity.this, "成功添加", Toast.LENGTH_SHORT).show();
-                                            showSyllabus();
-                                            custom_dialog.dismiss();
-                                        }
-                                        else
-                                            Toast.makeText(SyllabusActivity.this, "存入文件失败", Toast.LENGTH_SHORT).show();
-                                    }
-
-                                }
-                            });
-
-//                            Toast.makeText(SyllabusActivity.this, "空白格子@(" + row_index + ", " + column_index + ")", Toast.LENGTH_SHORT).show();
+                            addCustomClass();
                         }
                     });
+
                 }
+
 
                 //ll.setPadding(5,5,5,5);
                 ll.addView(textView);
@@ -509,6 +565,10 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 
             case R.id.set_week:
                 set_week_info();
+                break;
+
+            case R.id.add_class:
+                addCustomClass();
                 break;
 
             case R.id.save_syllabus:
