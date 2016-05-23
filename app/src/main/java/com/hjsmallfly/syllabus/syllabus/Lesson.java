@@ -76,7 +76,9 @@ public class Lesson {
         }
         // 构建节数信息
         for(int i = start_time ; i <= end_time ; ++i){
-            if (i == 11)
+            if (i == 10)    // 记得转化这种情况
+                class_time += "0";
+            else if (i == 11)
                 class_time += "A";
             else if (i == 12)
                 class_time += "B";

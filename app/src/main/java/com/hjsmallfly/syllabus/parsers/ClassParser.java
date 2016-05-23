@@ -200,6 +200,8 @@ public class ClassParser {
      */
     public static boolean checkConflict(List<Lesson> lessons, Lesson lesson){
         int[] duration = lesson.get_duration();
+//        Log.d("conflict", lesson.days.toString());
+//        Log.d("conflict", Arrays.toString(duration));
         for(Lesson each: lessons){
             for(int i = duration[0] ; i <= duration[1] ; ++i) {
                 List<Integer> position = calcPosition(each, 7, i);
@@ -208,10 +210,14 @@ public class ClassParser {
                 if (position.size() == 0 || position2.size() == 0)
                     continue;
 
-                for(int j = 0 ; j <position2.size() ; ++j ){
+                for(int j = 0 ; j < position2.size() ; ++j ){
                     for(Integer pos: position)
-                        if (position2.get(j).equals(pos))
+                        if (position2.get(j).intValue() == pos.intValue()) {
+//                            Log.d("conflict", "position2.get: " + position2.get(i).intValue() + ", " + "pos: " + pos.intValue());
+//                            Log.d("conflict", each.toString() + "和" + lesson.toString() + "在格子" + pos + "冲突" + "周数: " + i);
+//                            Log.d("conflict", position.toString() + ", " + position2.toString());
                             return true;
+                        }
                 }
 
             }
@@ -413,6 +419,8 @@ public class ClassParser {
             List<Integer> positions = calcPosition(lesson, COLUMNS, this_week);
             for(int loop = 0 ; loop < positions.size() ; ++loop)
                 syllabusGrid[positions.get(loop)] = lesson;
+
+            Log.d("class_added", lesson.toString());
 
         }
     }

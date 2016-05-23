@@ -2,6 +2,8 @@ package com.hjsmallfly.syllabus.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -46,6 +48,25 @@ public class ExamActivity extends AppCompatActivity implements View.OnClickListe
         }else
             get_exam_list();
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_exam, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id){
+            case R.id.sync_exam_action:
+                get_exam_list();
+                return true;
+//                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     // 友盟的统计功能
@@ -101,6 +122,9 @@ public class ExamActivity extends AppCompatActivity implements View.OnClickListe
             this.exam_list.addAll(exam_list);
             examAdapter.notifyDataSetChanged();
         }
+
+        String exam_info = "一共有" + exam_list.size() + "门考试[右上角或者菜单更新考试信息]";
+        exam_info_text_view.setText(exam_info);
     }
 
     @Override

@@ -11,34 +11,8 @@
         android:layout_height="wrap_content" />
 
     <EditText
-        android:id="@+id/custom_id"
-        android:hint="@string/custom_number"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <EditText
         android:id="@+id/custom_name"
         android:hint="@string/custom_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <EditText
-        android:id="@+id/custom_teacher"
-        android:hint="@string/custom_teacher"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <EditText
-        android:id="@+id/custom_room"
-
-        android:hint="@string/custom_room"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <EditText
-        android:id="@+id/custom_credit"
-        android:inputType="numberDecimal"
-        android:hint="@string/class_credit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -142,9 +116,31 @@
     </RadioGroup>
 
 
+    <EditText
+        android:id="@+id/custom_id"
+        android:hint="@string/custom_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
+    <EditText
+        android:id="@+id/custom_teacher"
+        android:hint="@string/custom_teacher"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
+    <EditText
+        android:id="@+id/custom_room"
 
+        android:hint="@string/custom_room"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/custom_credit"
+        android:inputType="numberDecimal"
+        android:hint="@string/class_credit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 
 </LinearLayout>

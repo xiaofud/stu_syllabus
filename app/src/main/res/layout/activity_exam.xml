@@ -20,6 +20,8 @@
         android:id="@+id/exam_list_view"
         android:layout_weight="1"
         android:layout_width="match_parent"
+        android:dividerHeight="10dp"
+        android:divider="#f4f4f4"
         android:layout_height="0dp">
     </ListView>
 
@@ -28,6 +30,7 @@
         android:background="@android:color/holo_blue_light"
         android:id="@+id/update_exam_button"
         android:text="更新考试信息"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

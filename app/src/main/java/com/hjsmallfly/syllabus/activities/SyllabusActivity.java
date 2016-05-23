@@ -127,7 +127,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         syllabus_bg = (LinearLayout) findViewById(R.id.syllabus_bg);
 
 
-        custom_dialog_layout = (LinearLayout) getLayoutInflater().inflate(R.layout.custom_class_layout, null);
+//        custom_dialog_layout = (LinearLayout) getLayoutInflater().inflate(R.layout.custom_class_layout, null, false);
 
         // 读取之前的壁纸
         load_syllabus_wallpaper();
@@ -140,6 +140,8 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
      * 添加自定义课程
      */
     private void addCustomClass(){
+        custom_dialog_layout = (LinearLayout) getLayoutInflater().inflate(R.layout.custom_class_layout, null, false);
+
         final EditText id = (EditText) custom_dialog_layout.findViewById(R.id.custom_id);
         final EditText name = (EditText) custom_dialog_layout.findViewById(R.id.custom_name);
         final EditText teacher = (EditText) custom_dialog_layout.findViewById(R.id.custom_teacher);
@@ -160,7 +162,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
         start_week.setText("1");
         end_week.setText("16");
 
-        if (custom_dialog == null) {
+//        if (custom_dialog == null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(SyllabusActivity.this);
             builder.setView(custom_dialog_layout);
             builder.setPositiveButton("添加", new DialogInterface.OnClickListener() {
@@ -172,13 +174,16 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
             builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(SyllabusActivity.this, "取消添加", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(SyllabusActivity.this, "取消添加", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 }
             });
             builder.setCancelable(false);
             custom_dialog = builder.create();
-        }
+//        }else{
+            // 说明第二次进来这里
+
+//        }
 
 
         custom_dialog.show();
@@ -192,8 +197,16 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 String start_week_ = start_week.getText().toString();
                 String end_week_ = end_week.getText().toString();
                 String credit_ = credit.getText().toString();
+                String className = name.getText().toString().trim();
 
-                if (credit_.isEmpty() || weekday_.isEmpty() || start_time_.isEmpty() || end_time_.isEmpty() || start_week_.isEmpty() || end_week_.isEmpty()) {
+                Log.d("ADD__", "星期几: " + weekday_);
+                Log.d("ADD__", "开始: " + start_time_);
+                Log.d("ADD__", "结束: " + end_time_);
+                Log.d("ADD__", "开始周数: " + start_week_);
+                Log.d("ADD__", "结束周数: " + end_week_);
+                Log.d("ADD__", "学分: " + credit_);
+
+                if (className.isEmpty() || weekday_.isEmpty() || start_time_.isEmpty() || end_time_.isEmpty() || start_week_.isEmpty() || end_week_.isEmpty()) {
                     Toast.makeText(SyllabusActivity.this, "*号字段必须填写", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -205,10 +218,37 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 else if (even_week_radio.isChecked())
                     week_flag = Lesson.EVEN_WEEK;
 
+                String classID = id.getText().toString().trim();
+                if (classID.isEmpty()){
+                    classID = "" + System.currentTimeMillis();
+                }
+
+                if (credit_.isEmpty())
+                    credit_ = "0";
+
+                // 检查范围
+                int start_time_int = Integer.parseInt(start_time_);
+                if (start_time_int <= 0 || start_time_int >= 14){
+                    Toast.makeText(SyllabusActivity.this, "开始节数不合法", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                int end_time_int = Integer.parseInt(end_time_);
+                if (end_time_int <= 0 || end_time_int >= 14){
+                    Toast.makeText(SyllabusActivity.this, "结束节数不合法", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                int week_int = Integer.parseInt(weekday_);
+                if (week_int <= 0 || week_int >= 8){
+                    Toast.makeText(SyllabusActivity.this, "星期几不合法", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
 
                 Lesson new_lesson = Lesson.makeLesson(name.getText().toString(), teacher.getText().toString(), room.getText().toString(),
                         week_flag, Integer.parseInt(weekday_), Integer.parseInt(start_week_), Integer.parseInt(end_week_),
-                        Integer.parseInt(start_time_), Integer.parseInt(end_time_), Integer.parseInt(credit_), id.getText().toString());
+                        Integer.parseInt(start_time_), Integer.parseInt(end_time_), Integer.parseInt(credit_), classID);
 
                 Log.d("custom_class", ClassParser.calcPosition(new_lesson, 7, 11).toString());
                 Log.d("custom_class", Arrays.toString(new_lesson.get_duration()));
@@ -220,18 +260,18 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                 else {
 
                     if (new_lesson.addToSyllabus(SyllabusActivity.this)) {
-                        //                                     清空所有数据
-                        id.setText("");
-                        name.setText("");
-                        room.setText("");
-                        teacher.setText("");
-                        credit.setText("");
-                        start_time.setText("");
-                        end_time.setText("");
-                        start_week.setText("");
-                        end_week.setText("");
-                        weekday.setText("");
-                        custom_dialog.dismiss();
+                        // 清空所有数据
+//                        id.setText("");
+//                        name.setText("");
+//                        room.setText("");
+//                        teacher.setText("");
+//                        credit.setText("");
+//                        start_time.setText("");
+//                        end_time.setText("");
+//                        start_week.setText("");
+//                        end_week.setText("");
+//                        weekday.setText("");
+//                        custom_dialog.dismiss();
                         Toast.makeText(SyllabusActivity.this, "成功添加", Toast.LENGTH_SHORT).show();
                         showSyllabus();
                         custom_dialog.dismiss();
@@ -383,9 +423,26 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
                     ll.setOnLongClickListener(new View.OnLongClickListener() {
                         @Override
                         public boolean onLongClick(View v) {
-                            Toast.makeText(SyllabusActivity.this, "删除课程", Toast.LENGTH_SHORT).show();
-                            if (removeClass(finalLesson))
-                                showSyllabus();
+//                            Toast.makeText(SyllabusActivity.this, "删除课程", Toast.LENGTH_SHORT).show();
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(SyllabusActivity.this);
+                            builder.setTitle("要删除这堂课么?同名课程会被移除");
+                            builder.setPositiveButton("删除", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (removeClass(finalLesson))
+                                        showSyllabus();
+                                }
+                            });
+                            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+
+                            builder.create().show();
+
                             return true;
                         }
                     });
