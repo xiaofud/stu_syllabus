@@ -109,8 +109,16 @@ public class ShowClassInfoActivity extends AppCompatActivity {
         });
 
         for (String key : keyList) {
-            if (!key.isEmpty())
-                classTime += " , " + weeks[key.charAt(1) - '1'];
+            if (!key.isEmpty()) {
+                Log.d("showClass", key.charAt(1) + "");
+                int index;
+                if (key.charAt(1) == '0')
+                    index = 6;  // 周日
+                else
+                    index = key.charAt(1) - '1';
+                classTime += " , " + weeks[index];
+
+            }
             if (key.length() > 2) {
                 classTime += key.substring(2);
             }
