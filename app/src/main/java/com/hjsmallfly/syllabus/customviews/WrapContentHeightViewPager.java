@@ -7,9 +7,18 @@ package com.hjsmallfly.syllabus.customviews;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 public class WrapContentHeightViewPager extends ViewPager {
+
+    // 控制能否移动
+    private boolean pagingEnabled = true;
+
+    public void setPagingEnabled(boolean enabled) {
+        pagingEnabled = enabled;
+    }
+
 
     public WrapContentHeightViewPager(Context context) {
         super(context);
@@ -18,6 +27,8 @@ public class WrapContentHeightViewPager extends ViewPager {
     public WrapContentHeightViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
+
+
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -37,5 +48,21 @@ public class WrapContentHeightViewPager extends ViewPager {
                 MeasureSpec.EXACTLY);
 
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        if (!pagingEnabled) {
+            return false; // do not intercept
+        }
+        return super.onInterceptTouchEvent(event);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (!pagingEnabled) {
+            return false; // do not consume
+        }
+        return super.onTouchEvent(event);
     }
 }

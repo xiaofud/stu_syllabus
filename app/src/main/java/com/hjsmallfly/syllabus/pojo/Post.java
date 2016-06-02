@@ -36,5 +36,8 @@ public class Post {
     @SerializedName("user")
     @Expose
     public PostUser postUser;
+    @SerializedName("source")
+    @Expose
+    public String source;
 
 }

@@ -66,13 +66,14 @@
         android:layout_height="wrap_content">
 
         <!--android:layout_marginRight="4dp"-->
+        <!--android:background="#BE4C3C"-->
         <Button
 
             android:layout_weight="1"
             android:id="@+id/new_post_button"
             android:textColor="@android:color/white"
             android:text="发布新动态"
-            android:background="#BE4C3C"
+            android:background="@android:color/holo_red_light"
             android:layout_width="0dp"
             android:layout_height="wrap_content" />
 
@@ -83,7 +84,7 @@
             android:text="查看更多"
             android:layout_width="0dp"
             android:textColor="@android:color/white"
-            android:background="#BE4C3C"
+            android:background="@android:color/holo_red_light"
             android:layout_height="wrap_content" />
 
 

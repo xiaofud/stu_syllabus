@@ -89,9 +89,9 @@
 
     <Button
         android:id="@+id/personal_info_update_button"
-        android:text="修改"
+        android:text="修改并上传头像"
         android:textColor="@android:color/white"
-        android:background="@android:color/holo_blue_bright"
+        android:background="@android:color/holo_red_light"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

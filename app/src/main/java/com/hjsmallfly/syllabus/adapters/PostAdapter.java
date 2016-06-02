@@ -279,7 +279,13 @@ public class PostAdapter extends ArrayAdapter<Post> {
 
 
         viewHolder.publisher_text.setText(post.postUser.nickname);
-        viewHolder.pub_time_text.setText(post.postTime);
+        String time_str = post.postTime;
+        if (post.source == null){
+            time_str += " 来自火星";
+        }else{
+            time_str += " 来自" + post.source;
+        }
+        viewHolder.pub_time_text.setText(time_str);
         if (post.postType == PushPostApi.POST_TYPE_TOPIC){
             viewHolder.content_text.setText(trim_string_to_max_len(post.content.trim(), 6, 140, "(点击查看全文)"));   // 去除没必要的空字符
         }else

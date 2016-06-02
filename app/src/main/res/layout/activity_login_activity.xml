@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:background="#00ffffff"
-                android:hint="校园网账号"
+                android:hint="校园网账号(同步课表才算正式登录)"
                 android:padding="10dp"
                 android:singleLine="true"
                 android:textColor="#2B2B2B" />

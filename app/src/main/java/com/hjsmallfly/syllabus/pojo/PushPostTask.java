@@ -12,6 +12,8 @@ public class PushPostTask {
     protected String token;
     protected int post_type;
     protected String photo_list_json;
+    // 发布来源
+    protected String source;
 
     public PushPostTask(String content, String description, int uid, String token, int post_type,
                         String photo_list_json){
@@ -21,6 +23,8 @@ public class PushPostTask {
         this.token = token;
         this.post_type = post_type;
         this.photo_list_json = photo_list_json;
+        // 安卓
+        this.source = "Android";
     }
 
 }

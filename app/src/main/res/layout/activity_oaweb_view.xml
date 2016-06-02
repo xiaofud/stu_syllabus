@@ -29,7 +29,7 @@
         android:id="@+id/copy_the_url_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/holo_blue_light"
+        android:background="@android:color/holo_red_light"
         android:text="复制当前链接"
         android:textColor="@android:color/white" />
 </LinearLayout>

@@ -78,6 +78,14 @@ public class BannerPagerAdapter extends PagerAdapter {
 
         // 如果图片不完整或者不是图片文件, 可能会出现null
 
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("banners", "click photo");
+                Toast.makeText(context, "点击了图片", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         if (bitmap != null) {
             // -----获取屏幕信息------
             DisplayMetrics displaymetrics = new DisplayMetrics();

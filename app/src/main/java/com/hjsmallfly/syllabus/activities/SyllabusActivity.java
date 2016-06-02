@@ -573,8 +573,10 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             clickTextView.setTransitionName("lesson_grid");
-            startActivity(tab_intent,ActivityOptions.makeSceneTransitionAnimation(SyllabusActivity.this,
-                    clickTextView,"lesson_grid").toBundle());
+            startActivity(tab_intent);
+            // 暂时取消这个动画
+//            startActivity(tab_intent,ActivityOptions.makeSceneTransitionAnimation(SyllabusActivity.this,
+//                    clickTextView,"lesson_grid").toBundle());
         }else{
             startActivity(tab_intent);
         }

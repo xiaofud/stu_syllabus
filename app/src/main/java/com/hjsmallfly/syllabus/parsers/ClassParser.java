@@ -131,6 +131,12 @@ public class ClassParser {
             }
 
             int colorIndex = 0;
+
+            // 提示医学院或者, 研究生, 或者老师
+            if (classes.length() == 0){
+                Toast.makeText(context, "如果你是医学院, 研究生, 或者是老师的话, 需要自行添加相应课程哟\n点击空白格子或者菜单可以添加课程", Toast.LENGTH_SHORT).show();
+            }
+
             for (int i = 0; i < classes.length(); ++i) {
                 // 得到每一节课
                 JSONObject lesson = (JSONObject) classes.get(i);

@@ -20,6 +20,7 @@ import android.util.Log;
 import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.animation.AccelerateInterpolator;
@@ -131,6 +132,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean hasDisplayed = false;
 
     private boolean autoScroll = true;
+    // 控制轮播顺序
+    private boolean reverseScrollOrder = false;
 
     // APIS
     GetUserApi getUserApi = SyllabusRetrofit.retrofit.create(GetUserApi.class);
@@ -197,8 +200,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d("banner", "失败缓存banner文件");
             }
             // 开启循环播放图片
-            if (!hasDisplayed)
+            if (!hasDisplayed) {
                 auto_scroll();
+//                Toast.makeText(MainActivity.this, "添加监听器到viewPager上", Toast.LENGTH_SHORT).show();
+                // 貌似无效, 再行探究
+//                viewPager.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Toast.makeText(MainActivity.this, "点击了banner", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+                viewPager.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        if (event.getAction() == MotionEvent.ACTION_MOVE){
+//                            Toast.makeText(MainActivity.this, "进入, 并移动", Toast.LENGTH_SHORT).show();
+                            // return false 好让事件能继续传播
+                            autoScroll = false; // 停止轮播
+//                            viewPager.setPagingEnabled(false);
+                            return false;
+                        }else if (event.getAction() == MotionEvent.ACTION_UP){
+//                            Toast.makeText(MainActivity.this, "移出", Toast.LENGTH_SHORT).show();
+                            autoScroll = true;
+                            return false;
+                        }
+
+//                        Toast.makeText(MainActivity.this, event.getAction() + "", Toast.LENGTH_SHORT).show();
+
+                        return false;
+                    }
+                });
+            }
 //            Toast.makeText(MainActivity.this, files.toString(), Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(MainActivity.this, "文件下载失败,请查看日志", Toast.LENGTH_SHORT).show();
@@ -214,25 +246,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void run() {
                 Log.d("switch", "thread started!");
-                while (autoScroll) {
+                while (true) {
                     try {
                         Thread.sleep(2500);
                     } catch (InterruptedException e) {
+                        Log.d("switch", "thread quited");
                         e.printStackTrace();
                     }
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            int count = bannerPagerAdapter.getCount();
-                            if (count != 0) {
-                                int next = (viewPager.getCurrentItem() + 1) % count;
-                                viewPager.setCurrentItem(next, true);
-                            }
+                    // autoScroll 用于控制是否主动轮播
+                    if (autoScroll) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                int count = bannerPagerAdapter.getCount();
+                                int next = -1;
+                                if (count > 0 && count != 1) {
+                                    next = viewPager.getCurrentItem();
+                                    if (!reverseScrollOrder){
+                                        // 顺序到达最后一张图片, 往回走
+                                        if (next == count - 1){
+                                            reverseScrollOrder = true;
+                                            next -= 1;  // 往回跳一张
+                                        }else{
+                                            next += 1;
+                                        }
+                                    }else{
+                                        if (next == 0){
+                                            reverseScrollOrder = false;
+                                            next += 1;
+                                        }else
+                                            next -= 1;
+                                    }
+                                    if (next >= 0 && next <= count - 1)
+                                        viewPager.setCurrentItem(next, true);
+                                }
 
-                        }
-                    });
+                            }
+                        });
+                    }
                 }
-                Log.d("switch", "thread quited");
+
             }
         });
         scroll_thread.start();
@@ -814,6 +867,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    /**
+     * 解析并显示课表
+     * @param json_data
+     * @param update_local_token
+     */
     private void parse_and_display(String json_data, boolean update_local_token) {
 //        if (classParser == null)
         // 每次用新的classParser [暂时这样修复这个BUG]
@@ -841,8 +899,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 Intent syllabus_activity = new Intent(MainActivity.this, SyllabusActivity.class);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    startActivity(syllabus_activity,
-                            ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
+                    startActivity(syllabus_activity);
+                    // 暂时取消动画效果
+//                    startActivity(syllabus_activity,
+//                            ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
                 } else {
                     startActivity(syllabus_activity);
                 }
@@ -1010,9 +1070,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     View img = findViewById(R.id.oa_img);
 //                    View text = findViewById(R.id.oa_text);
-                    startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(
-                            MainActivity.this,
-                            Pair.create(img, "oa_logo_share")).toBundle());
+                    // 暂时取消这个动画
+                    startActivity(intent);
+//                    startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(
+//                            MainActivity.this,
+//                            Pair.create(img, "oa_logo_share")).toBundle());
                 } else {
                     startActivity(intent);
                 }
