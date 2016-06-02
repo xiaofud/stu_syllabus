@@ -52,6 +52,7 @@
 
     <Button
         android:id="@+id/query_grade_button"
+        android:visibility="gone"
         android:text="@string/query_grade_button"
         android:textColor="@android:color/white"
         android:background="@android:color/holo_blue_light"

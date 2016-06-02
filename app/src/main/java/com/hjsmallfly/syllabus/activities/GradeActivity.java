@@ -2,6 +2,8 @@ package com.hjsmallfly.syllabus.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -127,6 +129,23 @@ public class GradeActivity extends AppCompatActivity implements View.OnClickList
                 get_grades();
             default:
                 break;
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_grade, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.sync_grade_action:
+                get_grades();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

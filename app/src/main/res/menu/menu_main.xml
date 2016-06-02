@@ -16,6 +16,7 @@
 
     <item
         android:id="@+id/check_update_action"
+        android:icon="@drawable/sync"
         android:title="更新"
         app:showAsAction="ifRoom" />
 

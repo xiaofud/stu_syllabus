@@ -52,6 +52,7 @@ public class ExamGetter extends AsyncTask<HashMap<String, String>, Void, String>
         }
 
         ExamParser parser = new ExamParser(context);
+        Toast.makeText(context, "更新成功", Toast.LENGTH_SHORT).show();
         examHandler.deal_with_exam_list(parser.parse_exam_list(raw_data));
 
     }

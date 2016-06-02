@@ -6,6 +6,7 @@
     <item
         android:id="@+id/personal_info_action"
         app:showAsAction="ifRoom"
+        android:icon="@drawable/user"
         android:title="个人信息" />
 
     <item
