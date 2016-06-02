@@ -69,7 +69,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, UpdateHandler, LessonHandler, TokenGetter, Spinner.OnItemSelectedListener, BannerHandler, FileDownloadedHandle {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, UpdateHandler, LessonHandler, TokenGetter, Spinner.OnItemSelectedListener, BannerHandler {
     public static Object[] syllabusData;     // 用于向显示课表的activity传递数据
     public static String info_about_syllabus;
     public static final String USERNAME_FILE = "username.txt";
@@ -123,9 +123,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private UpdateHelper updateHelper;
 
-    private String banner_json_data;
     private List<Banner> bannerList;
-    private List<File> fileList;
+//    private List<File> fileList;
+    private String banner_json_data;
     private BannerPagerAdapter bannerPagerAdapter;
 
 
@@ -141,51 +141,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // ================= UI 相关函数 =================
 
-    private void set_banners() {
-        Log.d("banner", "setting_banners");
-        if (bannerList.size() == 0) {
-            Log.d("banner", "bannerList 的 size 为0");
-            return;
-        }
 
-        // 是否使用之前缓存过的图片
-        boolean use_cached_files = false;
-
-        // 决定使用本地缓存的图片或者从网络上下载
-        if (FileOperation.hasFile(this, getString(R.string.BANNER_CACHED_FILE))) {
-            // 如果已经有缓存文件了,说明已经显示了本地缓存的文件了
-            long latestTimestamp = bannerList.get(0).getTimestamp();
-            Log.d("banner", "最新的时间戳是: " + latestTimestamp + "");
-            String local_banner_json_data = FileOperation.read_from_file(this, getString(R.string.BANNER_CACHED_FILE));
-            long local_timestamp = Banner.getTimestap(local_banner_json_data);
-            Log.d("banner", "缓存的时间戳是: " + local_timestamp + "");
-            if (local_timestamp == latestTimestamp) {
-                use_cached_files = true;
-            }
-        }
-
-        // 转换banner数据
-        List<String> urls = Banner.toUrls(this.bannerList);
-        List<String> filenames = Banner.toFilenames(this.bannerList);
-
-        // 去读缓存的情况已经在之前处理过了
-        if (!use_cached_files) {
-            // 从网络上下载新的图片
-            Log.d("banner", "没有缓存图片, 需要重新下载新的图片");
-            DownloadTask downloadTask = new DownloadTask(urls, "Syllabus", filenames, this, 4000);
-            downloadTask.execute();
-        }
-
-    }
-
-    private void display_banners(List<File> files) {
-        if (files != null) {
-            if (fileList == null)
-                fileList = new ArrayList<>();
-            fileList.addAll(files);
+    private void display_banners(List<Banner> banners) {
 
             if (bannerPagerAdapter == null) {
-                bannerPagerAdapter = new BannerPagerAdapter(this, fileList);
+                bannerPagerAdapter = new BannerPagerAdapter(this, banners);
                 if (viewPager.getAdapter() == null)
                     viewPager.setAdapter(bannerPagerAdapter);
                 else
@@ -193,23 +153,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else {
                 bannerPagerAdapter.notifyDataSetChanged();
             }
-            // 更新本地的banner缓存文件
-            if (FileOperation.save_to_file(this, getString(R.string.BANNER_CACHED_FILE), this.banner_json_data)) {
-                Log.d("banner", "成功缓存banner文件");
-            } else {
-                Log.d("banner", "失败缓存banner文件");
-            }
             // 开启循环播放图片
             if (!hasDisplayed) {
                 auto_scroll();
-//                Toast.makeText(MainActivity.this, "添加监听器到viewPager上", Toast.LENGTH_SHORT).show();
-                // 貌似无效, 再行探究
-//                viewPager.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Toast.makeText(MainActivity.this, "点击了banner", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
+                // 移动时取消自动轮播
                 viewPager.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
@@ -225,16 +172,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             return false;
                         }
 
-//                        Toast.makeText(MainActivity.this, event.getAction() + "", Toast.LENGTH_SHORT).show();
-
                         return false;
                     }
                 });
             }
-//            Toast.makeText(MainActivity.this, files.toString(), Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(MainActivity.this, "文件下载失败,请查看日志", Toast.LENGTH_SHORT).show();
-        }
+
     }
 
 
@@ -382,33 +324,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 debug_ip_edit.setVisibility(View.GONE);
             }
 
-            String showName = "15jmtang";
-//            String showName = "13yjli3";
-            SharedPreferences preferences = getSharedPreferences("userConfig", MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
-            int use_count = preferences.getInt("use_count", 0);
-            if (use_count == 0) {
-                String[] show = new String[]{
-                        "A. 好!",
-                        "B. 同上",
-                        "C. 同上",
-                        "D. 同上",
-                };
-                if (user[0].equals(showName)) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
-                            .setTitle("唐嘉敏, 做我女朋友好吗?");
-                    builder.setItems(show, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                        }
-                    });
-                    builder.setCancelable(false);
-                    builder.show();
-                }
-            }
-            editor.putInt("use_count", use_count + 1);
-//            editor.commit();
-            editor.apply();
+            // 暂时取消这个界面.
+//            String showName = "15jmtang";
+////            String showName = "13yjli3";
+//            SharedPreferences preferences = getSharedPreferences("userConfig", MODE_PRIVATE);
+//            SharedPreferences.Editor editor = preferences.edit();
+//            int use_count = preferences.getInt("use_count", 0);
+//            if (use_count == 0) {
+//                String[] show = new String[]{
+//                        "A. 好!",
+//                        "B. 同上",
+//                        "C. 同上",
+//                        "D. 同上",
+//                };
+//                if (user[0].equals(showName)) {
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
+//                            .setTitle("唐嘉敏, 做我女朋友好吗?");
+//                    builder.setItems(show, new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//                        }
+//                    });
+//                    builder.setCancelable(false);
+//                    builder.show();
+//                }
+//            }
+//            editor.putInt("use_count", use_count + 1);
+////            editor.commit();
+//            editor.apply();
 
 
         } else
@@ -928,21 +871,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.d("banner", "优先读取缓存好了的文件");
             String banner_json = FileOperation.read_from_file(this, getString(R.string.BANNER_CACHED_FILE));
             if (banner_json != null) {
-                // 设置类成员 banner_json_data
+                // 设置类成员 banner_json
                 this.banner_json_data = banner_json;
                 List<Banner> banners = Banner.parse(banner_json);
-                List<String> filenames = Banner.toFilenames(banners);
-                List<File> files = loadCachedBannerFile("Syllabus", filenames);
-                if (files.size() > 0) {
-                    Log.d("banner", "使用缓存文件");
-                    display_banners(files);
-                } else {  // 本地有缓存记录,但是图片被用户删除了
-                    Log.d("banner", "缓存文件被删除了");
-                    // 删除记录缓存的文件, 让app从服务器重新下载图片
-                    FileOperation.delete_file(this, getString(R.string.BANNER_CACHED_FILE));
+                Log.d("banners", "使用缓存文件");
+                display_banners(banners);
                 }
             }
-        }
         BannerGetter bannerGetter = new BannerGetter(this);
         Log.d("banner", "从服务器拉取新的banner信息");
         bannerGetter.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, WebApi.get_server_address() + getString(R.string.get_banner_api));
@@ -1021,6 +956,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+//    private void set_banners() {
+//        Log.d("banner", "setting_banners");
+//        if (bannerList.size() == 0) {
+//            Log.d("banner", "bannerList 的 size 为0");
+//            return;
+//        }
+//
+//        // 是否使用之前缓存过的图片
+//        boolean use_cached_files = false;
+//
+//        // 决定使用本地缓存的图片或者从网络上下载
+//        if (FileOperation.hasFile(this, getString(R.string.BANNER_CACHED_FILE))) {
+//            // 如果已经有缓存文件了,说明已经显示了本地缓存的文件了
+//            long latestTimestamp = bannerList.get(0).getTimestamp();
+//            Log.d("banner", "最新的时间戳是: " + latestTimestamp + "");
+//            String local_banner_json_data = FileOperation.read_from_file(this, getString(R.string.BANNER_CACHED_FILE));
+//            long local_timestamp = Banner.getTimestap(local_banner_json_data);
+//            Log.d("banner", "缓存的时间戳是: " + local_timestamp + "");
+//            if (local_timestamp == latestTimestamp) {
+//                use_cached_files = true;
+//            }
+//        }
+//
+//    }
+
     @Override
     public void handle_get_response(String result) {
         if (result.isEmpty()) {
@@ -1031,8 +991,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.banner_json_data = result;
         this.bannerList = Banner.parse(result);
         if (bannerList != null && bannerList.size() > 0) {
-//            Toast.makeText(MainActivity.this, bannerList.get(0).getUrl(), Toast.LENGTH_SHORT).show();
-            set_banners();
+            Log.d("banner", "缓存文件");
+
+            // 判断时间戳
+            if (isBannersCached()) {
+                long latestTimestamp = bannerList.get(0).getTimestamp();
+                Log.d("banner", "最新的时间戳是: " + latestTimestamp + "");
+                String local_banner_json_data = FileOperation.read_from_file(this, getString(R.string.BANNER_CACHED_FILE));
+                long local_timestamp = Banner.getTimestap(local_banner_json_data);
+                Log.d("banner", "缓存的时间戳是: " + local_timestamp + "");
+                if (local_timestamp == latestTimestamp) {
+                    Log.d("banner", "确定使用缓存");
+                    return;
+                }
+            }
+            // 更新本地缓存
+            FileOperation.save_to_file(this, getString(R.string.BANNER_CACHED_FILE), banner_json_data);
+            display_banners(bannerList);
         } else {
 //            Toast.makeText(MainActivity.this, "服务器没有资源,或者解析失败", Toast.LENGTH_SHORT).show();
             Log.d("banner", "服务器没有资源,或者解析失败");
@@ -1041,17 +1016,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    @Override
-    public void handle_downloaded_file(List<File> files) {
-        // 清空一些数据
-        if (fileList != null) {
-            Log.d("banner", "清空已经显示的图片");
-            Log.d("switch", "重新下载了图片文件");
-//            viewPager.requestLayout();
-            files.clear();
-        }
-        display_banners(files);
-    }
+//    @Override
+//    public void handle_downloaded_file(List<File> files) {
+////        // 清空一些数据
+////        if (fileList != null) {
+////            Log.d("banner", "清空已经显示的图片");
+////            Log.d("switch", "重新下载了图片文件");
+//////            viewPager.requestLayout();
+////            files.clear();
+////        }
+////        display_banners(files);
+//    }
 
 
     // ============= 回调接口 =============
@@ -1068,7 +1043,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(this, OAActivity.class);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    View img = findViewById(R.id.oa_img);
+//                    View img = findViewById(R.id.oa_img);
 //                    View text = findViewById(R.id.oa_text);
                     // 暂时取消这个动画
                     startActivity(intent);
