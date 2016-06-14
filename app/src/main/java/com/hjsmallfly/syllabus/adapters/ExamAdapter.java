@@ -83,8 +83,8 @@ public class ExamAdapter extends ArrayAdapter<Exam> {
             exam_comment += exam.exam_comment;
         }
         viewHolder.location_view.setText(location);
-        viewHolder.name_text_view.setText(name);
-        viewHolder.time_text_view.setText(time_str);
+        viewHolder.name_text_view.setText(name.replaceAll("\\[(\\w)*\\]",""));
+        viewHolder.time_text_view.setText(time_str.replace("(","\n("));
         viewHolder.sit_position_text_view.setText(sit_position);
         viewHolder.comment_text_view.setText(exam_comment);
 
