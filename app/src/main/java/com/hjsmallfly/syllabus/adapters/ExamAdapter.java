@@ -8,19 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hjsmallfly.syllabus.syllabus.Exam;
 import com.hjsmallfly.syllabus.syllabus.R;
 
-import org.joda.time.DateTime;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
-import java.util.logging.SimpleFormatter;
 
 /**
  * Created by smallfly on 15-11-23.

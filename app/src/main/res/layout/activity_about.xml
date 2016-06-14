@@ -1,20 +1,41 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.hjsmallfly.syllabus.activities.AboutActivity">
 
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_above="@+id/github_address"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:textSize="18sp"
+            android:text="扫码加呆杰微信号\n也可以搜索daidailiyujie添加"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:scaleType="center"
+            android:src="@drawable/wechatnum"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
     <EditText
-        android:layout_weight="1"
+        android:layout_above="@+id/about_msg"
+        android:id="@+id/github_address"
         android:text="@string/github_app_address"
         android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="0dp" />
+        android:layout_height="wrap_content" />
 
     <TextView
+        android:layout_alignParentBottom="true"
         android:padding="@dimen/activity_horizontal_margin"
+        android:id="@+id/about_msg"
         android:text="@string/about_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-</LinearLayout>
+</RelativeLayout>
