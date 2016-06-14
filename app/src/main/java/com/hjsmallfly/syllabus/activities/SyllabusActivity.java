@@ -452,11 +452,13 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 //                    final int row_index = j;
 //                    final int column_index = i;
                     // 空白格子
-                    ll.setOnClickListener(new View.OnClickListener() {
+                    ll.setOnLongClickListener(new View.OnLongClickListener() {
                         @Override
-                        public void onClick(View v) {
+                        public boolean onLongClick(View v) {
                             addCustomClass();
+                            return false;
                         }
+
                     });
 
                 }
