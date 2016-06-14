@@ -1,6 +1,7 @@
 package com.hjsmallfly.syllabus.activities;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +24,8 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ExamActivity extends AppCompatActivity implements View.OnClickListener, ExamHandler {
 
@@ -47,6 +50,22 @@ public class ExamActivity extends AppCompatActivity implements View.OnClickListe
             load_cached_exam_file();
         }else
             get_exam_list();
+
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                new Handler(getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (examAdapter!=null){
+                            examAdapter.notifyDataSetChanged();
+                        }
+                    }
+                });
+            }
+        },0,1000);
+
 
     }
 
@@ -123,7 +142,7 @@ public class ExamActivity extends AppCompatActivity implements View.OnClickListe
             examAdapter.notifyDataSetChanged();
         }
 
-        String exam_info = "一共有" + exam_list.size() + "门考试[右上角或者菜单更新考试信息]";
+        String exam_info = "一共有" + exam_list.size() + "门考试";
         exam_info_text_view.setText(exam_info);
     }
 
