@@ -92,7 +92,7 @@ public class BannerPagerAdapter extends PagerAdapter {
         int width = displaymetrics.widthPixels;
 
         Log.d("new_banner", "加载" + banner.getUrl());
-        Picasso.with(context).load(banner.getUrl()).error(R.drawable.logo_w).resize(width, 0).into(imageView);
+        Picasso.with(context).load(banner.getUrl()).placeholder(R.drawable.logo_w).error(R.drawable.logo_w).resize(width, 0).into(imageView);
         container.addView(viewGroup);
         return viewGroup;
     }
