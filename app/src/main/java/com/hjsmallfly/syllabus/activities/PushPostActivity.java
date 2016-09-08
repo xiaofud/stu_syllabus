@@ -352,9 +352,10 @@ public class PushPostActivity extends AppCompatActivity {
                 public void onResponse(Call<BmobPhoto> call, Response<BmobPhoto> response) {
 
                     if (response.isSuccessful()){
+                        // 新的Bmob返回的直接是图片的完整URL
                         uploaded_photo_urls.add
-                                (ImageUploader.IMAGE_URL_PREFIX_WITH_TAILING_SLASH + response.body().url);
-                        Log.d("new_post", "上传成功");
+                                (/*ImageUploader.IMAGE_URL_PREFIX_WITH_TAILING_SLASH + */response.body().url);
+                        Log.d("new_post", "上传成功: " + response.body().url);
                         if (uploaded_photo_urls.size() >= photo_files.size()){
                             // 说明全部上传成功了
 //                            Toast.makeText(PushPostActivity.this, "图片全部上传完毕", Toast.LENGTH_SHORT).show();

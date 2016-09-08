@@ -37,6 +37,7 @@
             android:textSize="16sp" />
 
         <GridView
+            android:visibility="gone"
             android:layout_marginTop="10dp"
             android:id="@+id/discuss_grid_image_view"
             android:numColumns="3"

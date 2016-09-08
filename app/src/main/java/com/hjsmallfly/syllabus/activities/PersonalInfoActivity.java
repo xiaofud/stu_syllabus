@@ -232,7 +232,8 @@ public class PersonalInfoActivity extends AppCompatActivity implements View.OnCl
                                 BmobPhoto bmobPhoto = response.body();
 //                                Toast.makeText(PersonalInfoActivity.this, bmobPhoto.url, Toast.LENGTH_SHORT).show();
                                 User user = PersonalInfoActivity.this.user;
-                                user.image = ImageUploader.IMAGE_URL_PREFIX_WITH_TAILING_SLASH + bmobPhoto.url;
+                                // 新版的Bmob返回的是完整的URL
+                                user.image = bmobPhoto.url;
                                 user.nickname = nickname_edit.getText().toString().trim();
                                 user.profile = profile_edit_text.getText().toString().trim();
                                 update_user(user);

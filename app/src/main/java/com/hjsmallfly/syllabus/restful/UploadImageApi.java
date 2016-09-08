@@ -25,6 +25,6 @@ public interface UploadImageApi {
             API_KEY_FIELD + ": " + API_KEY_FIELD_VALUE,
             "Content-Type: image/jpeg"
     })
-    @POST("/1/files/{filename}")
+    @POST("/2/files/{filename}")
     Call<BmobPhoto> upload(@Body RequestBody requestBody, @Path("filename") String filename);
 }
