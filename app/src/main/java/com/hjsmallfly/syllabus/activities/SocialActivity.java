@@ -3,6 +3,8 @@ package com.hjsmallfly.syllabus.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 
 
 import com.hjsmallfly.syllabus.adapters.PostAdapter;
+import com.hjsmallfly.syllabus.adapters.PostRecyclerAdapter;
 import com.hjsmallfly.syllabus.helpers.SyllabusRetrofit;
 import com.hjsmallfly.syllabus.pojo.PostList;
 import com.hjsmallfly.syllabus.restful.GetPostsApi;
@@ -33,14 +36,16 @@ public class SocialActivity extends AppCompatActivity {
     // =========== 用于给其他类控制这个类的UI ===========
 
 
-
-    private ListView global_list_view;
+    private RecyclerView postsRecyclerView;
+//    private ListView global_list_view;
     private Button new_post_button;
     private Button view_more_button;
 
-    private PostAdapter postAdapter;
+//    private PostAdapter postAdapter;
 
     private PostList postList;
+
+    private PostRecyclerAdapter postRecyclerAdapter;
 
 
 
@@ -48,6 +53,8 @@ public class SocialActivity extends AppCompatActivity {
     private GetPostsApi getPostsApi;
 
     private int current_max_id = VERY_BIG_INTEGER;
+
+    private RecyclerView.LayoutManager recyclerViewLayoutManager;
 
 
 
@@ -75,16 +82,16 @@ public class SocialActivity extends AppCompatActivity {
             need_to_update_posts = false;
         }
 
-        if (SocialActivity.ENSURE_POSITION != -1 && postAdapter != null){
-            // 设置回之前设定的位置
-
-            if (SocialActivity.ENSURE_POSITION < postAdapter.getCount()){
-                // 数据有可能更新了
-                postAdapter.notifyDataSetChanged();
-                global_list_view.setSelection(SocialActivity.ENSURE_POSITION);
-            }
-
-        }
+//        if (SocialActivity.ENSURE_POSITION != -1 && postAdapter != null){
+//            // 设置回之前设定的位置
+//
+//            if (SocialActivity.ENSURE_POSITION < postAdapter.getCount()){
+//                // 数据有可能更新了
+//                postAdapter.notifyDataSetChanged();
+//                global_list_view.setSelection(SocialActivity.ENSURE_POSITION);
+//            }
+//
+//        }
 
         MobclickAgent.onResume(this);
     }
@@ -105,7 +112,8 @@ public class SocialActivity extends AppCompatActivity {
 
 
     private void find_views(){
-        global_list_view = (ListView) findViewById(R.id.global_discuss_list_view);
+        postsRecyclerView = (RecyclerView) findViewById(R.id.postsRecyclerView);
+//        global_list_view = (ListView) findViewById(R.id.global_discuss_list_view);
         new_post_button = (Button) findViewById(R.id.new_post_button);
         view_more_button = (Button) findViewById(R.id.view_more_button);
     }
@@ -129,6 +137,9 @@ public class SocialActivity extends AppCompatActivity {
             }
         });
 
+        recyclerViewLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        postsRecyclerView.setLayoutManager(recyclerViewLayoutManager);
+
     }
 
     private void get_posts(int before_id, final boolean re_pull){
@@ -140,11 +151,13 @@ public class SocialActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     PostList tmp = response.body();
                     // 记录原来列表的最后一项
-                    int origin_max_item_id = global_list_view.getCount();
+                    int origin_max_item_id;
+                    if (postList != null)
+                         origin_max_item_id = postList.postList.size();
+                    else
+                        origin_max_item_id = 1;
+
                     if (SocialActivity.this.postList != null){
-
-
-
                         // 更新内容
                         if (re_pull)    // 意味着要拉取最新的数据
                             SocialActivity.this.postList.postList.clear();
@@ -178,20 +191,22 @@ public class SocialActivity extends AppCompatActivity {
         // 显示最新的posts
         if (this.postList != null){
 //            if (postAdapter == null){
-            if (postAdapter == null) {
-                postAdapter = new PostAdapter(this, R.layout.discuss_item_layout, this.postList.postList);
-                global_list_view.setAdapter(postAdapter);
-            }
-            postAdapter.notifyDataSetChanged();
-//            Toast.makeText(SocialActivity.this, "select: " + selection_id, Toast.LENGTH_SHORT).show();
-            global_list_view.setSelection(selection_id);
-        }
-//        else {
-//            postAdapter.notifyDataSetChanged();
-//            Toast.makeText(SocialActivity.this, "select: " + selection_id, Toast.LENGTH_SHORT).show();
-//            global_list_view.setSelection(selection_id);
-//        }
+//            if (postAdapter == null) {
+//                postAdapter = new PostAdapter(this, R.layout.discuss_item_layout, this.postList.postList);
+//                global_list_view.setAdapter(postAdapter);
+//
+//            }
 
+            if (postRecyclerAdapter == null){
+                postRecyclerAdapter = new PostRecyclerAdapter(this.postList.postList);
+                postsRecyclerView.setAdapter(postRecyclerAdapter);
+            }
+
+            postRecyclerAdapter.notifyDataSetChanged();
+            recyclerViewLayoutManager.scrollToPosition(selection_id);
+//            postAdapter.notifyDataSetChanged();
+//            global_list_view.setSelection(selection_id);
+        }
     }
 
 
