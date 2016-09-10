@@ -1,11 +1,9 @@
 package com.hjsmallfly.syllabus.activities;
 
-import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -17,7 +15,6 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -35,7 +32,6 @@ import android.widget.Toast;
 import com.hjsmallfly.syllabus.adapters.BannerPagerAdapter;
 import com.hjsmallfly.syllabus.customviews.WrapContentHeightViewPager;
 import com.hjsmallfly.syllabus.helpers.BannerGetter;
-import com.hjsmallfly.syllabus.helpers.DownloadTask;
 import com.hjsmallfly.syllabus.helpers.InternetLogin;
 import com.hjsmallfly.syllabus.helpers.LessonPullTask;
 import com.hjsmallfly.syllabus.helpers.StringDataHelper;
@@ -43,7 +39,6 @@ import com.hjsmallfly.syllabus.helpers.SyllabusRetrofit;
 import com.hjsmallfly.syllabus.helpers.UpdateHelper;
 import com.hjsmallfly.syllabus.helpers.WebApi;
 import com.hjsmallfly.syllabus.interfaces.BannerHandler;
-import com.hjsmallfly.syllabus.interfaces.FileDownloadedHandle;
 import com.hjsmallfly.syllabus.interfaces.LessonHandler;
 import com.hjsmallfly.syllabus.interfaces.TokenGetter;
 import com.hjsmallfly.syllabus.interfaces.UpdateHandler;
@@ -1056,7 +1051,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
             case R.id.school_activity_button:
-                Intent global_discuss_intent = new Intent(this, SocialActivity.class);
+                Intent global_discuss_intent = new Intent(this, MessageActivity.class);
                 startActivity(global_discuss_intent);
                 break;
             case R.id.query_grade_text_view:

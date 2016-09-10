@@ -29,6 +29,8 @@ import com.hjsmallfly.syllabus.pojo.Post;
 import com.hjsmallfly.syllabus.pojo.PostCommentTask;
 import com.hjsmallfly.syllabus.pojo.PostThumbUp;
 import com.hjsmallfly.syllabus.pojo.ThumbUpTask;
+import com.hjsmallfly.syllabus.restful.DeletePostApi;
+import com.hjsmallfly.syllabus.restful.DeleteUnreadAPI;
 import com.hjsmallfly.syllabus.restful.GetCommentsApi;
 import com.hjsmallfly.syllabus.restful.PostCommentApi;
 import com.hjsmallfly.syllabus.restful.PushPostApi;
@@ -77,6 +79,7 @@ public class PostContentActivity extends AppCompatActivity {
     private PushThumbUpApi thumbUpApi;
     private GetCommentsApi getCommentApi;
     private PostCommentApi postCommentApi;
+    private DeleteUnreadAPI deleteUnreadAPI;
 
     private Gson gson = new Gson();
 
@@ -98,14 +101,33 @@ public class PostContentActivity extends AppCompatActivity {
         thumbUpApi = SyllabusRetrofit.retrofit.create(PushThumbUpApi.class);
         getCommentApi = SyllabusRetrofit.retrofit.create(GetCommentsApi.class);
         postCommentApi = SyllabusRetrofit.retrofit.create(PostCommentApi.class);
+        deleteUnreadAPI = SyllabusRetrofit.retrofit.create(DeleteUnreadAPI.class);
 
-//        SocialActivity.need_to_update_posts = true;
+//        MessageActivity.need_to_update_posts = true;
 
         init_views();
 
+
         get_comments();
+
+        deleteUnread();
     }
 
+    private void deleteUnread(){
+        // 尝试删除这个未读消息
+        Call<Void> deleteUnreadCall = deleteUnreadAPI.deleteUnread(MainActivity.user_id, post.id, MainActivity.token);
+        deleteUnreadCall.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
+            }
+        });
+    }
 
     // =============== 跟UI有关的函数 ===============
 
@@ -378,6 +400,9 @@ public class PostContentActivity extends AppCompatActivity {
                     CommentList commentList = response.body();
 //                    Toast.makeText(PostContentActivity.this, commentList.comments.size() + "", Toast.LENGTH_SHORT).show();
                     if (commentList.comments.size() > 0)
+
+
+
                         if (comments == null){
                             // 第一次
                             comments = commentList.comments;

@@ -1,6 +1,5 @@
 package com.hjsmallfly.syllabus.activities;
 
-import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -61,11 +60,9 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 
 
 public class SyllabusActivity extends AppCompatActivity implements LessonHandler, TokenGetter {
@@ -608,7 +605,7 @@ public class SyllabusActivity extends AppCompatActivity implements LessonHandler
 
 
             case R.id.global_discuss_action:
-                Intent global_discuss_intent = new Intent(this, SocialActivity.class);
+                Intent global_discuss_intent = new Intent(this, MessageActivity.class);
                 startActivity(global_discuss_intent);
                 break;
 

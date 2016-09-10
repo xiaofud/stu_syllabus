@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.hjsmallfly.syllabus.activities.SocialActivity">
+    tools:context="com.hjsmallfly.syllabus.activities.MessageActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/postsRecyclerView"
@@ -17,18 +17,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp">
     </android.support.v7.widget.RecyclerView>
-
-    <!--<ListView-->
-        <!--android:id="@+id/global_discuss_list_view"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:layout_weight="1"-->
-        <!--android:divider="@android:color/transparent"-->
-        <!--android:dividerHeight="5dp">-->
-
-        <!--&lt;!&ndash;android:divider="@android:color/darker_gray"&ndash;&gt;-->
-
-    <!--</ListView>-->
 
     <LinearLayout
         android:visibility="gone"
@@ -78,6 +66,15 @@
             android:id="@+id/new_post_button"
             android:textColor="@android:color/white"
             android:text="发布新动态"
+            android:background="@android:color/holo_red_light"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:layout_weight="1"
+            android:id="@+id/unreadButton"
+            android:textColor="@android:color/white"
+            android:text="未读消息"
             android:background="@android:color/holo_red_light"
             android:layout_width="0dp"
             android:layout_height="wrap_content" />

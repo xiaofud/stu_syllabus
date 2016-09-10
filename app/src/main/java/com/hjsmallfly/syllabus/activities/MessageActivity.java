@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,21 +13,14 @@ import android.widget.Toast;
 
 
 import com.hjsmallfly.syllabus.adapters.PostRecyclerAdapter;
-import com.hjsmallfly.syllabus.helpers.SyllabusRetrofit;
 import com.hjsmallfly.syllabus.mvp.contract.PostsContract;
 import com.hjsmallfly.syllabus.mvp.model.PostsModel;
 import com.hjsmallfly.syllabus.mvp.presenter.PostsPresenter;
 import com.hjsmallfly.syllabus.pojo.PostList;
-import com.hjsmallfly.syllabus.restful.GetPostsApi;
 import com.hjsmallfly.syllabus.syllabus.R;
 import com.umeng.analytics.MobclickAgent;
 
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class SocialActivity extends AppCompatActivity implements PostsContract.PostsView {
+public class MessageActivity extends AppCompatActivity implements PostsContract.PostsView {
 
     // =========== 用于给其他类控制这个类的UI ===========
     public static boolean need_to_update_posts = false;
@@ -37,28 +29,25 @@ public class SocialActivity extends AppCompatActivity implements PostsContract.P
 
     // =========== 用于给其他类控制这个类的UI ===========
 
-
     private RecyclerView postsRecyclerView;
     private Button new_post_button;
+    private Button unreadButton;
     private Button view_more_button;
-
     private PostList postList;
-
     private PostRecyclerAdapter postRecyclerAdapter;
 
     private int currentMinID = VERY_BIG_INTEGER;
-
 
     private RecyclerView.LayoutManager recyclerViewLayoutManager;
 
     private PostsContract.PostsPresenter presenter;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_global_discuss);
-
         find_views();
         setup_views();
         PostsModel postsModel = new PostsModel();
@@ -73,7 +62,6 @@ public class SocialActivity extends AppCompatActivity implements PostsContract.P
     protected void onResume() {
         super.onResume();
         if (need_to_update_posts){
-//            get_posts(VERY_BIG_INTEGER, true);
             presenter.loadMorePosts(NUMBER_OF_POSTS_PER_PULL, VERY_BIG_INTEGER, true);
             need_to_update_posts = false;
         }
@@ -96,21 +84,23 @@ public class SocialActivity extends AppCompatActivity implements PostsContract.P
 
 
 
-    private void find_views(){
+    protected void find_views(){
         postsRecyclerView = (RecyclerView) findViewById(R.id.postsRecyclerView);
         new_post_button = (Button) findViewById(R.id.new_post_button);
+        unreadButton = (Button) findViewById(R.id.unreadButton);
         view_more_button = (Button) findViewById(R.id.view_more_button);
     }
 
-    private void setup_views(){
+
+    protected void setup_views(){
         new_post_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (MainActivity.user_id == -1){
-                    Toast.makeText(SocialActivity.this, "亲, 请同步一下课表", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MessageActivity.this, "亲, 请同步一下课表", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                startActivity(new Intent(SocialActivity.this, PushPostActivity.class));
+                startActivity(new Intent(MessageActivity.this, PushPostActivity.class));
             }
         });
 
@@ -118,6 +108,13 @@ public class SocialActivity extends AppCompatActivity implements PostsContract.P
             @Override
             public void onClick(View v) {
                 presenter.loadMorePosts(NUMBER_OF_POSTS_PER_PULL, currentMinID, false);
+            }
+        });
+
+        unreadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MessageActivity.this, UnreadActivity.class));
             }
         });
 
@@ -137,7 +134,7 @@ public class SocialActivity extends AppCompatActivity implements PostsContract.P
 
             case R.id.personal_info_action:
                 if (MainActivity.user_id == -1){
-                    Toast.makeText(SocialActivity.this, "亲, 请同步一次课表", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MessageActivity.this, "亲, 请同步一次课表", Toast.LENGTH_SHORT).show();
                     return true;
                 }
                 Intent person_intent = new Intent(this, PersonalInfoActivity.class);
@@ -184,7 +181,7 @@ public class SocialActivity extends AppCompatActivity implements PostsContract.P
     }
 
     public void showMessage(String message){
-        Toast.makeText(SocialActivity.this, message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(MessageActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override

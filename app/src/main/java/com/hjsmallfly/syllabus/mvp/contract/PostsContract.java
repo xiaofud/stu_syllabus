@@ -11,6 +11,11 @@ public interface PostsContract {
         void loadMorePosts(int count, int before_id, boolean refresh);
     }
 
+    interface UnreadPresenter{
+        void getUnreadMessage(int userID, int type);
+//        void readMessage(int )
+    }
+
     interface PostsView{
         void setPresenter(PostsPresenter presenter);
         void updatePosts(PostList postList, boolean refresh);

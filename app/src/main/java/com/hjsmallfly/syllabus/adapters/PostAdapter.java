@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.hjsmallfly.syllabus.activities.SocialActivity;
 import com.hjsmallfly.syllabus.activities.MainActivity;
 import com.hjsmallfly.syllabus.activities.PostContentActivity;
 import com.hjsmallfly.syllabus.helpers.ClipBoardHelper;
@@ -393,7 +392,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
         @Override
         public void onClick(View v) {
                 PostContentActivity.post = this.post_to_display;
-//                SocialActivity.ENSURE_POSITION = position;
+//                MessageActivity.ENSURE_POSITION = position;
                 getContext().startActivity(new Intent(getContext(), PostContentActivity.class));
         }
     }
