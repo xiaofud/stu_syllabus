@@ -74,9 +74,6 @@
             android:label="@string/oa_web_view_label"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.hjsmallfly.syllabus.activities.HelpActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name="com.hjsmallfly.syllabus.activities.ShowStudentInfoListActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -104,7 +101,8 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity android:name="com.hjsmallfly.syllabus.activities.UnreadActivity" />
-        <activity android:name="com.hjsmallfly.syllabus.activities.MessageAbstractActivity"></activity>
+        <activity android:name="com.hjsmallfly.syllabus.activities.MessageAbstractActivity" />
+        <activity android:name="com.hjsmallfly.syllabus.activities.InternetLoginWebActivity"></activity>
     </application>
 
 </manifest>

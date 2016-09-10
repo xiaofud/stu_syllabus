@@ -1,9 +1,12 @@
 package com.hjsmallfly.syllabus.helpers;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.hjsmallfly.syllabus.activities.InternetLoginWebActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,8 +43,6 @@ public class InternetLogin {
 
     private class LoginTask extends AsyncTask<Void, Void, String>{
 
-
-
         @Override
         protected String doInBackground(Void... params) {
             HashMap<String, String> post_data = new HashMap<>();
@@ -57,9 +58,12 @@ public class InternetLogin {
         protected void onPostExecute(String s) {
             Log.d("newFlux", s);
             try {
+                // 学校的JSON格式有问题
+                s = s.replaceAll("'", "\"");
                 JSONObject loginObject = new JSONObject(s);
 //                boolean success = loginObject.getBoolean("success");
                 String msg = loginObject.getString("msg");
+                context.startActivity(new Intent(context, InternetLoginWebActivity.class));
                 Toast.makeText(InternetLogin.this.context, msg, Toast.LENGTH_SHORT).show();
             } catch (JSONException e) {
                 Toast.makeText(InternetLogin.this.context, "网络连接错误", Toast.LENGTH_SHORT).show();

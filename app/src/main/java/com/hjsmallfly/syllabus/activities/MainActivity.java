@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d("switch", "thread started!");
                 while (true) {
                     try {
-                        Thread.sleep(2500);
+                        Thread.sleep(3500);
                     } catch (InterruptedException e) {
                         Log.d("switch", "thread quited");
                         e.printStackTrace();
@@ -413,11 +413,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return true;
         }
 
-        if (id == R.id.help_action) {
-            Intent intent = new Intent(this, HelpActivity.class);
-            startActivity(intent);
-            return true;
-        }
 
         if (id == R.id.logout_action) {
             if (cur_username != null && cur_password != null) {
@@ -951,30 +946,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-//    private void set_banners() {
-//        Log.d("banner", "setting_banners");
-//        if (bannerList.size() == 0) {
-//            Log.d("banner", "bannerList 的 size 为0");
-//            return;
-//        }
-//
-//        // 是否使用之前缓存过的图片
-//        boolean use_cached_files = false;
-//
-//        // 决定使用本地缓存的图片或者从网络上下载
-//        if (FileOperation.hasFile(this, getString(R.string.BANNER_CACHED_FILE))) {
-//            // 如果已经有缓存文件了,说明已经显示了本地缓存的文件了
-//            long latestTimestamp = bannerList.get(0).getTimestamp();
-//            Log.d("banner", "最新的时间戳是: " + latestTimestamp + "");
-//            String local_banner_json_data = FileOperation.read_from_file(this, getString(R.string.BANNER_CACHED_FILE));
-//            long local_timestamp = Banner.getTimestap(local_banner_json_data);
-//            Log.d("banner", "缓存的时间戳是: " + local_timestamp + "");
-//            if (local_timestamp == latestTimestamp) {
-//                use_cached_files = true;
-//            }
-//        }
-//
-//    }
 
     @Override
     public void handle_get_response(String result) {
@@ -1011,17 +982,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-//    @Override
-//    public void handle_downloaded_file(List<File> files) {
-////        // 清空一些数据
-////        if (fileList != null) {
-////            Log.d("banner", "清空已经显示的图片");
-////            Log.d("switch", "重新下载了图片文件");
-//////            viewPager.requestLayout();
-////            files.clear();
-////        }
-////        display_banners(files);
-//    }
 
 
     // ============= 回调接口 =============
