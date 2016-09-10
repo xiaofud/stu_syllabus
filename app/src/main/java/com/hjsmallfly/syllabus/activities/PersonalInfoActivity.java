@@ -363,45 +363,4 @@ public class PersonalInfoActivity extends AppCompatActivity implements View.OnCl
 
     }
 
-//    @Override
-//    public void handle_user(UserInformation userInformation) {
-//        if (userInformation == null){
-//            return;
-//        }
-//
-//        username_edit.setText(userInformation.username);
-//        if (userInformation.nick_name != null){
-//            nickname_edit.setText(userInformation.nick_name);
-//        }
-//    }
-
-
-//    @Override
-//    public void handle_user_alter(String response) {
-//        if (response.isEmpty()){
-//            Toast.makeText(PersonalInfoActivity.this, "网络连接错误!", Toast.LENGTH_SHORT).show();
-//            return ;
-//        }
-//
-//        String error = JSONHelper.check_and_get_error(response);
-//        if (error != null){
-//            if (error.equals("no such user"))
-//                Toast.makeText(PersonalInfoActivity.this, "没有该用户!", Toast.LENGTH_SHORT).show();
-//            else if (error.equals("wrong token"))
-//                Toast.makeText(PersonalInfoActivity.this, StringDataHelper.ERROR_TOKEN, Toast.LENGTH_SHORT).show();
-//            else if (error.equals("the nickname has been used")){
-//                Toast.makeText(PersonalInfoActivity.this, "用户名已经被使用", Toast.LENGTH_SHORT).show();
-//            }else if(error.equals("not authorized to use this name")){
-//                Toast.makeText(PersonalInfoActivity.this, "不允许使用该用户名", Toast.LENGTH_SHORT).show();
-//            }
-//            return;
-//        }
-//
-//        // 友盟
-//        MobclickAgent.onEvent(this, "Setting_Nickname");
-//
-//        Toast.makeText(PersonalInfoActivity.this, "修改成功!", Toast.LENGTH_SHORT).show();
-//
-//
-//    }
 }

@@ -1,8 +1,9 @@
 package com.hjsmallfly.syllabus.mvp.viewholder;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,15 +16,18 @@ import com.google.gson.Gson;
 import com.hjsmallfly.syllabus.activities.MainActivity;
 import com.hjsmallfly.syllabus.activities.PostContentActivity;
 import com.hjsmallfly.syllabus.adapters.GridImageViewAdapter;
-import com.hjsmallfly.syllabus.mvp.contract.PostContract;
+import com.hjsmallfly.syllabus.helpers.ClipBoardHelper;
+import com.hjsmallfly.syllabus.interfaces.ItemRemovedListener;
+import com.hjsmallfly.syllabus.mvp.contract.SinglePostContract;
 import com.hjsmallfly.syllabus.pojo.PhotoList;
 import com.hjsmallfly.syllabus.pojo.Post;
 import com.hjsmallfly.syllabus.syllabus.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class DiscussItemLayoutHolder extends RecyclerView.ViewHolder implements PostContract.PostView {
+public class PostViewHolder extends RecyclerView.ViewHolder implements SinglePostContract.PostView {
 
     private ImageView discussAvatarImageView;
     private TextView discussSpeakerText;
@@ -35,15 +39,17 @@ public class DiscussItemLayoutHolder extends RecyclerView.ViewHolder implements 
     private ImageView commentImageView;
     private TextView commentCountTextView;
 
+    private List<ItemRemovedListener> itemRemovedListeners;
+
     private Gson gson = new Gson();
 
-    private PostContract.PostPresenter postPresenter;
+    private SinglePostContract.PostPresenter postPresenter;
 
-    public DiscussItemLayoutHolder(LayoutInflater inflater, ViewGroup parent) {
+    public PostViewHolder(LayoutInflater inflater, ViewGroup parent) {
         this(inflater.inflate(R.layout.discuss_item_layout, parent, false));
     }
 
-    public DiscussItemLayoutHolder(View view) {
+    public PostViewHolder(View view) {
         super(view);
         discussAvatarImageView = (ImageView) view.findViewById(R.id.discuss_avatar_image_view);
         discussSpeakerText = (TextView) view.findViewById(R.id.discuss_speaker_text);
@@ -56,6 +62,19 @@ public class DiscussItemLayoutHolder extends RecyclerView.ViewHolder implements 
         commentCountTextView = (TextView) view.findViewById(R.id.comment_count_text_view);
     }
 
+    public void addItemRemovedListener(ItemRemovedListener listener){
+        if (itemRemovedListeners == null)
+            itemRemovedListeners = new ArrayList<>();
+        itemRemovedListeners.add(listener);
+    }
+
+    public void notifyItemRemoved(){
+        if (itemRemovedListeners == null)
+            return;
+        for(ItemRemovedListener listener: itemRemovedListeners)
+            listener.onItemRemoved(getAdapterPosition());
+    }
+
     public static int get_like_id(int uid, Post post){
         for(int i = 0 ; i < post.thumbUps.size() ; ++i){
             if (post.thumbUps.get(i).uid == uid)
@@ -65,7 +84,7 @@ public class DiscussItemLayoutHolder extends RecyclerView.ViewHolder implements 
     }
 
     @Override
-    public void setPresenter(PostContract.PostPresenter presenter){
+    public void setPresenter(SinglePostContract.PostPresenter presenter){
         this.postPresenter = presenter;
     }
 
@@ -105,12 +124,26 @@ public class DiscussItemLayoutHolder extends RecyclerView.ViewHolder implements 
     }
 
     @Override
+    public void onDeleteReturn(int code, Post post, String message) {
+        if (code == 0){
+            Toast.makeText(discussContent.getContext(), "删除成功", Toast.LENGTH_SHORT).show();
+            notifyItemRemoved();
+        }else
+            Toast.makeText(discussContent.getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void displayPostBrief(Post post) {
         // ---------- 文字信息 ----------
         discussSpeakerText.setText(post.postUser.nickname);
         commentCountTextView.setText(String.valueOf(post.comments.size()));
         likeCountTextView.setText(String.valueOf(post.thumbUps.size()));
-        discussTimeText.setText(post.postTime);
+        String postTimeInfo;    // 有可能有[来自]信息
+        if (post.source != null && !post.source.isEmpty())
+            postTimeInfo = post.postTime + " 来自" + post.source;
+        else
+            postTimeInfo = post.postTime;
+        discussTimeText.setText(postTimeInfo);
         discussContent.setText(post.content);
         // ---------- 文字信息 ----------
 
@@ -142,24 +175,22 @@ public class DiscussItemLayoutHolder extends RecyclerView.ViewHolder implements 
         // ---------- 点赞图片 ----------
 
         // 点击显示详情
-        commentImageView.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener showDetailListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 postPresenter.displayDetailButtonClicked();
             }
-        });
+        };
+        commentImageView.setOnClickListener(showDetailListener);
+        commentCountTextView.setOnClickListener(showDetailListener);
+        discussContent.setOnClickListener(showDetailListener);
 
-        commentCountTextView.setOnClickListener(new View.OnClickListener() {
+        // 弹出菜单
+        discussContent.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
-                postPresenter.displayDetailButtonClicked();
-            }
-        });
-
-        discussContent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                postPresenter.displayDetailButtonClicked();
+            public boolean onLongClick(View v) {
+                postPresenter.onLongClicked();
+                return true;
             }
         });
 
@@ -200,7 +231,36 @@ public class DiscussItemLayoutHolder extends RecyclerView.ViewHolder implements 
     }
 
     @Override
-    public PostContract.PostPresenter getPresenter() {
+    public void confirmOption(final Post post) {
+        AlertDialog.Builder builder =
+                new AlertDialog.Builder(discussContent.getContext());
+        if (MainActivity.cur_username.equals("14xfdeng") || MainActivity.cur_username.equals("13yjli3") || MainActivity.cur_username.equals("14jhwang")){
+            builder.setTitle("请选择一个操作" + "(" + post.postUser.account + ")");
+        }else
+            builder.setTitle("请选择一个操作");
+
+        builder.setPositiveButton("复制", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ClipBoardHelper.setContent(discussContent.getContext(), post.content);
+                Toast.makeText(discussContent.getContext(), "已将内容复制到剪贴板上", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setNegativeButton("删除", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (MainActivity.user_id == -1){
+                    Toast.makeText(discussContent.getContext(), "登录超时, 请同步一次课表", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                postPresenter.onOptionConfirmed(SinglePostContract.PostView.OPTION_DELETE);
+            }
+        });
+        builder.create().show();
+    }
+
+    @Override
+    public SinglePostContract.PostPresenter getPresenter() {
         return postPresenter;
     }
 

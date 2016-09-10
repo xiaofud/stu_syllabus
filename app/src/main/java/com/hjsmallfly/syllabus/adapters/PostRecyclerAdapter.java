@@ -4,20 +4,24 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.hjsmallfly.syllabus.mvp.contract.PostContract;
-import com.hjsmallfly.syllabus.mvp.model.PostModel;
-import com.hjsmallfly.syllabus.mvp.presenter.PostPresenter;
-import com.hjsmallfly.syllabus.mvp.viewholder.DiscussItemLayoutHolder;
+import com.hjsmallfly.syllabus.interfaces.ItemRemovedListener;
+import com.hjsmallfly.syllabus.mvp.model.SinglePostModel;
+import com.hjsmallfly.syllabus.mvp.presenter.SinglePostPresenter;
+import com.hjsmallfly.syllabus.mvp.viewholder.PostViewHolder;
 import com.hjsmallfly.syllabus.pojo.Post;
 
 import java.util.List;
+
 
 /**
  * Created by smallfly on 16-9-10.
  *
  */
-public class PostRecyclerAdapter extends RecyclerView.Adapter<DiscussItemLayoutHolder> {
+public class PostRecyclerAdapter extends RecyclerView.Adapter<PostViewHolder> implements ItemRemovedListener {
 
+    /**
+     * 存放所有的posts
+     */
     private List<Post> posts;
 
     public PostRecyclerAdapter(List<Post> posts){
@@ -25,17 +29,24 @@ public class PostRecyclerAdapter extends RecyclerView.Adapter<DiscussItemLayoutH
     }
 
     @Override
-    public DiscussItemLayoutHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        DiscussItemLayoutHolder viewHolder = new DiscussItemLayoutHolder(LayoutInflater.from(parent.getContext()), parent);
-        PostModel postModel = new PostModel();
-        PostContract.PostPresenter presenter = new PostPresenter(postModel, viewHolder);
+    public PostViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        PostViewHolder viewHolder = new PostViewHolder(LayoutInflater.from(parent.getContext()), parent);
+        SinglePostModel postModel = new SinglePostModel();
+        viewHolder.addItemRemovedListener(this);
+        new SinglePostPresenter(postModel, viewHolder);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(DiscussItemLayoutHolder holder, int position) {
+    public void onBindViewHolder(PostViewHolder holder, int position) {
         Post post = posts.get(position);
         holder.getPresenter().setPost(post);
+    }
+
+    @Override
+    public void onItemRemoved(int position) {
+        posts.remove(position);
+        notifyItemRemoved(position);
     }
 
     @Override

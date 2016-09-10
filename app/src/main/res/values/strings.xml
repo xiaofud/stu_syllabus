@@ -2,7 +2,7 @@
     <string name="app_name">汕大课程表</string>
     <string name="title_activity_syllabus">课程表</string>
     <string name="help_message">在课表界面的菜单里可以设置默认学期</string>
-    <string name="about_message">晓拂: 14xfdeng@stu.edu.cn(Android)\n呆杰: 13yjli3@stu.edu.cn(Android)\n俊皓: 14jhwang@stu.edu.cn(iOS)</string>
+    <string name="about_message">公众号: stusyllabus\n晓拂: 14xfdeng@stu.edu.cn(Android)\n呆杰: 13yjli3@stu.edu.cn(Android)\n俊皓: 14jhwang@stu.edu.cn(iOS)</string>
     <string name="github_app_address">安卓源码:\nhttps://github.com/Hjsmallfly/stu_syllabus</string>
     <string name="syllabus_get_api">/credit/api/v2/syllabus</string>
     <!--<string name="server_ip">http://121.42.175.83:8084</string>-->

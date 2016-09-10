@@ -11,13 +11,13 @@
         android:layout_height="match_parent">
         <TextView
             android:textSize="18sp"
-            android:text="扫码加呆杰微信号\n也可以搜索daidailiyujie添加"
+            android:text="扫描二维码直接下载"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <ImageView
             android:scaleType="center"
-            android:src="@drawable/wechatnum"
+            android:src="@drawable/androidqrcode"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
